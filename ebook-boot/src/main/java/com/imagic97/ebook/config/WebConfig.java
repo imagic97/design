@@ -1,6 +1,5 @@
-package com.example.demo.config;
+package com.imagic97.ebook.config;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;

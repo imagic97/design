@@ -1,4 +1,4 @@
-package com.example.demo.epub;
+package com.imagic97.ebook.epub;
 
 import java.util.ArrayList;
 import java.util.List;

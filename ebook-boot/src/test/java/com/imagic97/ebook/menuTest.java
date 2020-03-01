@@ -1,17 +1,14 @@
-package com.example.demo;
+package com.imagic97.ebook;
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo.epub.ContentItem;
-import com.example.demo.epub.EpubMenuParser;
-import com.example.demo.util.Buff2Image;
+import com.imagic97.ebook.epub.ContentItem;
+import com.imagic97.ebook.epub.EpubMenuParser;
 import net.sf.jazzlib.ZipFile;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.MediaType;
-import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.service.MediatypeService;
 
-import javax.xml.crypto.Data;
 import java.util.Arrays;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.demo.util;
+package com.imagic97.ebook.util;
 
 import java.io.FileOutputStream;
 

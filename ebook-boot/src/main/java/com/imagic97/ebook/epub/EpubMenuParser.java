@@ -1,4 +1,4 @@
-package com.example.demo.epub;
+package com.imagic97.ebook.epub;
 
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.TOCReference;

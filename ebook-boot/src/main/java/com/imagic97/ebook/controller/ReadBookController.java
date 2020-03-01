@@ -1,10 +1,10 @@
-package com.example.demo.controller;
+package com.imagic97.ebook.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo.epub.ContentItem;
-import com.example.demo.epub.EpubMenuParser;
-import com.example.demo.epub.Reader;
-import com.example.demo.util.ResponseContentType;
+import com.imagic97.ebook.epub.ContentItem;
+import com.imagic97.ebook.epub.EpubMenuParser;
+import com.imagic97.ebook.epub.Reader;
+import com.imagic97.ebook.util.ResponseContentType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
-package com.example.demo;
+package com.imagic97.ebook;
 
-import com.example.demo.util.ResponseContentType;
+import com.imagic97.ebook.util.ResponseContentType;
 
 public class ZipTest {
     public static void main(String[] args) {

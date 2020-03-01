@@ -1,11 +1,10 @@
-package com.example.demo;
+package com.imagic97.ebook;
 
-import com.example.demo.epub.ContentItem;
-import com.example.demo.epub.EpubMenuParser;
+import com.imagic97.ebook.epub.ContentItem;
+import com.imagic97.ebook.epub.EpubMenuParser;
 import net.sf.jazzlib.ZipFile;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.service.MediatypeService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
