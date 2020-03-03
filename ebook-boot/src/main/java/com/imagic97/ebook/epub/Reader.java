@@ -1,5 +1,6 @@
 package com.imagic97.ebook.epub;
 
+import com.imagic97.ebook.exception.MessageException;
 import net.sf.jazzlib.ZipFile;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
@@ -75,9 +76,8 @@ public class Reader {
                     MediatypeService.MP4};
             ZipFile zipFile = new ZipFile(bookFile);
             this.book = epubReader.readEpubLazy(zipFile, "UTF-8", Arrays.asList(lazyTypes));
-
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new MessageException("405",bookFile+"资源不存在");
         }
     }
 

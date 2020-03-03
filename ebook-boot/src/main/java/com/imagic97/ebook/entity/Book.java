@@ -6,7 +6,6 @@ import lombok.*;
  * @author imagic
  */
 @Data
-@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

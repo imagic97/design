@@ -1,12 +1,11 @@
 package com.imagic97.ebook.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.imagic97.ebook.config.PathConfig;
 import com.imagic97.ebook.epub.ContentItem;
 import com.imagic97.ebook.epub.EpubMenuParser;
 import com.imagic97.ebook.epub.Reader;
+import com.imagic97.ebook.exception.MessageException;
 import com.imagic97.ebook.util.ResponseContentType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +19,9 @@ import java.io.IOException;
 @RequestMapping("/read")
 public class ReadBookController {
 
-//    @Autowired
-//    private PathConfig pathConfig;
-
+//    @Value("${system-config.bookPath}")
+//    private String resourceDir;
+//
     /**
      * 获取书籍资源文件,如图片、html、css
      * 章节通过href获取，图片资源则为id
@@ -38,11 +37,9 @@ public class ReadBookController {
         String type = ResponseContentType.getInstance().matchType(href, ".");
         response.setContentType(type);
         String path = getClass().getResource("/").getPath() + "static/book/" + file;
-        //String path = pathConfig.getBookPath()+file;
         byte[] data = new Reader(path, href).getResourceData();
         if (data == null) {
-            System.out.println("error:404");
-            response.setStatus(404);
+            throw new MessageException("5","资源不存在");
         } else {
             try {
                 FileCopyUtils.copy(data, response.getOutputStream());
@@ -77,13 +74,11 @@ public class ReadBookController {
      * 获取书籍目录
      *
      * @param file     书籍文件名
-     * @param response 响应请求
      * @return String json格式目录字符串
      */
     @RequestMapping(value = "/content")
     @ResponseBody
-    public String getContentItem(@RequestParam String file,
-                                 HttpServletResponse response) {
+    public String getContentItem(@RequestParam String file) {
         String path = getClass().getResource("/").getPath() + "static/book/" + file;
         Reader reader = new Reader(path);
         ContentItem contentItem = new EpubMenuParser().startParse(reader.getBook());
