@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 /**
  * @author imagic
- * @disc ${}
  */
 public class StringUtil {
     //子字符串modelStr在字符串str中第count次出现时的下标

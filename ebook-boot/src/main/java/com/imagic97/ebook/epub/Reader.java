@@ -97,29 +97,7 @@ public class Reader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return data;
     }
-
-//    public byte[] getResourceData(String position) {
-//        if (position == null || resource == null) {
-//            return null;
-//        }
-//        String string = new String();
-//        try {
-//            string = new String(resource.getData(),StandardCharsets.UTF_8);
-//            if (string.contains(position)) {
-//                string = string.substring(string.indexOf(position) - 8);
-//            }
-//            if (StringUtil.appearNumber(string, "<h") > 1) {
-//                string = string.substring(0, StringUtil.getFromIndex(string, "<h", 2));
-//            } else {
-//                string = string.substring(0, string.indexOf("</body>"));
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return string.getBytes(StandardCharsets.UTF_8);//   }
-
 
 }

@@ -1,10 +1,12 @@
 package com.imagic97.ebook.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.imagic97.ebook.config.PathConfig;
 import com.imagic97.ebook.epub.ContentItem;
 import com.imagic97.ebook.epub.EpubMenuParser;
 import com.imagic97.ebook.epub.Reader;
 import com.imagic97.ebook.util.ResponseContentType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/read")
 public class ReadBookController {
+
+//    @Autowired
+//    private PathConfig pathConfig;
 
     /**
      * 获取书籍资源文件,如图片、html、css
@@ -33,7 +38,7 @@ public class ReadBookController {
         String type = ResponseContentType.getInstance().matchType(href, ".");
         response.setContentType(type);
         String path = getClass().getResource("/").getPath() + "static/book/" + file;
-
+        //String path = pathConfig.getBookPath()+file;
         byte[] data = new Reader(path, href).getResourceData();
         if (data == null) {
             System.out.println("error:404");
