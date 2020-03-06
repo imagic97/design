@@ -20,24 +20,16 @@ public class GlobalExceptionHandler {
 
     /**
      * 处理自定义的业务异常
-     * @param e
-     * @param req
-     * @return
      */
     @ExceptionHandler(value = MessageException.class)
     @ResponseBody
-    public ResultBody exceptionHandler(HttpServletRequest req ,MessageException e){
-        logger.error("业务异常！原因是:"+e.getErrorMessage());
-        return ResultBody.error(e.getErrorCode(),e.getErrorMessage());
+    public ResultBody exceptionHandler(HttpServletRequest req, MessageException e) {
+        logger.error("业务异常！原因是:" + e.getErrorMessage());
+        return ResultBody.error(e.getErrorCode(), e.getErrorMessage());
     }
-
 
     /**
      * 处理空指针的异常
-     *
-     * @param req
-     * @param e
-     * @return
      */
     @ExceptionHandler(value = NullPointerException.class)
     @ResponseBody
@@ -45,7 +37,6 @@ public class GlobalExceptionHandler {
         logger.error("空指针异常！原因是:", e);
         return ResultBody.error(CommonMessageCode.BODY_NOT_MATCH);
     }
-
 
     @ExceptionHandler(value = FileNotFoundException.class)
     @ResponseBody
@@ -56,10 +47,6 @@ public class GlobalExceptionHandler {
 
     /**
      * 处理其他异常
-     *
-     * @param req
-     * @param e
-     * @return
      */
     @ExceptionHandler(value = Exception.class)
     @ResponseBody

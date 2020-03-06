@@ -17,7 +17,7 @@ public class EpubMenuParser {
 
     /**
      * 遍历epub书籍的目录
-     * @param refs
+     * @param refs 目录资源
      * @param level 菜单深度
      */
     private void parseMenu(List<TOCReference> refs, int level) {

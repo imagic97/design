@@ -5,5 +5,6 @@ package com.imagic97.ebook.common;
  */
 public interface BaseMessageInterface {
     String getResultCode();
+
     String getResultMessage();
 }

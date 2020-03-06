@@ -9,6 +9,18 @@ import java.util.List;
  */
 public interface UserService {
     User userLogin(String userName, String userPassword);
+
     Integer userAdd(User user);
+
     List<User> selectUserByName(String name);
+
+    String getUserCount();
+
+    List<User> selectAllUser(Integer limit, Integer offset);
+
+    Integer modifyUser(User user);
+
+    Integer makeUserFrozenById(String userId);
+
+    Integer deleteUserById();
 }

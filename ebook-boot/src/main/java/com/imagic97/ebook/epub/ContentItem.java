@@ -41,7 +41,7 @@ public class ContentItem {
 
     public List<ContentItem> getChildren() {
         if(this.children==null){
-            children = new ArrayList<ContentItem>();
+            children = new ArrayList<>();
         }
         return children;
     }

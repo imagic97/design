@@ -8,7 +8,6 @@ import com.imagic97.ebook.common.BaseMessageInterface;
 public class MessageException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-
     /**
      * 错误码
      */
@@ -22,18 +21,19 @@ public class MessageException extends RuntimeException {
         super();
     }
 
-    public MessageException(BaseMessageInterface baseMessageInterface){
+    public MessageException(BaseMessageInterface baseMessageInterface) {
         super(baseMessageInterface.getResultCode());
         this.errorCode = baseMessageInterface.getResultCode();
         this.errorMessage = baseMessageInterface.getResultMessage();
     }
-    public MessageException(BaseMessageInterface baseMessageInterface,Throwable throwable){
-        super(baseMessageInterface.getResultCode(),throwable);
+
+    public MessageException(BaseMessageInterface baseMessageInterface, Throwable throwable) {
+        super(baseMessageInterface.getResultCode(), throwable);
         this.errorCode = baseMessageInterface.getResultCode();
         this.errorMessage = baseMessageInterface.getResultMessage();
     }
 
-    public MessageException(String errorMessage){
+    public MessageException(String errorMessage) {
         super(errorMessage);
         this.errorMessage = errorMessage;
     }
@@ -44,8 +44,8 @@ public class MessageException extends RuntimeException {
         this.errorMessage = errorMessage;
     }
 
-    public MessageException(String errorCode, String errorMessage ,Throwable throwable){
-        super(errorCode,throwable);
+    public MessageException(String errorCode, String errorMessage, Throwable throwable) {
+        super(errorCode, throwable);
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }

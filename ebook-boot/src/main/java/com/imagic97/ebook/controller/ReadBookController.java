@@ -1,6 +1,6 @@
 package com.imagic97.ebook.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.imagic97.ebook.common.ResultBody;
 import com.imagic97.ebook.epub.ContentItem;
 import com.imagic97.ebook.epub.EpubMenuParser;
 import com.imagic97.ebook.epub.Reader;
@@ -8,7 +8,9 @@ import com.imagic97.ebook.exception.MessageException;
 import com.imagic97.ebook.util.ResponseContentType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -18,10 +20,6 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/read")
 public class ReadBookController {
-
-//    @Value("${system-config.bookPath}")
-//    private String resourceDir;
-//
     /**
      * 获取书籍资源文件,如图片、html、css
      * 章节通过href获取，图片资源则为id
@@ -39,7 +37,7 @@ public class ReadBookController {
         String path = getClass().getResource("/").getPath() + "static/book/" + file;
         byte[] data = new Reader(path, href).getResourceData();
         if (data == null) {
-            throw new MessageException("5","资源不存在");
+            throw new MessageException("5", "资源不存在");
         } else {
             try {
                 FileCopyUtils.copy(data, response.getOutputStream());
@@ -73,16 +71,16 @@ public class ReadBookController {
     /**
      * 获取书籍目录
      *
-     * @param file     书籍文件名
+     * @param file 书籍文件名
      * @return String json格式目录字符串
      */
     @RequestMapping(value = "/content")
     @ResponseBody
-    public String getContentItem(@RequestParam String file) {
+    public ResultBody getContentItem(@RequestParam String file) {
         String path = getClass().getResource("/").getPath() + "static/book/" + file;
         Reader reader = new Reader(path);
         ContentItem contentItem = new EpubMenuParser().startParse(reader.getBook());
-        return JSON.toJSONString(contentItem);
+        return ResultBody.success(contentItem);
     }
 
 }

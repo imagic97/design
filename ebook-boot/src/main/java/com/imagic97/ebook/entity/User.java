@@ -3,6 +3,8 @@ package com.imagic97.ebook.entity;
 import lombok.*;
 
 /**
+ * user表实体
+ *
  * @author imagic
  */
 @Data
