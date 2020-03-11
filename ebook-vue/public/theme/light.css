@@ -1,0 +1,18 @@
+body {
+  color: #000;
+}
+#app {
+  background-color: #f5f5dc;
+}
+
+.themeControl {
+  background-color: #fff;
+}
+
+.contentCatalog {
+  background-color: #fff;
+}
+
+.readerControls {
+  background-color: #fff;
+}

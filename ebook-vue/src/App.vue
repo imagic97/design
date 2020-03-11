@@ -6,6 +6,7 @@
 
 <script>
 import reading from "./views/book/reading.vue";
+
 export default {
   name: "app",
   components: {
@@ -16,18 +17,26 @@ export default {
 
 <style>
 @import url(assets/reset.css);
-/* @import url(assets/dark.css); */
-html,
 body {
-  position: relative;
+  background: #7d8188;
+}
+#app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  width: 670px;
   height: 100%;
-  min-height: 100%;
-  background-color: #f6f7f9;
+  background: beige;
+  margin: 0 auto;
+  user-select: none;
 }
 
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@media screen and (max-width: 500px) {
+  #app {
+    width: 100%;
+  }
 }
 </style>

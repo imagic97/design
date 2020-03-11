@@ -16,6 +16,18 @@ const actions = {
   },
   setContentShow: ({ commit }, contentShow) => {
     return commit("SET_CONTENTSHOW", contentShow);
+  },
+  setContentList: ({ commit }, contentList) => {
+    return commit("SET_CONTENTLIST", contentList);
+  },
+  setMenuShow: ({ commit }, menuShow) => {
+    return commit("SET_MENUSHOW", menuShow);
+  },
+  setCurrentComponent: ({ commit }, currentComponent) => {
+    return commit("SET_CURRENTCOMPONENT", currentComponent);
+  },
+  setFontSize: ({ commit }, fontSize) => {
+    return commit("SET_FONTSIZE", fontSize);
   }
 };
 

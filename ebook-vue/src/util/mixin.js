@@ -8,7 +8,11 @@ export const ebookMixin = {
       "content",
       "position",
       "nextPosition",
-      "contentShow"
+      "contentShow",
+      "contentList",
+      "menuShow",
+      "currentComponent",
+      "fontSize"
     ])
   },
   data() {
@@ -25,7 +29,11 @@ export const ebookMixin = {
       "setContent",
       "setPosition",
       "setNextPosition",
-      "setContentShow"
+      "setContentShow",
+      "setContentList",
+      "setMenuShow",
+      "setCurrentComponent",
+      "setFontSize"
     ])
   }
 };

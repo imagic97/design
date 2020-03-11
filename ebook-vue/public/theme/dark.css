@@ -1,0 +1,18 @@
+body {
+  color: #fafafa;
+}
+#app {
+  background-color: rgb(56, 56, 56);
+}
+
+.themeControl {
+  background-color: rgb(16, 20, 24);
+}
+
+.contentCatalog {
+  background-color: rgb(16, 20, 24);
+}
+
+.readerControls {
+  background-color: rgb(16, 20, 24);
+}

@@ -1,30 +1,17 @@
 <template>
-  <div id="readerCatalog">
-    <!-- <a href class="readerCatalog_bookInfo">
-      <div class="readerCatalog_bookInfo_cover">
-        <img src alt="书籍封面" class="bookCover_img" />
-        <div class="wr_bookCover_border"></div>
-        <span class="wr_bookCover_decor wr_bookCover_gradientDecor wr_bookCover_borderDecor"></span>
-      </div>
-      <div class="readerCatalog_bookInfo_right">
-        <h2 class="readerCatalog_bookInfo_title">
-          <span class="readerCatalog_bookInfo_title_txt">Java编程的逻辑</span>
-          <span class="readerCatalog_bookInfo_title_arrow"></span>
-        </h2>
-        <div class="readerCatalog_bookInfo_author">马俊昌</div>
-    
-      </div>
-    </a>-->
-    <ul class="readerCatalog_list">
-      <li
-        class="chapterItem"
-        v-for="(item,key) in truthList"
-        :key="key"
-        v-on:click="ContentToReader(item,key)"
-      >
-        <span>{{item.title}}</span>
-      </li>
-    </ul>
+  <div class="content">
+    <div class="contentCatalog">
+      <ul class="contentCatalog_list">
+        <li
+          class="chapterItem"
+          v-for="(item, key) in contentList"
+          :key="key"
+          v-on:click="ContentToReader(item, key)"
+        >
+          <span v-bind:class="{'selected':isCurrentContent(item.url)}">{{ item.title }}</span>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
@@ -34,25 +21,32 @@ export default {
   mixins: [ebookMixin],
   data() {
     return {
-      key: "",
-      contentList: "",
-      truthList: []
+      key: ""
     };
   },
   mounted() {
     this.init();
   },
   methods: {
+    isCurrentContent(value) {
+      return this.content === value;
+    },
+    setCurrentComponentHide() {
+      this.setCurrentComponent(null);
+    },
     init() {
       getContent(this.bookID).then(Response => {
-        this.contentList = Response.data;
-        if (this.contentList == null) this.contentList = "目录为空哦";
-        this.getJsonList(this.contentList.children);
+        if (Response.data.result == null) {
+          this.contentList = "目录为空哦";
+          return;
+        }
+        this.getJsonList(Response.data.result.children);
+        if (this.content == "") this.setContent(this.contentList[0].url);
       });
     },
     getJsonList(contentJson) {
       for (var i = 0; i < contentJson.length; i++) {
-        this.truthList.push({
+        this.contentList.push({
           title: contentJson[i].title,
           url: contentJson[i].url
         });
@@ -68,30 +62,22 @@ export default {
       //分割章节定位
       var position = "";
       var nextPosition = "";
-      //     var nextPosition =
-      // key + 1 < this.truthList.length
-      //   ? this.truthList[key + 1].url.slice(
-      //       content.url.indexOf("#") + 1,
-      //       content.url.length
-      //     )
-      //   : "";
-
       if (content.url.search("#") > 0) {
         position = content.url.slice(
           content.url.indexOf("#") + 1,
           content.url.length
         );
-        if (
-          key + 1 < this.truthList.length &&
-          this.truthList[key + 1].url.search("#") > 0
-        ) {
-          nextPosition = this.truthList[key + 1].url.slice(
-            content.url.indexOf("#") + 1,
-            content.url.length
-          );
-        }
       }
 
+      if (
+        key + 1 < this.contentList.length &&
+        this.contentList[key + 1].url.search("#") > 0
+      ) {
+        nextPosition = this.contentList[key + 1].url.slice(
+          this.contentList[key + 1].url.indexOf("#") + 1,
+          this.contentList[key + 1].url.length
+        );
+      }
       //判断当前章节、定位是否和点击章节一致
       if ((this.content != content.url) | (this.position != position)) {
         this.setContent(content.url);
@@ -99,42 +85,44 @@ export default {
         //获取下一个章节定位
         this.setNextPosition(nextPosition);
       }
-
-      this.setContentShow(false);
+      this.setCurrentComponentHide();
     }
   }
 };
 </script>
 
 <style scoped>
-#readerCatalog {
-  width: 520px;
+.contentCatalog {
   position: absolute;
-  height: 100%;
-  overflow: auto;
-  right: 0;
+  width: 90%;
+  bottom: 0;
+  height: 55%;
+  overflow: hidden;
+  padding: 0 0 0 10%;
+  /* background-color: #fff; */
 }
 
 .chapterItem:hover {
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.05), transparent);
 }
+.selected {
+  color: darkblue;
+}
 
 ul {
-  -webkit-box-flex: 1;
-  flex: auto;
   overflow: auto;
-  padding-bottom: env(safe-area-inset-bottom);
-  width: 520px;
-  position: absolute;
-  height: 90%;
+  width: 100%;
+  height: 100%;
+}
+
+ul::-webkit-scrollbar {
+  width: 0 !important;
 }
 li {
   -webkit-box-direction: normal;
   list-style: none;
   height: 52px;
   line-height: 52px;
-  padding-left: 36px;
-  padding-right: 36px;
   border-radius: 0;
   border: solid #ebedf1;
   border-width: 0 0 1px;

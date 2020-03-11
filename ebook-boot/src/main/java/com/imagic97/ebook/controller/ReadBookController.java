@@ -35,6 +35,7 @@ public class ReadBookController {
         String type = ResponseContentType.getInstance().matchType(href, ".");
         response.setContentType(type);
         String path = getClass().getResource("/").getPath() + "static/book/" + file;
+
         byte[] data = new Reader(path, href).getResourceData();
         if (data == null) {
             throw new MessageException("5", "资源不存在");
