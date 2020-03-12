@@ -33,10 +33,8 @@ public class ReadBookController {
                      @RequestParam String href,
                      HttpServletResponse response) {
         String type = ResponseContentType.getInstance().matchType(href, ".");
-        response.setContentType(type);
-        String path = getClass().getResource("/").getPath() + "static/book/" + file;
-
-        byte[] data = new Reader(path, href).getResourceData();
+        response.setContentType(file);
+        byte[] data = new Reader(file, href).getResourceData();
         if (data == null) {
             throw new MessageException("5", "资源不存在");
         } else {
@@ -60,8 +58,7 @@ public class ReadBookController {
     public void getCover(@RequestParam String file,
                          HttpServletResponse response) {
         response.setContentType("image/png");
-        String path = getClass().getResource("/").getPath() + "static/book/" + file;
-        Reader reader = new Reader(path);
+        Reader reader = new Reader(file);
         try {
             FileCopyUtils.copy(new ByteArrayInputStream(reader.getBook().getCoverImage().getData()), response.getOutputStream());
         } catch (IOException e) {
@@ -78,10 +75,19 @@ public class ReadBookController {
     @RequestMapping(value = "/content")
     @ResponseBody
     public ResultBody getContentItem(@RequestParam String file) {
-        String path = getClass().getResource("/").getPath() + "static/book/" + file;
-        Reader reader = new Reader(path);
+        Reader reader = new Reader(file);
         ContentItem contentItem = new EpubMenuParser().startParse(reader.getBook());
         return ResultBody.success(contentItem);
+    }
+
+    @RequestMapping(value = "/css")
+    @ResponseBody
+    public ResultBody getBookCSS(@RequestParam String file) {
+        Reader reader = new Reader(file);
+        String cssStyle = reader.getCSS();
+        if (cssStyle != null && !cssStyle.equals(""))
+            return ResultBody.success(reader.getCSS());
+        else return ResultBody.error("样式空");
     }
 
 }

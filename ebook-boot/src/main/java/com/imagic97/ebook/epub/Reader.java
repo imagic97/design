@@ -6,6 +6,7 @@ import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.service.MediatypeService;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,6 +63,7 @@ public class Reader {
     }
 
     public Reader(String bookFile) {
+        bookFile = getClass().getResource("/").getPath() + "static/book/" + bookFile;
         this.bookFile = bookFile;
         try {
             EpubReader epubReader = new EpubReader();
@@ -76,7 +78,7 @@ public class Reader {
             ZipFile zipFile = new ZipFile(bookFile);
             this.book = epubReader.readEpubLazy(zipFile, "UTF-8", Arrays.asList(lazyTypes));
         } catch (Exception e) {
-            throw new MessageException("405",bookFile+"资源不存在");
+            throw new MessageException("0",bookFile+"资源不存在");
         }
     }
 
@@ -97,6 +99,19 @@ public class Reader {
             e.printStackTrace();
         }
         return data;
+    }
+
+    public String getCSS(){
+       List<Resource> resourceList = this.book.getResources().getResourcesByMediaType(MediatypeService.CSS);
+       String result = "";
+       try {
+           for ( Resource item:resourceList ){
+               result += new String(item.getData());
+           }
+       }catch (Exception e){
+           throw new MessageException("0","读取样式过程出现错误");
+       }
+        return result;
     }
 
 }
