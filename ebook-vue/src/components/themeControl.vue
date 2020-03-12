@@ -107,6 +107,14 @@ export default {
   height: 30px;
   border-radius: 15px;
 }
+
+@media screen and (max-width: 500px) {
+  .theme {
+    margin: 16px 23px;
+    height: 30px;
+    border-radius: 15px;
+  }
+}
 .currentTheme {
   border: 2px solid #1b88ee;
 }

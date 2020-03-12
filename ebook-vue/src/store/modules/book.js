@@ -1,7 +1,7 @@
 const book = {
   state: {
     fileName: "",
-    bookID: "3.epub",
+    bookID: "7.epub",
     //单章节
     content: "",
     //当前章节定位

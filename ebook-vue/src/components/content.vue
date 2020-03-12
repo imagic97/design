@@ -125,6 +125,7 @@ li {
   line-height: 52px;
   border-radius: 0;
   border: solid #ebedf1;
+  overflow: hidden;
   border-width: 0 0 1px;
 }
 </style>

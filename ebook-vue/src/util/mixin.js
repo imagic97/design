@@ -1,5 +1,5 @@
 import { mapGetters, mapActions } from "vuex";
-import { API_TO_GET_VIEW, API_TO_GET_COVER } from "./settings";
+import { API_TO_GET_VIEW, API_TO_GET_COVER, API_TO_GET_CSS } from "./settings";
 export const ebookMixin = {
   computed: {
     ...mapGetters([
@@ -18,7 +18,8 @@ export const ebookMixin = {
   data() {
     return {
       API_TO_GET_VIEW: API_TO_GET_VIEW,
-      API_TO_GET_COVER: API_TO_GET_COVER
+      API_TO_GET_COVER: API_TO_GET_COVER,
+      API_TO_GET_CSS: API_TO_GET_CSS
     };
   },
 

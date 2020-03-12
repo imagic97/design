@@ -1,10 +1,11 @@
 <template>
   <div class="renderTargetContainer" @click="setCurrentComponentTxt()" v-bind:key="content">
-    <div class="chapterContiner">
+    <div class="chapterContainer">
       <div
+        id="text"
         v-html="responseText"
-        v-bind:style="{fontSize:fontSize + 'px'}"
-        v-lazy-container="{ selector: 'img'}"
+        :style="{'fontSize':fontSize+'px','lineHeight':1.8*fontSize+'px'}"
+        v-lazy-container="{ selector: 'img' }"
       ></div>
       <div class="nextChapterContainner">
         <div class="nextChapter">
@@ -16,14 +17,14 @@
   </div>
 </template>
 <script>
-import { getResource } from "@/api/api";
+import { getResource, getChapterCSS } from "@/api/api";
 import { ebookMixin } from "@/util/mixin";
 export default {
   mixins: [ebookMixin],
   data() {
     return {
       responseText: "",
-      css: ""
+      chapterCSS: ""
     };
   },
   updated() {
@@ -31,6 +32,9 @@ export default {
   },
 
   mounted() {
+    // this.addCss(this.API_TO_GET_CSS + this.bookID);
+    /* eslint-disable */
+
     this.init();
   },
   methods: {
@@ -40,17 +44,28 @@ export default {
       else this.setCurrentComponent(null);
     },
     init() {
-      if ((this.bookID != "") & (this.content != ""))
+      if ((this.bookID != "") & (this.content != "")) {
         getResource(this.bookID, this.content).then(Response => {
-          this.resolveCss(Response.data);
-          for (let j = 0, len = this.css.length; j < len; j++) {
-            this.addCss(
-              this.API_TO_GET_VIEW + this.bookID + "&href=" + this.css[j]
-            );
-          }
           this.responseText = this.letslazyload(this.handleText(Response.data));
-          this.loading = false;
         });
+        getChapterCSS(this.bookID).then(Response => {
+          if (Response.data.code == 200) {
+            this.chapterCSS = Response.data.result;
+            //添加章节样式限制
+            this.chapterCSS =
+              ".chapterContiner " +
+              this.chapterCSS.replace(/}/gi, "}.chapterContainer ");
+            //去除换行
+            this.chapterCSS = this.chapterCSS.replace(/\r\n/gi, "");
+            //移除style节点
+            let removeDom = document.getElementById("chapterCSS");
+            if (removeDom != null) {
+              removeDom.parentNode.removeChild(removeDom);
+            }
+            this.CreateStyle();
+          }
+        });
+      }
     },
 
     letslazyload(contentp) {
@@ -68,21 +83,14 @@ export default {
       });
       return contentp;
     },
-    // <link[^>]*href="[^"]*/(.+\.css)
-    addCss(href) {
-      const link = document.createElement("link");
-      link.setAttribute("rel", "stylesheet");
-      link.setAttribute("type", "text/css");
-      link.setAttribute("href", href);
-      document.getElementsByTagName("head")[0].appendChild(link);
+    CreateStyle() {
+      const style = document.createElement("style");
+      style.setAttribute("type", "text/css");
+      style.setAttribute("id", "chapterCSS");
+      style.innerText = this.chapterCSS;
+      document.getElementsByTagName("head")[0].appendChild(style);
     },
 
-    resolveCss(text) {
-      //let rule = /(?:<link[^>]*href="[^"]*\/)(.+\.css)/;
-      let rule = /(?<=link.+href\s*="\W*)\w+.css/g;
-      this.css = text.match(rule);
-      //}
-    },
     //对书籍文本进行分割，替换img路径
     handleText(text) {
       text = text.slice(text.indexOf("<body"));
@@ -112,13 +120,6 @@ export default {
       }
       return text;
     },
-    find(text, cha, num) {
-      var x = text.indexOf(cha);
-      for (var i = 0; i < num; i++) {
-        x = text.indexOf(cha, x + 1);
-      }
-      return x;
-    },
     toNextChapter() {
       this.$message("da");
     }
@@ -127,28 +128,19 @@ export default {
 </script>
 
 <style scoped>
-/* .renderTargetContainer h1 {
-  background-color: rgb(119, 119, 119);
-  color: rgb(229, 100, 107);
-}
-.renderTargetContainer h2 {
-  background-color: rgb(161, 161, 161);
-  border-bottom: 1px solid #000;
-}
-.renderTargetContainer h3 {
-  background-color: rgb(211, 211, 211);
-} */
 .renderTargetContainer img {
   max-width: 600px;
 }
 .renderTargetContainer {
   font-size: 16px;
+  padding: 17px 0 0 0;
   position: absolute;
   width: 100%;
   height: 100%;
   min-height: 450px;
   overflow: auto;
 }
+
 .renderTargetContainer::-webkit-scrollbar {
   width: 0 !important;
 }
@@ -159,6 +151,15 @@ export default {
   width: 100%;
   margin: 0 auto;
 }
+
+#text {
+  padding: 0 14px;
+}
+
+.nextChapter {
+  padding: 40px 0 126px 0;
+}
+
 .nextChapter button {
   display: block;
   width: 280px;

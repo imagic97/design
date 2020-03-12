@@ -23,3 +23,13 @@ export function getContent(file) {
     }
   });
 }
+
+export function getChapterCSS(file) {
+  return axios({
+    method: "GET",
+    url: "/read/css",
+    params: {
+      file: file
+    }
+  });
+}
