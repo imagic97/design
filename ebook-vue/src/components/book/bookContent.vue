@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" v-show="menuVisible && menuShow === 1">
     <div class="contentCatalog">
       <ul class="contentCatalog_list">
         <li
@@ -8,7 +8,7 @@
           :key="key"
           v-on:click="ContentToReader(item, key)"
         >
-          <span v-bind:class="{'selected':isCurrentContent(item.url)}">{{ item.title }}</span>
+          <span v-bind:class="{'listSelected':isCurrentContent(item.url)}">{{ item.title }}</span>
         </li>
       </ul>
     </div>
@@ -19,11 +19,6 @@ import { getContent } from "@/api/api";
 import { ebookMixin } from "@/util/mixin";
 export default {
   mixins: [ebookMixin],
-  data() {
-    return {
-      key: ""
-    };
-  },
   mounted() {
     this.init();
   },
@@ -41,9 +36,13 @@ export default {
           return;
         }
         this.getJsonList(Response.data.result.children);
-        if (this.content == "") this.setContent(this.contentList[0].url);
+        if (this.content == "") {
+          this.setContent(this.contentList[0].url);
+          this.setNextPosition(this.getPosition(this.contentList[1].url));
+        }
       });
     },
+    //递归Json获取顺序目录列表
     getJsonList(contentJson) {
       for (var i = 0; i < contentJson.length; i++) {
         this.contentList.push({
@@ -51,6 +50,7 @@ export default {
           url: contentJson[i].url
         });
         if (contentJson[i].children.length > 0) {
+          //获取子目录内容
           this.getJsonList(contentJson[i].children);
         }
       }
@@ -60,32 +60,20 @@ export default {
       if (content.url == "") return;
       this.key = key;
       //分割章节定位
-      var position = "";
+      var position = this.getPosition(content.url);
       var nextPosition = "";
-      if (content.url.search("#") > 0) {
-        position = content.url.slice(
-          content.url.indexOf("#") + 1,
-          content.url.length
-        );
-      }
-
-      if (
-        key + 1 < this.contentList.length &&
-        this.contentList[key + 1].url.search("#") > 0
-      ) {
-        nextPosition = this.contentList[key + 1].url.slice(
-          this.contentList[key + 1].url.indexOf("#") + 1,
-          this.contentList[key + 1].url.length
-        );
+      if (key + 1 < this.contentList.length) {
+        nextPosition = this.getPosition(this.contentList[key + 1].url);
       }
       //判断当前章节、定位是否和点击章节一致
-      if ((this.content != content.url) | (this.position != position)) {
+      if (this.content != content.url) {
         this.setContent(content.url);
         this.setPosition(position);
         //获取下一个章节定位
         this.setNextPosition(nextPosition);
+        this.setKeyInContent(key);
       }
-      this.setCurrentComponentHide();
+      this.setMenuShowOrHide();
     }
   }
 };
@@ -94,18 +82,18 @@ export default {
 <style scoped>
 .contentCatalog {
   position: absolute;
-  width: 90%;
-  bottom: 0;
-  height: 55%;
+  width: 100%;
+  bottom: 64px;
+  height: 57%;
+  border-radius: 16px 16px 0 0;
   overflow: hidden;
-  padding: 0 0 0 10%;
-  /* background-color: #fff; */
+  box-shadow: 0 -8px 21px rgba(0, 25, 104, 0.3);
 }
 
 .chapterItem:hover {
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.05), transparent);
 }
-.selected {
+.listSelected {
   color: darkblue;
 }
 
@@ -115,9 +103,6 @@ ul {
   height: 100%;
 }
 
-ul::-webkit-scrollbar {
-  width: 0 !important;
-}
 li {
   -webkit-box-direction: normal;
   list-style: none;

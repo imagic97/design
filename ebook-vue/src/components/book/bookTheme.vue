@@ -1,5 +1,5 @@
 <template>
-  <div class="themeControl">
+  <div class="themeControl" v-show="menuVisible && menuShow === 2">
     <div>
       <el-row>
         <el-col :span="12">
@@ -90,12 +90,12 @@ export default {
 <style scoped>
 .themeControl {
   position: absolute;
-  bottom: 0;
+  bottom: 64px;
   width: 100%;
-  overflow: auto;
+  border-radius: 16px 16px 0 0;
   box-shadow: 0 -8px 21px rgba(0, 25, 104, 0.3);
   /* background-color: #fefefe; */
-  padding: 0 0 54px 0;
+  padding: 18px 0 54px 0;
 }
 
 .fontSize {

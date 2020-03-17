@@ -1,22 +1,17 @@
 <template>
   <div id="app">
-    <reading />
+    <router-view />
   </div>
 </template>
 
 <script>
-import reading from "./views/book/reading.vue";
-
 export default {
-  name: "app",
-  components: {
-    reading
-  }
+  name: "app"
 };
 </script>
 
 <style>
-@import url(assets/reset.css);
+/* @import url(assets/reset.css); */
 body {
   background: #7d8188;
 }
@@ -27,9 +22,10 @@ body {
   right: 0;
   bottom: 0;
   z-index: 0;
-  width: 670px;
+  width: 870px;
   height: 100%;
-  background: beige;
+  background-color: #f1f1f1;
+  /* background: beige; */
   margin: 0 auto;
   user-select: none;
 }

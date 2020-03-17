@@ -1,7 +1,7 @@
 const book = {
   state: {
     fileName: "",
-    bookID: "7.epub",
+    bookID: "6.epub",
     //单章节
     content: "",
     //当前章节定位
@@ -13,8 +13,9 @@ const book = {
     //目录列表
     contentList: [],
     //菜单列表显示
-    menuShow: false,
-    currentComponent: "contentItem",
+    menuShow: -1,
+    keyInContent: 0,
+    menuVisible: false,
     fontSize: 16
   },
   mutations: {
@@ -42,11 +43,14 @@ const book = {
     SET_MENUSHOW: (state, menuShow) => {
       state.menuShow = menuShow;
     },
-    SET_CURRENTCOMPONENT: (state, currentComponent) => {
-      state.currentComponent = currentComponent;
+    SET_KEYINCONTENT: (state, keyInContent) => {
+      state.keyInContent = keyInContent;
     },
     SET_FONTSIZE: (state, fontSize) => {
       state.fontSize = fontSize;
+    },
+    SET_MENUVISIBLE: (state, menuVisible) => {
+      state.menuVisible = menuVisible;
     }
   }
 };

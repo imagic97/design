@@ -8,7 +8,9 @@ const getters = {
   contentList: state => state.book.contentList,
   menuShow: state => state.book.menuShow,
   currentComponent: state => state.book.currentComponent,
-  fontSize: state => state.book.fontSize
+  fontSize: state => state.book.fontSize,
+  menuVisible: state => state.book.menuVisible,
+  keyInContent: state => state.book.keyInContent
 };
 
 export default getters;

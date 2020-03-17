@@ -32,7 +32,10 @@ public class ResponseContentType {
     }
 
     public String matchType(String string, String rules) {
-        return typeMap.get(string.substring(string.lastIndexOf(rules)));
+        int start = string.lastIndexOf(rules);
+        if (start >= 0) {
+            return typeMap.get(string.substring(start));
+        } else return typeMap.get(".xhtml");
     }
 
     public static ResponseContentType getInstance() {

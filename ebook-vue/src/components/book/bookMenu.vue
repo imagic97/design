@@ -1,23 +1,39 @@
 <template>
-  <div class="readerControls">
+  <div class="readerControls" v-show="menuVisible">
     <el-row :gutter="0">
       <el-col :span="6">
-        <div class="readerControls_item readerControls_item1">
+        <div
+          class="readerControls_item readerControls_item1"
+          :class="{'selected': menuShow === 3}"
+          @click="showSetting(3)"
+        >
           <span class="title">书签</span>
         </div>
       </el-col>
       <el-col :span="6">
-        <div class="readerControls_item readerControls_item2" @click="showTheme()">
+        <div
+          class="readerControls_item readerControls_item2"
+          :class="{'selected': menuShow === 2}"
+          @click="showSetting(2)"
+        >
           <span class="title">主题</span>
         </div>
       </el-col>
       <el-col :span="6">
-        <div class="readerControls_item readerControls_item3" @click="showContent()">
+        <div
+          class="readerControls_item readerControls_item3"
+          :class="{'selected': menuShow === 1}"
+          @click="showSetting(1)"
+        >
           <span class="title">目录</span>
         </div>
       </el-col>
       <el-col :span="6">
-        <div class="readerControls_item readerControls_item4">
+        <div
+          class="readerControls_item readerControls_item4"
+          :class="{'selected': menuShow === 0}"
+          @click="showSetting(0)"
+        >
           <span class="title">回到主页</span>
         </div>
       </el-col>
@@ -29,11 +45,8 @@ import { ebookMixin } from "@/util/mixin";
 export default {
   mixins: [ebookMixin],
   methods: {
-    showContent() {
-      this.setCurrentComponent("contentItem");
-    },
-    showTheme() {
-      this.setCurrentComponent("theme");
+    showSetting(value) {
+      this.setMenuShow(value);
     }
   }
 };
@@ -46,7 +59,6 @@ export default {
   height: 64px;
   z-index: 999;
   box-shadow: 0 -8px 21px rgba(0, 25, 104, 0.3);
-  /* background-color: #fff; */
   text-align: center;
 }
 

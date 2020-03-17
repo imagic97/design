@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 @Controller
@@ -36,6 +38,7 @@ public class ReadBookController {
         response.setContentType(file);
         byte[] data = new Reader(file, href).getResourceData();
         if (data == null) {
+
             throw new MessageException("5", "资源不存在");
         } else {
             try {
@@ -59,8 +62,13 @@ public class ReadBookController {
                          HttpServletResponse response) {
         response.setContentType("image/png");
         Reader reader = new Reader(file);
+        InputStream fileInputStream;
+        byte[] data=null;
         try {
-            FileCopyUtils.copy(new ByteArrayInputStream(reader.getBook().getCoverImage().getData()), response.getOutputStream());
+            data =reader.getBook().getCoverImage().getData();
+            if(data == null) fileInputStream = new FileInputStream("");
+
+                FileCopyUtils.copy(new ByteArrayInputStream(), response.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }

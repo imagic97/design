@@ -1,25 +1,25 @@
 <template>
   <div id="reading">
-    <reader />
-    <keep-alive>
-      <component v-bind:is="currentComponent"></component>
-    </keep-alive>
+    <book-reader />
+    <book-menu />
+    <book-content />
+    <book-theme />
   </div>
 </template>
 
 <script>
-import reader from "../../components/reader.vue";
-import readerControl from "../../components/readerControl.vue";
-import contentItem from "../../components/content.vue";
-import theme from "../../components/themeControl.vue";
+import bookReader from "../../components/book/bookReader";
+import bookMenu from "../../components/book/bookMenu";
+import bookContent from "../../components/book/bookContent";
+import bookTheme from "../../components/book/bookTheme";
 import { ebookMixin } from "@/util/mixin";
 export default {
   mixins: [ebookMixin],
   components: {
-    readerControl,
-    reader,
-    contentItem,
-    theme
+    bookReader,
+    bookMenu,
+    bookContent,
+    bookTheme
   },
   data() {
     return {};

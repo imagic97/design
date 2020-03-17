@@ -78,7 +78,7 @@ public class Reader {
             ZipFile zipFile = new ZipFile(bookFile);
             this.book = epubReader.readEpubLazy(zipFile, "UTF-8", Arrays.asList(lazyTypes));
         } catch (Exception e) {
-            throw new MessageException("0",bookFile+"资源不存在");
+            throw new MessageException("0","资源不存在");
         }
     }
 

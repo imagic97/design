@@ -23,11 +23,14 @@ const actions = {
   setMenuShow: ({ commit }, menuShow) => {
     return commit("SET_MENUSHOW", menuShow);
   },
-  setCurrentComponent: ({ commit }, currentComponent) => {
-    return commit("SET_CURRENTCOMPONENT", currentComponent);
+  setKeyInContent: ({ commit }, keyInContent) => {
+    return commit("SET_KEYINCONTENT", keyInContent);
   },
   setFontSize: ({ commit }, fontSize) => {
     return commit("SET_FONTSIZE", fontSize);
+  },
+  setMenuVisible: ({ commit }, menuVisible) => {
+    return commit("SET_MENUVISIBLE", menuVisible);
   }
 };
 

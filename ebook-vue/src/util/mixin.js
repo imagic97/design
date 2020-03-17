@@ -11,8 +11,9 @@ export const ebookMixin = {
       "contentShow",
       "contentList",
       "menuShow",
-      "currentComponent",
-      "fontSize"
+      "keyInContent",
+      "fontSize",
+      "menuVisible"
     ])
   },
   data() {
@@ -33,8 +34,20 @@ export const ebookMixin = {
       "setContentShow",
       "setContentList",
       "setMenuShow",
-      "setCurrentComponent",
-      "setFontSize"
-    ])
+      "setKeyInContent",
+      "setFontSize",
+      "setMenuVisible"
+    ]),
+    setMenuShowOrHide() {
+      this.setMenuShow(-1), this.setMenuVisible(!this.menuVisible);
+    },
+    //获取以"#"为章节分割符后的定位字符串，无则返回""
+    getPosition(url) {
+      var str = "";
+      if (url.search("#") > 0) {
+        str = url.slice(url.indexOf("#") + 1, url.length);
+      }
+      return str;
+    }
   }
 };
