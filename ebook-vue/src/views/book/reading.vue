@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import bookReader from "../../components/book/bookReader";
+import bookReader from "@/components/book/bookReader";
 import bookMenu from "../../components/book/bookMenu";
 import bookContent from "../../components/book/bookContent";
 import bookTheme from "../../components/book/bookTheme";
@@ -20,9 +20,6 @@ export default {
     bookMenu,
     bookContent,
     bookTheme
-  },
-  data() {
-    return {};
   }
 };
 </script>

@@ -11,7 +11,6 @@ export default {
 </script>
 
 <style>
-/* @import url(assets/reset.css); */
 body {
   background: #7d8188;
 }
