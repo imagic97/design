@@ -15,11 +15,7 @@ public interface BookService {
 
     Integer modifyBook(Book book);
 
-    Integer deleteBookById(String bookId);
+    Integer deleteBookById(long bookId,long userId);
 
-    List<Book> selectBookByBookName(String bookName);
-
-    List<Book> selectBookByAuthor(String author);
-
-    List<Book> selectBookByUserId(String userId);
+    List<Book> selectBookByUserId(long userId);
 }

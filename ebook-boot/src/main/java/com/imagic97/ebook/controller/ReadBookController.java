@@ -6,6 +6,7 @@ import com.imagic97.ebook.epub.EpubMenuParser;
 import com.imagic97.ebook.epub.Reader;
 import com.imagic97.ebook.exception.MessageException;
 import com.imagic97.ebook.util.ResponseContentType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,14 +15,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 
 @Controller
 @RequestMapping("/read")
 public class ReadBookController {
+
+    @Value("${BOOK_PATH}")
+    private String BOOK_PATH;
+
     /**
      * 获取书籍资源文件,如图片、html、css
      * 章节通过href获取，图片资源则为id
@@ -35,8 +38,8 @@ public class ReadBookController {
                      @RequestParam String href,
                      HttpServletResponse response) {
         String type = ResponseContentType.getInstance().matchType(href, ".");
-        response.setContentType(file);
-        byte[] data = new Reader(file, href).getResourceData();
+        response.setContentType(type);
+        byte[] data = new Reader(BOOK_PATH + file, href).getResourceData();
         if (data == null) {
 
             throw new MessageException("5", "资源不存在");
@@ -61,14 +64,14 @@ public class ReadBookController {
     public void getCover(@RequestParam String file,
                          HttpServletResponse response) {
         response.setContentType("image/png");
-        Reader reader = new Reader(file);
-        InputStream fileInputStream;
-        byte[] data=null;
+        Reader reader = new Reader(BOOK_PATH + file);
+        byte[] data = null;
         try {
-            data =reader.getBook().getCoverImage().getData();
-            if(data == null) fileInputStream = new FileInputStream("");
-
-                FileCopyUtils.copy(new ByteArrayInputStream(), response.getOutputStream());
+            
+            data = reader.getBook().getCoverImage().getData();
+            if (data != null) {
+                FileCopyUtils.copy(new ByteArrayInputStream(data), response.getOutputStream());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,7 +86,7 @@ public class ReadBookController {
     @RequestMapping(value = "/content")
     @ResponseBody
     public ResultBody getContentItem(@RequestParam String file) {
-        Reader reader = new Reader(file);
+        Reader reader = new Reader(BOOK_PATH + file);
         ContentItem contentItem = new EpubMenuParser().startParse(reader.getBook());
         return ResultBody.success(contentItem);
     }
@@ -91,7 +94,7 @@ public class ReadBookController {
     @RequestMapping(value = "/css")
     @ResponseBody
     public ResultBody getBookCSS(@RequestParam String file) {
-        Reader reader = new Reader(file);
+        Reader reader = new Reader(BOOK_PATH + file);
         String cssStyle = reader.getCSS();
         if (cssStyle != null && !cssStyle.equals(""))
             return ResultBody.success(reader.getCSS());

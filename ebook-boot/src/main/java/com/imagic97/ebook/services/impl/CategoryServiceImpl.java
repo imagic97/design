@@ -3,6 +3,7 @@ package com.imagic97.ebook.services.impl;
 import com.imagic97.ebook.dao.CategoryMapper;
 import com.imagic97.ebook.entity.Category;
 import com.imagic97.ebook.services.CategoryService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 /**
  * @author imagic
  */
+@Service
 public class CategoryServiceImpl implements CategoryService {
     @Resource
     private CategoryMapper categoryMapper;

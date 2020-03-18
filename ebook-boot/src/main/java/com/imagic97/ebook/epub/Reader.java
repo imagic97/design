@@ -2,8 +2,7 @@ package com.imagic97.ebook.epub;
 
 import com.imagic97.ebook.exception.MessageException;
 import net.sf.jazzlib.ZipFile;
-import nl.siegmann.epublib.domain.Book;
-import nl.siegmann.epublib.domain.Resource;
+import nl.siegmann.epublib.domain.*;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.service.MediatypeService;
 
@@ -63,7 +62,6 @@ public class Reader {
     }
 
     public Reader(String bookFile) {
-        bookFile = getClass().getResource("/").getPath() + "static/book/" + bookFile;
         this.bookFile = bookFile;
         try {
             EpubReader epubReader = new EpubReader();
@@ -78,7 +76,7 @@ public class Reader {
             ZipFile zipFile = new ZipFile(bookFile);
             this.book = epubReader.readEpubLazy(zipFile, "UTF-8", Arrays.asList(lazyTypes));
         } catch (Exception e) {
-            throw new MessageException("0","资源不存在");
+            throw new MessageException("0", "资源不存在");
         }
     }
 
@@ -91,27 +89,87 @@ public class Reader {
 
 
     public byte[] getResourceData() {
-        byte[] data = new byte[0];
-        if(resource==null)return null;
+        byte[] result = new byte[0];
+        if (resource == null) return null;
         try {
-            data = resource.getData();
+            result = resource.getData();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return data;
+        return result;
     }
 
-    public String getCSS(){
-       List<Resource> resourceList = this.book.getResources().getResourcesByMediaType(MediatypeService.CSS);
-       String result = "";
-       try {
-           for ( Resource item:resourceList ){
-               result += new String(item.getData());
-           }
-       }catch (Exception e){
-           throw new MessageException("0","读取样式过程出现错误");
-       }
-        return result;
+    public String getCSS() {
+        List<Resource> resourceList = this.book.getResources().getResourcesByMediaType(MediatypeService.CSS);
+        StringBuilder result = new StringBuilder();
+        try {
+            for (Resource item : resourceList) {
+                result.append(new String(item.getData()));
+            }
+        } catch (Exception e) {
+            throw new MessageException("0", "读取样式过程出现错误");
+        }
+        return result.toString();
+    }
+
+    public String getTitle() {
+        return book.getMetadata().getFirstTitle();
+    }
+
+    public String getAuthor() {
+        List<Author> authors = book.getMetadata().getAuthors();
+        StringBuilder result = new StringBuilder();
+        for (Author author : authors) {
+            result.append(author.getFirstname()).append(" ").append(author.getLastname()).append("/");
+        }
+        return result.toString();
+    }
+
+    public String getIntroduction() {
+        List<String> stringList = book.getMetadata().getDescriptions();
+        StringBuilder result = new StringBuilder();
+        for (String string : stringList) {
+            result.append(string).append(" ");
+        }
+        return result.toString();
+    }
+
+    public String getLanguage() {
+        return book.getMetadata().getLanguage();
+    }
+
+    /**
+     * 获取出版社
+     *
+     * @return 出版社字符串
+     */
+    public String getPublisher() {
+        List<String> stringList = book.getMetadata().getPublishers();
+        StringBuilder result = new StringBuilder();
+        for (String string : stringList) {
+            result.append(string).append(" ");
+        }
+        return result.toString();
+    }
+
+    public String getISBN() {
+        List<Identifier> identifierList = book.getMetadata().getIdentifiers();
+        for (Identifier identifier : identifierList) {
+            if (identifier.getScheme().equals("ISBN"))
+                return identifier.getValue();
+        }
+        return "";
+    }
+
+    public String getPublishDate() {
+        List<Date> dateList = book.getMetadata().getDates();
+        if (dateList == null) return "";
+        for (Date date : dateList) {
+            if (date.getEvent() == Date.Event.PUBLICATION)
+                return date.getValue();
+        }
+        if (dateList.size() == 1) return dateList.get(0).getValue();
+        return null;
     }
 
 }

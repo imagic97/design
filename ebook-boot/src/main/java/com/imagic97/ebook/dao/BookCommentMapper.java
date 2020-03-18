@@ -1,14 +1,12 @@
 package com.imagic97.ebook.dao;
 
 import com.imagic97.ebook.entity.BookComment;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @author imagic
  */
+@Mapper
 public interface BookCommentMapper {
     //添加书评
     @Insert("insert into book_comment(user_id,content,createDate) value(#{userId},#{content},#{createDate})")

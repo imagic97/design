@@ -28,4 +28,10 @@ public class StringUtil {
         Date date = new Date(System.currentTimeMillis());
         return formatter.format(date);
     }
+
+    public static String getCurrentTimeStampWithLong(long timeStamp) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(timeStamp);
+        return formatter.format(date);
+    }
 }

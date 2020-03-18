@@ -3,11 +3,13 @@ package com.imagic97.ebook.dao;
 import com.imagic97.ebook.entity.BookMark;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 /**
  * @author imagic
  */
+@Mapper
 public interface BookMarkMapper {
     //添加书签
     @Insert("insert into book_mark(user_id,book_id,chapters,createDate) value (userId,bookId,chapters,createDate)")

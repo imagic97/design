@@ -1,5 +1,6 @@
 package com.imagic97.ebook.services.impl;
 
+import com.imagic97.ebook.dao.BookInfoMapper;
 import com.imagic97.ebook.dao.BookMapper;
 import com.imagic97.ebook.entity.Book;
 import com.imagic97.ebook.services.BookService;
@@ -18,6 +19,9 @@ public class BookServiceImpl implements BookService {
     @Resource
     private BookMapper bookMapper;
 
+    @Resource
+     private BookInfoMapper bookInfoMapper;
+
     @Override
     public Book selectBookById(long bookId) {
         return bookMapper.selectBookById(bookId);
@@ -35,22 +39,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Integer deleteBookById(String bookId) {
-        return bookMapper.deleteBookById(bookId);
+    public Integer deleteBookById(long bookId , long userId) {
+        bookInfoMapper.deleteBookInfoById(bookId);
+        return bookMapper.deleteBookById(bookId,userId);
     }
 
     @Override
-    public List<Book> selectBookByBookName(String bookName) {
-        return bookMapper.selectBookByBookName(bookName);
-    }
-
-    @Override
-    public List<Book> selectBookByAuthor(String author) {
-        return bookMapper.selectBookByAuthor(author);
-    }
-
-    @Override
-    public List<Book> selectBookByUserId(String userId) {
+    public List<Book> selectBookByUserId(long userId) {
         return bookMapper.selectBookByUserId(userId);
     }
 }

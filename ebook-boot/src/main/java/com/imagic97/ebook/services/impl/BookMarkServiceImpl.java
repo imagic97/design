@@ -4,12 +4,14 @@ import com.imagic97.ebook.dao.BookMarkMapper;
 import com.imagic97.ebook.entity.BookMark;
 import com.imagic97.ebook.services.BookMarkService;
 import com.imagic97.ebook.util.StringUtil;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
 /**
  * @author imagic
  */
+@Service
 public class BookMarkServiceImpl implements BookMarkService {
     @Resource
     private BookMarkMapper bookMarkMapper;

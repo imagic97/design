@@ -4,12 +4,14 @@ import com.imagic97.ebook.dao.BookCommentMapper;
 import com.imagic97.ebook.entity.BookComment;
 import com.imagic97.ebook.services.BookCommentService;
 import com.imagic97.ebook.util.StringUtil;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
 /**
  * @author imagic
  */
+@Service
 public class BookCommentServiceImpl implements BookCommentService {
 
     @Resource

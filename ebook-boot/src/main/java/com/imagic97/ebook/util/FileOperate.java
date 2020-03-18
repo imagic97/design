@@ -14,12 +14,10 @@ public class FileOperate {
     /**
      * 上传文件转存
      */
-    public boolean fileUpload(MultipartFile multipartFile, long user_id) {
-        String originalFilename = String.valueOf(user_id) + "-" + multipartFile.getOriginalFilename();
-        String path = getClass().getResource("/").getPath() + "static/book/";
-        File saveFile = new File(path + originalFilename);
+    public static boolean fileUpload(MultipartFile multipartFile, String path, String filename) {
+        File saveFile = new File(path + filename);
         if (saveFile.exists()) {
-           return false;
+            throw new MessageException("文件已存在");
         }
         try {
             multipartFile.transferTo(saveFile);
@@ -27,5 +25,15 @@ public class FileOperate {
             throw new MessageException(CommonMessageCode.INTERNAL_SERVER_ERROR);
         }
         return true;
+    }
+
+    public static boolean deleteFile(String fileName) {
+        File file = new File(fileName);
+        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+        if (file.exists() && file.isFile()) {
+            return file.delete();
+        } else {
+            return false;
+        }
     }
 }
