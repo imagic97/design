@@ -24,12 +24,11 @@ body {
   width: 870px;
   height: 100%;
   background-color: #f1f1f1;
-  /* background: beige; */
   margin: 0 auto;
   user-select: none;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 750px) {
   #app {
     width: 100%;
   }

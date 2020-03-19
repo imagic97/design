@@ -4,9 +4,7 @@
       <img v-lazy="imgUrl" :key="imgUrl" alt />
       <span class="book_cover_boder"></span>
     </div>
-    <div class="bookTitle">
-      <span>{{ bookTitle ? bookTitle : "未知名" }}</span>
-    </div>
+    <div class="bookTitle">{{ bookTitle ? bookTitle : "未知名" }}</div>
   </div>
 </template>
 <script>
@@ -20,14 +18,14 @@ export default {
 <style scoped>
 img {
   display: block;
-  width: 108px;
+  width: 100%;
   height: 156px;
   box-shadow: 6px 7px 6px rgba(0, 25, 104, 0.3);
 }
+
 @media screen and (min-width: 500px) {
   .bookCover:hover {
     z-index: 99;
-    transform: scale(1.3);
   }
 }
 
@@ -36,6 +34,20 @@ img {
   padding: 0;
   position: relative;
 }
+.bookTitle {
+  text-overflow: ellipsis;
+  margin: 16px 0 0 0;
+  max-height: 36px;
+}
+
+/* @media screen and (max-width: 500px) {
+  .bookTitle {
+    text-overflow: ellipsis;
+    margin: 8px 0 22px 0;
+    max-height: 36px;
+  }
+} */
+
 .book_cover_boder {
   position: absolute;
   top: 0;

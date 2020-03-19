@@ -30,6 +30,7 @@ export default {
       this.setCurrentComponent(null);
     },
     init() {
+      this.setContentList([]);
       getContent(this.bookID).then(Response => {
         if (Response.data.result == null) {
           this.contentList = "目录为空哦";

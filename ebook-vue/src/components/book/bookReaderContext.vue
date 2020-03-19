@@ -1,7 +1,7 @@
 <template>
   <div
     id="text"
-    v-html="responseText"
+    v-html="responseHtml"
     :style="{'fontSize':fontSize+'px'}"
     v-lazy-container="{ selector: 'img' }"
   ></div>
@@ -10,7 +10,7 @@
 <script>
 export default {
   props: {
-    responseText: String,
+    responseHtml: String,
     fontSize: Number
   }
 };

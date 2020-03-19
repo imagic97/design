@@ -20,6 +20,12 @@ export default {
     bookMenu,
     bookContent,
     bookTheme
+  },
+  destroyed() {
+    this.setBookID("");
+    this.setContent("");
+    this.setContentList([]);
+    this.setKeyInContent(0);
   }
 };
 </script>
