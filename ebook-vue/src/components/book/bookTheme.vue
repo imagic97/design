@@ -34,7 +34,7 @@
 
 <script>
 import { ebookMixin } from "@/util/mixin";
-import { addCss, removeCss } from "@/util/utils";
+//import { addCss, removeCss } from "@/util/utils";
 export default {
   mixins: [ebookMixin],
   data() {
@@ -71,12 +71,15 @@ export default {
   },
   methods: {
     setCurrentTheme(value) {
+      if (value === this.currentTheme) return;
+      let removeDom = document.getElementById("themeStyle");
+      if (removeDom != null) {
+        removeDom.parentNode.removeChild(removeDom);
+      }
       if (value === "dark") {
-        removeCss(`theme/light.css`);
-        addCss(`theme/dark.css`);
+        this.CreateStyle(this.THEME_DARK, "themeStyle");
       } else {
-        removeCss(`theme/dark.css`);
-        addCss(`theme/light.css`);
+        this.CreateStyle(this.THEME_LIGHT, "themeStyle");
       }
       this.currentTheme = value;
     },
@@ -94,7 +97,6 @@ export default {
   width: 100%;
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -8px 21px rgba(0, 25, 104, 0.3);
-  /* background-color: #fefefe; */
   padding: 18px 0 54px 0;
 }
 
@@ -123,6 +125,6 @@ export default {
   background: rgb(56, 56, 56);
 }
 .theme-light {
-  background: #f5f5dc;
+  background: #f1f1f1;
 }
 </style>

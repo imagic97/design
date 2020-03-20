@@ -82,19 +82,12 @@ export default {
             if (removeDom != null) {
               removeDom.parentNode.removeChild(removeDom);
             }
-            this.CreateStyle(this.chapterCSS);
+            this.CreateStyle(this.chapterCSS, "chapterCSS");
           }
         });
     },
 
-    //挂载电子书CSS样式
-    CreateStyle(styleText) {
-      const style = document.createElement("style");
-      style.setAttribute("type", "text/css");
-      style.setAttribute("id", "chapterCSS");
-      style.innerText = styleText;
-      document.getElementsByTagName("head")[0].appendChild(style);
-    },
+
 
     //获取并生成图片请求地址
     getImgPath(sourcePath, htmlPath) {
