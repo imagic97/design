@@ -24,6 +24,8 @@ export default {
   destroyed() {
     this.setBookID("");
     this.setContent("");
+    this.setPosition("");
+    this.setNextPosition("");
     this.setContentList([]);
     this.setKeyInContent(0);
   }

@@ -11,10 +11,10 @@
           <img v-lazy="API_TO_GET_COVER + item.bookID" :key="item.bookID" class="bookCover_img" />
           <div class="book_cover_boder"></div>
         </div>
-        <div class="title">{{item.bookTitle}}</div>
+        <div class="title">{{item.bookTitle?item.bookTitle:"------"}}</div>
       </div>
       <span class="addBook placeholder"></span>
-      <!-- 占位作用，防止组件弹性拉伸 -->
+      <!-- 占位作用，防止组件拉伸 -->
       <div class="placeholder"></div>
       <div class="placeholder"></div>
       <div class="placeholder"></div>
@@ -36,7 +36,9 @@ export default {
         { bookID: "4.epub", bookTitle: "dad" },
         { bookID: "5.epub", bookTitle: "dad" },
         { bookID: "6.epub", bookTitle: "dad" },
-        { bookID: "7.epub", bookTitle: "dad" }
+        { bookID: "7.epub", bookTitle: "dad" },
+        { bookID: "8.epub", bookTitle: "dad" },
+        { bookID: "9.epub", bookTitle: "dad" }
       ]
     };
   },

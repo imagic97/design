@@ -8,7 +8,7 @@
           :key="key"
           v-on:click="ContentToReader(item, key)"
         >
-          <span v-bind:class="{'listSelected':isCurrentContent(item.url)}">{{ item.title }}</span>
+          <div id="aa" v-bind:class="{'listSelected':isCurrentContent(item.url)}">{{ item.title }}</div>
         </li>
       </ul>
     </div>
@@ -33,7 +33,7 @@ export default {
       this.setContentList([]);
       getContent(this.bookID).then(Response => {
         if (Response.data.result == null) {
-          this.contentList = "目录为空哦";
+          this.setContentList([]);
           return;
         }
         this.getJsonList(Response.data.result.children);
@@ -113,5 +113,13 @@ li {
   border: solid #ebedf1;
   overflow: hidden;
   border-width: 0 0 1px;
+}
+#aa {
+  display: block;
+  width: 80%;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

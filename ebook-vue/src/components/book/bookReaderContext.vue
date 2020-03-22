@@ -11,7 +11,7 @@
 export default {
   props: {
     responseHtml: String,
-    fontSize: Number
+    fontSize: String
   }
 };
 </script>

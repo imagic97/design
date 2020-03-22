@@ -16,7 +16,7 @@ const book = {
     menuShow: -1,
     keyInContent: 0,
     menuVisible: false,
-    fontSize: 16
+    fontSize: "16"
   },
   mutations: {
     SET_FILENAME: (state, fileName) => {

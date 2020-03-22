@@ -4,7 +4,7 @@
       <img v-lazy="imgUrl" :key="imgUrl" alt />
       <span class="book_cover_boder"></span>
     </div>
-    <div class="bookTitle">{{ bookTitle ? bookTitle : "未知名" }}</div>
+    <div class="bookTitle">{{ bookTitle!="" ? bookTitle+"das" : "空" }}</div>
   </div>
 </template>
 <script>

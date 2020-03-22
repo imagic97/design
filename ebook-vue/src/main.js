@@ -10,7 +10,7 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.use(VueLazyload, {
   error: require("@/assets/error.svg"),
-  loading: require("@/assets/pre-image.png")
+  loading: require("@/assets/pre-image.svg")
 });
 new Vue({
   router,

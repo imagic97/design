@@ -5,8 +5,13 @@
 </template>
 
 <script>
+import { ebookMixin } from "@/util/mixin";
 export default {
-  name: "app"
+  mixins: [ebookMixin],
+  name: "app",
+  mounted() {
+    this.CreateStyle(this.THEME_LIGHT, "themeStyle");
+  }
 };
 </script>
 
@@ -28,7 +33,7 @@ body {
   user-select: none;
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 768px) {
   #app {
     width: 100%;
   }

@@ -74,6 +74,7 @@ export default {
               /font-size:.{3,8};/gi,
               ""
             );
+
             this.chapterCSS += " a {pointer-events:none;}";
             //去除换行
             this.chapterCSS = this.chapterCSS.replace(/\r|\n/gi, "");
@@ -87,13 +88,17 @@ export default {
         });
     },
 
-
-
     //获取并生成图片请求地址
     getImgPath(sourcePath, htmlPath) {
       let imgIndex = -1;
       let htmlIndex = -1;
+      if (sourcePath.indexOf("../") < 0 && htmlPath.indexOf("/") > 0) {
+        htmlPath = htmlPath.slice(0, htmlPath.lastIndexOf("/"));
+        return htmlPath + "/" + sourcePath;
+      }
       htmlPath = htmlPath.slice(0, htmlPath.lastIndexOf("/"));
+      /* eslint-disable */
+
       while ((imgIndex = sourcePath.indexOf("../") > -1)) {
         sourcePath = sourcePath.slice(imgIndex + 2, sourcePath.length);
         htmlIndex = htmlPath.lastIndexOf("/");
@@ -107,14 +112,17 @@ export default {
     handleHtml(html) {
       html = html.slice(html.indexOf("<body"));
       if (this.position != "" && html.search(this.position) > -1) {
-        html = html.slice(html.indexOf(this.position) - 8);
+        let tamp = html.slice(0, html.indexOf(this.position));
+        tamp = tamp.slice(tamp.lastIndexOf("<"));
+        html = tamp + html.slice(html.indexOf(this.position));
       }
       if (
         html.search(this.nextPosition) >= 0 &&
         this.nextPosition !== "" &&
         this.nextPosition != this.position
       ) {
-        html = html.slice(0, html.indexOf(this.nextPosition) - 8);
+        html = html.slice(0, html.indexOf(this.nextPosition));
+        html = html.slice(0, html.lastIndexOf(">") + 1);
       }
       html = html.slice(0, html.indexOf("</body>"));
 

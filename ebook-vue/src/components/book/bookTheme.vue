@@ -19,15 +19,7 @@
       </el-row>
     </div>
     <div class="fontSize">
-      <el-slider
-        v-model.lazy="zitiSize"
-        :min="10"
-        :max="34"
-        :show-tooltip="false"
-        :step="6"
-        show-stops
-        :marks="marks"
-      ></el-slider>
+      <input class="fontSizeValue" v-model="zitiSize" type="range" max="34" min="10" step="6" />
     </div>
   </div>
 </template>
@@ -39,23 +31,7 @@ export default {
   mixins: [ebookMixin],
   data() {
     return {
-      currentTheme: "light",
-      marks: {
-        10: {
-          style: {
-            fontSize: "10px",
-            color: "#1989FA"
-          },
-          label: this.$createElement("strong", "A")
-        },
-        34: {
-          style: {
-            fontSize: "34px",
-            color: "#1989FA"
-          },
-          label: this.$createElement("strong", "A")
-        }
-      }
+      currentTheme: "light"
     };
   },
 
@@ -102,7 +78,8 @@ export default {
 
 .fontSize {
   margin: 0 auto;
-  width: 82%;
+  padding: 16px 0 0 0;
+  width: 86%;
 }
 .theme {
   margin: 16px 60px;
@@ -126,5 +103,26 @@ export default {
 }
 .theme-light {
   background: #f1f1f1;
+}
+
+.fontSizeValue {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 8px;
+  background: -webkit-linear-gradient(#1b88ee, #1b88ee) no-repeat, #1b88ee;
+  background-size: 100%;
+  border-radius: 4px;
+}
+
+.fontSizeValue:focus {
+  outline: none;
+}
+.fontSizeValue::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #bbbbe0;
+  border: none;
 }
 </style>
