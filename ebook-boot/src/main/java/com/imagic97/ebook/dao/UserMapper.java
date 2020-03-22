@@ -44,5 +44,5 @@ public interface UserMapper {
 
     //根据id删除用户，不推荐
     @Delete("delete from user where user_id=#{userId} ")
-    public Integer deleteUserById();
+    public Integer deleteUserById(long userId);
 }

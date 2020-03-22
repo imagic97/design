@@ -22,5 +22,5 @@ public interface UserService {
 
     Integer makeUserFrozenById(String userId);
 
-    Integer deleteUserById();
+    Integer deleteUserById(long userId);
 }

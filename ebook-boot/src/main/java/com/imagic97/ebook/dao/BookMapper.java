@@ -27,11 +27,17 @@ public interface BookMapper {
             "book_category = #{bookCategory} " +
             "is_share=#{isShare} " +
             "where book_id = #{bookId}")
-    Integer modifyBook(Book book);
+    Integer modifyBookAll(Book book);
+
+    @Update("update book set " +
+            "book_category = #{bookCategory}, " +
+            "is_share = #{isShare} " +
+            "where book_id = #{bookId}")
+    Integer modifyBook(@Param("bookId") long bookId, @Param("bookCategory") Integer category, @Param("isShare") Integer isShare);
 
     //根据bookId删除book
-    @Delete("delete from book where book_id = #{bookId} and user_id = #{userId}")
-    Integer deleteBookById(@Param("bookId") long bookId,@Param("userId") long  userId);
+    @Delete("delete from book where book_id = #{bookId}")
+    Integer deleteBookById(@Param("bookId") long bookId);
 
     //根据用户id查找书
     @Select("select from book where user_id = #{userId}")

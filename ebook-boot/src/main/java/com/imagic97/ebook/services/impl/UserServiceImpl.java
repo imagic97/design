@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer deleteUserById() {
-        return userMapper.deleteUserById();
+    public Integer deleteUserById(long userId) {
+        return userMapper.deleteUserById(userId);
     }
 }

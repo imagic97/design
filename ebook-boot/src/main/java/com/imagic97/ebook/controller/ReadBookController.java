@@ -6,9 +6,12 @@ import com.imagic97.ebook.epub.EpubMenuParser;
 import com.imagic97.ebook.epub.Reader;
 import com.imagic97.ebook.exception.MessageException;
 import com.imagic97.ebook.util.ResponseContentType;
+import io.swagger.annotations.ApiOperation;
+import nl.siegmann.epublib.domain.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +23,7 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/read")
+@ApiOperation("电子书阅读模块")
 public class ReadBookController {
 
     @Value("${BOOK_PATH}")
@@ -33,7 +37,8 @@ public class ReadBookController {
      * @param href     指定资源名
      * @param response 响应请求
      */
-    @RequestMapping(value = "/view")
+    @GetMapping(value = "/view")
+    @ApiOperation("获取电子书资源，如HTML、png等")
     public void view(@RequestParam String file,
                      @RequestParam String href,
                      HttpServletResponse response) {
@@ -59,16 +64,20 @@ public class ReadBookController {
      * @param file     书籍文件名
      * @param response 响应请求
      */
-    @RequestMapping(value = "/cover")
+    @GetMapping(value = "/cover")
     @ResponseBody
+    @ApiOperation("获取电子书封面")
     public void getCover(@RequestParam String file,
                          HttpServletResponse response) {
         response.setContentType("image/png");
         Reader reader = new Reader(BOOK_PATH + file);
         byte[] data = null;
         try {
-            
-            data = reader.getBook().getCoverImage().getData();
+            Resource resource = reader.getBook().getCoverImage();
+            if (resource == null){
+                return ;
+            }
+             data = resource.getData();
             if (data != null) {
                 FileCopyUtils.copy(new ByteArrayInputStream(data), response.getOutputStream());
             }
@@ -83,16 +92,18 @@ public class ReadBookController {
      * @param file 书籍文件名
      * @return String json格式目录字符串
      */
-    @RequestMapping(value = "/content")
+    @GetMapping(value = "/content")
     @ResponseBody
+    @ApiOperation("获取电子书目录")
     public ResultBody getContentItem(@RequestParam String file) {
         Reader reader = new Reader(BOOK_PATH + file);
         ContentItem contentItem = new EpubMenuParser().startParse(reader.getBook());
         return ResultBody.success(contentItem);
     }
 
-    @RequestMapping(value = "/css")
+    @GetMapping(value = "/css")
     @ResponseBody
+    @ApiOperation("获取电子书样式")
     public ResultBody getBookCSS(@RequestParam String file) {
         Reader reader = new Reader(BOOK_PATH + file);
         String cssStyle = reader.getCSS();

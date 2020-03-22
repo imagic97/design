@@ -11,23 +11,27 @@ public interface BookInfoMapper {
     @Select("select * from book_info where book_id = #{bookId}")
     BookInfo selectBookInfoById(long bookId);
 
-    //添加书籍，bookName对于资源文件夹下的书名
+    //添加书籍信息
     @Insert("insert into book_info(book_id,title,introduction,language,publisher,creator,ISBN,publish_date)" +
             " value(#{bookId},#{title},#{introduction},#{language},#{publisher},#{creator},#{ISBN},#{publishDate})")
     @Options(useGeneratedKeys = true , keyColumn = "book_info_id", keyProperty = "bookInfoId")
     Integer addBookInfo(BookInfo bookInfo);
 
-    //修改book信息
+    //修改bookInfo信息
     @Update("update book_info set" +
-            " title = #{title}" +
-            " introduction = #{introduction}" +
-            " language =#{language}" +
-            "publisher = #{publisher}" +
+            "title = #{title}," +
+            "introduction = #{introduction}," +
+            "language =#{language}," +
+            "publisher = #{publisher}," +
             "creator=#{creator} " +
-            "where book_id = #{bookId}")
-    Integer modifyBook(BookInfo bookInfo);
+            "where book_info_id = #{bookInfoId}")
+    Integer modifyBookInfo(BookInfo bookInfo);
 
     //根据bookId删除bookinfo
+    @Delete("delete from book_info where book_info_id = #{bookInfoId}")
+    Integer deleteBookInfoById(long bookInfoId);
+
     @Delete("delete from book_info where book_id = #{bookId}")
-    Integer deleteBookInfoById(long bookId);
+    Integer deleteBookInfoByBookId(long bookId);
+
 }

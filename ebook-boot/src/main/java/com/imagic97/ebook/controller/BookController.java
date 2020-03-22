@@ -10,10 +10,9 @@ import com.imagic97.ebook.services.BookInfoService;
 import com.imagic97.ebook.services.BookService;
 import com.imagic97.ebook.util.FileOperate;
 import com.imagic97.ebook.util.StringUtil;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -24,6 +23,7 @@ import javax.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping("/book")
+@ApiOperation("电子书操作模块")
 public class BookController {
 
     @Resource
@@ -41,12 +41,17 @@ public class BookController {
      * @param multipartFile 上传文件
      * @param httpSession   session会话
      */
-    @RequestMapping("/upload")
+    @PostMapping(value = "/upload")
+    @ApiOperation(value = "用户上传书本", response = ResultBody.class)
     public ResultBody bookUpload(@RequestParam MultipartFile multipartFile, HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
         //   String path = getClass().getResource("/").getPath() + "static/book/";
         long timeStamp = System.currentTimeMillis();
         //long数据自提升为string
+        String fileType = multipartFile.getContentType();
+        if (!"application/epub+zip".equals(fileType)) {
+            return ResultBody.error("格式错误,该文件类型为：" + fileType);
+        }
         String fileName = timeStamp + "_" + user.getUserId();
         //保存上传文件至本地，返回文件名
         boolean isDone = FileOperate.fileUpload(multipartFile, BOOK_PATH, fileName);
@@ -84,7 +89,7 @@ public class BookController {
                 FileOperate.deleteFile(BOOK_PATH + fileName);
                 //清楚数据库相关记录
                 if (flag > -1) {
-                    bookService.deleteBookById(book.getBookId(), user.getUserId());
+                    bookService.deleteBookById(book.getBookId());
                 }
             }
             e.printStackTrace();
@@ -93,13 +98,61 @@ public class BookController {
         return ResultBody.success(null);
     }
 
-    @RequestMapping(value = "/delete")
+    @GetMapping(value = "/delete")
+    @ApiOperation("删除电子书")
     public ResultBody deleteBookByUser(@RequestParam long bookId,
                                        @RequestParam String fileName,
                                        HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
-        if (FileOperate.deleteFile(BOOK_PATH + fileName))
-            bookService.deleteBookById(bookId, user.getUserId());
+
+        Book currentBook = bookService.selectBookById(bookId);
+        if(!currentBook.getFileName().equals(fileName)){
+            return ResultBody.error("参数错误");
+        }
+        if (currentBook == null) {
+            return ResultBody.error("删除错误");
+        }
+        //判断用户是否自己上传的书
+        if (currentBook.getUserId() != user.getUserId()) {
+            //判断是否为普通用户
+            if (user.getType() == 1) {
+                return ResultBody.error("删除失败,无权限");
+            }
+        }
+        if (FileOperate.deleteFile(BOOK_PATH + fileName));
+            bookService.deleteBookById(bookId);
         return ResultBody.success(null);
     }
+
+    @GetMapping("/modifyBook")
+    @ApiOperation("修改电子书分类以及是否可分享 ---管理员")
+    public ResultBody modifyBook(
+            @RequestParam long bookId,
+            @RequestParam Integer bookCategory,
+            @RequestParam Integer isShare,
+            HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        if (user.getType() == 1) return ResultBody.error("用户无权限");
+        if (bookService.modifyBook(bookId, bookCategory, isShare) > 0) {
+            return ResultBody.success(null);
+        }
+        return ResultBody.error("修改失败");
+    }
+
+    @GetMapping("/modifyBookInfo")
+    @ApiOperation("修改电子书详细信息 ---管理员/用户")
+    public ResultBody modifyBookInfo(
+            @RequestParam BookInfo bookInfo,
+            HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        Book currentBook = bookService.selectBookById(bookInfo.getBookId());
+        if (currentBook.getUserId() != user.getUserId() | user.getType() == 1) {
+            return ResultBody.error("修改失败,无权限");
+        }
+        if (bookInfoService.modifyBook(bookInfo) > 0) {
+            return ResultBody.success(null);
+        }
+        return ResultBody.error("修改成功");
+    }
+
 }

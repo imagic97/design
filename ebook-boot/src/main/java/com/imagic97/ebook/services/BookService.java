@@ -15,7 +15,9 @@ public interface BookService {
 
     Integer modifyBook(Book book);
 
-    Integer deleteBookById(long bookId,long userId);
+    Integer modifyBook(long bookId, Integer calagory, Integer isShare);
+
+    Integer deleteBookById(long bookId);
 
     List<Book> selectBookByUserId(long userId);
 }

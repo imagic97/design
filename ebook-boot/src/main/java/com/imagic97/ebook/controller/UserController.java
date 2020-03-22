@@ -4,10 +4,8 @@ import com.imagic97.ebook.common.ResultBody;
 import com.imagic97.ebook.entity.User;
 import com.imagic97.ebook.exception.MessageException;
 import com.imagic97.ebook.services.UserService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
@@ -17,12 +15,14 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/user")
+@ApiOperation("用户模块")
 public class UserController {
     @Resource
     private UserService userService;
 
 
-    @RequestMapping("/login")
+    @PostMapping("/login")
+    @ApiOperation("用户登录")
     public ResultBody login(@RequestParam String userName,
                             @RequestParam String password,
                             HttpSession httpSession) {
@@ -39,7 +39,8 @@ public class UserController {
         return ResultBody.error("用户名或密码错误");
     }
 
-    @RequestMapping("register")
+    @PostMapping("register")
+    @ApiOperation("用户注册")
     public ResultBody addUser(@RequestParam String userName,
                               @RequestParam String password,
                               @RequestParam(required = false) String email) {
@@ -55,5 +56,15 @@ public class UserController {
         return userService.userAdd(user) > 0 ? ResultBody.success("注册成功") : ResultBody.error("注册失败，未知错误");
     }
 
+    @GetMapping("/deleteUser")
+    @ApiOperation("管理员删除用户")
+    public ResultBody deleteUser(@RequestParam long userId, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        if (user.getType() == 1) return ResultBody.error("用户无权限");
+        if(userService.deleteUserById(userId)>0){
+            return ResultBody.success("删除成功");
+        }
+        return ResultBody.error("删除失败");
+    }
 
 }

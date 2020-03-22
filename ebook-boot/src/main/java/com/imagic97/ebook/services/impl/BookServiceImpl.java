@@ -20,7 +20,7 @@ public class BookServiceImpl implements BookService {
     private BookMapper bookMapper;
 
     @Resource
-     private BookInfoMapper bookInfoMapper;
+    private BookInfoMapper bookInfoMapper;
 
     @Override
     public Book selectBookById(long bookId) {
@@ -34,14 +34,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Integer modifyBook(Book book) {
-        return bookMapper.modifyBook(book);
+    public Integer modifyBook(long bookId, Integer category, Integer isShare) {
+        return bookMapper.modifyBook(bookId, category, isShare);
     }
 
     @Override
-    public Integer deleteBookById(long bookId , long userId) {
-        bookInfoMapper.deleteBookInfoById(bookId);
-        return bookMapper.deleteBookById(bookId,userId);
+    public Integer modifyBook(Book book) {
+        return bookMapper.modifyBookAll(book);
+    }
+
+    @Override
+    public Integer deleteBookById(long bookId) {
+        bookInfoMapper.deleteBookInfoByBookId(bookId);
+        return bookMapper.deleteBookById(bookId);
     }
 
     @Override

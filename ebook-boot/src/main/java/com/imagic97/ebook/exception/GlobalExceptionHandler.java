@@ -54,4 +54,5 @@ public class GlobalExceptionHandler {
         logger.error("未知异常！原因是:", e);
         return ResultBody.error(CommonMessageCode.INTERNAL_SERVER_ERROR);
     }
+
 }
