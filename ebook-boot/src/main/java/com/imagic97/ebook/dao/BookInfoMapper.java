@@ -18,7 +18,7 @@ public interface BookInfoMapper {
     Integer addBookInfo(BookInfo bookInfo);
 
     //修改bookInfo信息
-    @Update("update book_info set" +
+    @Update("update book_info set " +
             "title = #{title}," +
             "introduction = #{introduction}," +
             "language =#{language}," +

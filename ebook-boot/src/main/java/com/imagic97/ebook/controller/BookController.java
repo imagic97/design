@@ -106,12 +106,13 @@ public class BookController {
         User user = (User) httpSession.getAttribute("user");
 
         Book currentBook = bookService.selectBookById(bookId);
-        if(!currentBook.getFileName().equals(fileName)){
-            return ResultBody.error("参数错误");
-        }
         if (currentBook == null) {
-            return ResultBody.error("删除错误");
+            return ResultBody.error("异常操作");
         }
+        if (!currentBook.getFileName().equals(fileName)) {
+            return ResultBody.error("异常操作");
+        }
+
         //判断用户是否自己上传的书
         if (currentBook.getUserId() != user.getUserId()) {
             //判断是否为普通用户
@@ -119,9 +120,15 @@ public class BookController {
                 return ResultBody.error("删除失败,无权限");
             }
         }
-        if (FileOperate.deleteFile(BOOK_PATH + fileName));
+        if (FileOperate.deleteFile(BOOK_PATH + fileName))
             bookService.deleteBookById(bookId);
         return ResultBody.success(null);
+    }
+
+    @GetMapping("/getBookInfoByBookId")
+    @ApiOperation("获取电子书详细信息")
+    public ResultBody getBookInfoByBookId(@RequestParam long bookId) {
+        return ResultBody.success(bookInfoService.selectBookInfoById(bookId));
     }
 
     @GetMapping("/modifyBook")
@@ -139,20 +146,24 @@ public class BookController {
         return ResultBody.error("修改失败");
     }
 
-    @GetMapping("/modifyBookInfo")
+    @PostMapping("/modifyBookInfo")
     @ApiOperation("修改电子书详细信息 ---管理员/用户")
     public ResultBody modifyBookInfo(
-            @RequestParam BookInfo bookInfo,
+            @RequestBody BookInfo bookInfo,
             HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
         Book currentBook = bookService.selectBookById(bookInfo.getBookId());
-        if (currentBook.getUserId() != user.getUserId() | user.getType() == 1) {
-            return ResultBody.error("修改失败,无权限");
+        if (currentBook.getUserId() != user.getUserId()) {
+            //判断是否为普通用户
+            if (user.getType() == 1) {
+                return ResultBody.error("删除失败,无权限");
+            }
         }
         if (bookInfoService.modifyBook(bookInfo) > 0) {
             return ResultBody.success(null);
         }
         return ResultBody.error("修改成功");
     }
+
 
 }
