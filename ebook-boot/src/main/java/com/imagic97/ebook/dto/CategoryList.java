@@ -1,4 +1,4 @@
-package com.imagic97.ebook.DTO;
+package com.imagic97.ebook.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

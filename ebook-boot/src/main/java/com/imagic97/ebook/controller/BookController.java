@@ -159,7 +159,7 @@ public class BookController {
                 return ResultBody.error("删除失败,无权限");
             }
         }
-        if (bookInfoService.modifyBook(bookInfo) > 0) {
+        if (bookInfoService.modifyBookInfo(bookInfo) > 0) {
             return ResultBody.success(null);
         }
         return ResultBody.error("修改成功");

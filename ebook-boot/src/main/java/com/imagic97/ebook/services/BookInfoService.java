@@ -10,7 +10,7 @@ public interface BookInfoService {
 
     Integer addBookInfo(BookInfo bookInfo);
 
-    Integer modifyBook(BookInfo bookInfo);
+    Integer modifyBookInfo(BookInfo bookInfo);
 
     Integer deleteBookInfoById(long bookId);
 }

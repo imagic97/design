@@ -26,7 +26,7 @@ public class BookInfoServiceImpl implements BookInfoService {
     }
 
     @Override
-    public Integer modifyBook(BookInfo bookInfo) {
+    public Integer modifyBookInfo(BookInfo bookInfo) {
         return bookInfoMapper.modifyBookInfo(bookInfo);
     }
 
