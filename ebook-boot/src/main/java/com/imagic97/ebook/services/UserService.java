@@ -14,6 +14,8 @@ public interface UserService {
 
     List<User> selectUserByName(String name);
 
+    User selectUserById(long userId);
+
     String getUserCount();
 
     List<User> selectAllUser(Integer limit, Integer offset);
@@ -23,4 +25,6 @@ public interface UserService {
     Integer makeUserFrozenById(String userId);
 
     Integer deleteUserById(long userId);
+
+    Integer modifyUserStatus(User user);
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * 用户表操作mapper
+ *
  * @author imagic
  */
 @Mapper
@@ -26,6 +27,10 @@ public interface UserMapper {
     @Select("select * from user where user_name=#{name}")
     public List<User> selectUserByName(String name);
 
+    //根据用户id查找用户
+    @Select("select * from user where user_id=#{userId}")
+    public User selectUserById(long userId);
+
     //返回user表长度
     @Select("select count(*) from user")
     public String getUserCount();
@@ -37,6 +42,9 @@ public interface UserMapper {
     //修改用户名，用户密码，邮箱
     @Update("update user set user_name = #{userName},user_password = #{userPassword},email=#{email} WHERE user_id= #{userId}")
     public Integer modifyUser(User user);
+
+    @Update("update user set type = #{type},state = #{state} WHERE user_id= #{userId}")
+    public Integer modifyUserStatus(User user);
 
     //根据用户id冻结账户 0为正常，1为冻结
     @Update("update user set state = 1 where user_id = #{userId}")

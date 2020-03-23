@@ -55,6 +55,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Integer modifyUserStatus(User user) {
+        return userMapper.modifyUserStatus(user);
+    }
+
+    @Override
+    public User selectUserById(long userId) {
+        return userMapper.selectUserById(userId);
+    }
+
+    @Override
     public Integer deleteUserById(long userId) {
         return userMapper.deleteUserById(userId);
     }
