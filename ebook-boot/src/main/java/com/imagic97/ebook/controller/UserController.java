@@ -81,7 +81,7 @@ public class UserController {
         user.setUserName(userName);
         user.setUserPassword(password);
         user.setEmail(email);
-        return userService.userAdd(user) > 0 ? ResultBody.success("修改成功") : ResultBody.error("修改失败");
+        return userService.modifyUser(user) > 0 ? ResultBody.success("修改成功") : ResultBody.error("修改失败");
     }
 
     @PostMapping("/modifyUserStatus")
@@ -98,6 +98,5 @@ public class UserController {
         changeUser.setType(type);
         return userService.modifyUserStatus(changeUser) > 0 ? ResultBody.success("修改成功") : ResultBody.error("修改失败");
     }
-
 
 }
