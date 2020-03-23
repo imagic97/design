@@ -24,7 +24,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/book/**")
                 .addPathPatterns("/admin/**")
                 .addPathPatterns("/user/**")
-                .excludePathPatterns("/user/login");
+                .addPathPatterns("/delete_category")
+                .addPathPatterns("/add_category")
+                .excludePathPatterns("/user/login")
+                .excludePathPatterns("/user/register");
     }
 
     @Override
