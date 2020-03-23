@@ -44,6 +44,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> selectBookByCategoryId(int categoryId) {
+        return bookMapper.selectBookByCategoryId(categoryId);
+    }
+
+    @Override
     public Integer deleteBookById(long bookId) {
         bookInfoMapper.deleteBookInfoByBookId(bookId);
         return bookMapper.deleteBookById(bookId);

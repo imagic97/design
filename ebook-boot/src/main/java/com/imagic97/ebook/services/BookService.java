@@ -20,4 +20,6 @@ public interface BookService {
     Integer deleteBookById(long bookId);
 
     List<Book> selectBookByUserId(long userId);
+
+    List<Book> selectBookByCategoryId(int categoryId);
 }

@@ -125,7 +125,7 @@ public class BookController {
         return ResultBody.success(null);
     }
 
-    @GetMapping("/getBookInfoByBookId")
+    @GetMapping("/getBookInfo")
     @ApiOperation("获取电子书详细信息")
     public ResultBody getBookInfoByBookId(@RequestParam long bookId) {
         return ResultBody.success(bookInfoService.selectBookInfoById(bookId));
@@ -164,6 +164,4 @@ public class BookController {
         }
         return ResultBody.error("修改成功");
     }
-
-
 }
