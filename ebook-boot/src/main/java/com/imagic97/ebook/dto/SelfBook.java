@@ -5,16 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** 用户书架
+/**
+ * 用户书架
+ *
  * @author imagic
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserSelf {
-    private long userId;
+public class SelfBook {
+    private long selfId;
     private long bookId;
     private String fileName;
-    private String bookName;
+    private String title;
 }
