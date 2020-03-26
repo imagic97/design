@@ -40,9 +40,9 @@ public interface BookMapper {
     Integer deleteBookById(@Param("bookId") long bookId);
 
     //根据用户id查找书
-    @Select("select from book where user_id = #{userId}")
+    @Select("select * from book where user_id = #{userId}")
     List<Book> selectBookByUserId(long userId);
 
-    @Select("select from book where Categry_id = #{CategryId} AND is_Share = 1")
-    List<Book> selectBookByCategoryId(int CategryId);
+    @Select("select * from book where book_category = #{CategoryId} AND is_Share = 1")
+    List<Book> selectBookByCategoryId(int CategoryId);
 }

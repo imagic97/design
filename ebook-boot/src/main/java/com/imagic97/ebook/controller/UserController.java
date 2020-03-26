@@ -1,14 +1,21 @@
 package com.imagic97.ebook.controller;
 
 import com.imagic97.ebook.common.ResultBody;
+import com.imagic97.ebook.dto.SelfBook;
+import com.imagic97.ebook.entity.Book;
+import com.imagic97.ebook.entity.Self;
 import com.imagic97.ebook.entity.User;
 import com.imagic97.ebook.exception.MessageException;
+import com.imagic97.ebook.services.BookService;
+import com.imagic97.ebook.services.SelfService;
 import com.imagic97.ebook.services.UserService;
+import com.imagic97.ebook.util.StringUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @author imagic
@@ -21,6 +28,11 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private SelfService selfService;
+
+    @Resource
+    private BookService bookService;
 
     @PostMapping("/login")
     @ApiOperation("用户登录")
@@ -97,6 +109,45 @@ public class UserController {
         changeUser.setState(state);
         changeUser.setType(type);
         return userService.modifyUserStatus(changeUser) > 0 ? ResultBody.success("修改成功") : ResultBody.error("修改失败");
+    }
+
+    @GetMapping("/getUserSelf")
+    @ApiOperation("获取用户书架")
+    public ResultBody getUserSelf(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        List<Book> bookList = bookService.selectBookByUserId(user.getUserId());
+        List<SelfBook> selfList = selfService.selectSelfByUserId(user.getUserId());
+        return ResultBody.success(selfList);
+    }
+
+    @GetMapping("/addBookToSelf")
+    @ApiOperation("用户添加书到书架")
+    public ResultBody addBookToSelf(@RequestParam long bookId,
+                                    HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        Book book = bookService.selectBookById(bookId);
+        if (book == null) return ResultBody.error("暂无此书");
+        if (book.getIsShare() < 1) return ResultBody.error("此书不可共享");
+
+        Self self = Self.builder()
+                .bookId(bookId)
+                .userId(user.getUserId())
+                .createDate(StringUtil.getCurrentTimeStamp()).build();
+
+        if (selfService.addBookToSelf(self) > 0)
+            return ResultBody.success(null);
+        return ResultBody.error("添加失败");
+    }
+
+    @GetMapping("/deleteBookFromSelf")
+    @ApiOperation("用户从书架删除书")
+    public ResultBody deleteBookFromSelf(@RequestParam long selfId,
+                                         HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        if (selfService.deleteSelf(selfId, user.getUserId()) > 0) {
+            return ResultBody.success(null);
+        }
+        return ResultBody.error("删除失败");
     }
 
 }
