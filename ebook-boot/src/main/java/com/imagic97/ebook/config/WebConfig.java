@@ -1,5 +1,6 @@
 package com.imagic97.ebook.config;
 
+import com.imagic97.ebook.interceptor.AdminIntercepter;
 import com.imagic97.ebook.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +29,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/add_category")
                 .excludePathPatterns("/user/login")
                 .excludePathPatterns("/user/register");
+
+        registry.addInterceptor(new AdminIntercepter())
+                .addPathPatterns("/get_category");
     }
+
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
