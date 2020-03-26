@@ -36,7 +36,7 @@ public class CategoryController {
     @GetMapping("/get_category_book")
     @ApiOperation("获取分类下的电子书")
     public ResultBody getCategoryBook(@RequestParam int category_Id) {
-        return ResultBody.success(bookService.selectBookById(category_Id));
+        return ResultBody.success(bookService.selectBookByCategoryId(category_Id));
     }
 
     @GetMapping("/add_category")
@@ -45,7 +45,7 @@ public class CategoryController {
         User user = (User) httpSession.getAttribute("user");
         //判断是否为普通用户
         if (user.getType() == 1) {
-            return ResultBody.error("删除失败,无权限");
+            return ResultBody.error("无权限");
         }
         Category category = Category.builder().categoryName(categoryName).build();
         if (categoryService.addCategory(category) > 0) {

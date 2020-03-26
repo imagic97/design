@@ -18,8 +18,8 @@ public interface CategoryMapper {
     public List<Category> selectAllCategory();
 
     //添加分类
-    @Insert("insert into category(category_name) value (categoryName)")
-    public  Integer addCategory(Category category);
+    @Insert("insert into category(category_name) value (#{categoryName})")
+    public Integer addCategory(Category category);
 
     //删除分类，不可取
     @Delete("delete from category where category_id =#{categoryId}")
