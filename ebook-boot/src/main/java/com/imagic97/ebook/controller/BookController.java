@@ -3,11 +3,13 @@ package com.imagic97.ebook.controller;
 import com.imagic97.ebook.common.ResultBody;
 import com.imagic97.ebook.entity.Book;
 import com.imagic97.ebook.entity.BookInfo;
+import com.imagic97.ebook.entity.Self;
 import com.imagic97.ebook.entity.User;
 import com.imagic97.ebook.epub.Reader;
 import com.imagic97.ebook.exception.MessageException;
 import com.imagic97.ebook.services.BookInfoService;
 import com.imagic97.ebook.services.BookService;
+import com.imagic97.ebook.services.SelfService;
 import com.imagic97.ebook.util.FileOperate;
 import com.imagic97.ebook.util.StringUtil;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +30,9 @@ public class BookController {
 
     @Resource
     private BookService bookService;
+
+    @Resource
+    private SelfService selfService;
 
     @Resource
     private BookInfoService bookInfoService;
@@ -57,6 +62,7 @@ public class BookController {
         boolean isDone = FileOperate.fileUpload(multipartFile, BOOK_PATH, fileName);
         Book book = null;
         BookInfo bookInfo;
+        Self self;
         Integer flag = -1;
         try {
             if (isDone) {
@@ -81,6 +87,16 @@ public class BookController {
                         .publisher(reader.getPublisher())
                         .title(reader.getTitle()).build();
                 bookInfoService.addBookInfo(bookInfo);
+
+                //上传的书存至self表
+                //判断是否用户
+                if (user.getType() == 1) {
+                    self = Self.builder()
+                            .userId(user.getUserId())
+                            .bookId(book.getBookId())
+                            .createDate(StringUtil.getCurrentTimeStampWithLong(timeStamp)).build();
+                    selfService.addBookToSelf(self);
+                }
             }
         } catch (Exception e) {
             //数据库读写失败
@@ -120,8 +136,10 @@ public class BookController {
                 return ResultBody.error("删除失败,无权限");
             }
         }
-        if (FileOperate.deleteFile(BOOK_PATH + fileName))
+        if (FileOperate.deleteFile(BOOK_PATH + fileName)) {
             bookService.deleteBookById(bookId);
+            selfService.deleteSelfByBookId(bookId, user.getUserId());
+        }
         return ResultBody.success(null);
     }
 

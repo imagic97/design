@@ -5,11 +5,11 @@
       <reader-context :responseHtml="responseHtml" v-bind:fontSize="fontSize" />
       <div class="nextChapterContainner">
         <div class="nextChapter">
-          <el-button
+          <button
             type="primary"
             v-if="responseHtml!=''&&this.keyInContent+1 < this.contentList.length"
             @click.stop="toNextChapter"
-          >下一章</el-button>
+          >下一章</button>
         </div>
       </div>
     </div>
@@ -196,5 +196,7 @@ export default {
   height: 48px;
   margin: 0 auto;
   border: 0;
+  background-color: rgb(0, 167, 222);
+  outline: none;
 }
 </style>

@@ -1,25 +1,26 @@
 <template>
   <div class="themeControl" v-show="menuVisible && menuShow === 2">
-    <div>
-      <el-row>
-        <el-col :span="12">
-          <div
-            class="theme theme-dark"
-            @click="setCurrentTheme('dark')"
-            :class="{'currentTheme':isCurrentTheme('dark')}"
-          ></div>
-        </el-col>
-        <el-col :span="12">
-          <div
-            class="theme theme-light"
-            @click="setCurrentTheme('light')"
-            :class="{'currentTheme':isCurrentTheme('light')}"
-          ></div>
-        </el-col>
-      </el-row>
+    <div class="themeContainer">
+      <div
+        class="theme theme-dark"
+        @click="setCurrentTheme('dark')"
+        :class="{ currentTheme: isCurrentTheme('dark') }"
+      ></div>
+      <div
+        class="theme theme-light"
+        @click="setCurrentTheme('light')"
+        :class="{ currentTheme: isCurrentTheme('light') }"
+      ></div>
     </div>
     <div class="fontSize">
-      <input class="fontSizeValue" v-model="zitiSize" type="range" max="34" min="10" step="6" />
+      <input
+        class="fontSizeValue"
+        v-model="zitiSize"
+        type="range"
+        max="34"
+        min="10"
+        step="6"
+      />
     </div>
   </div>
 </template>
@@ -75,6 +76,9 @@ export default {
   box-shadow: 0 -8px 21px rgba(0, 25, 104, 0.3);
   padding: 18px 0 54px 0;
 }
+.themeContainer {
+  display: flex;
+}
 
 .fontSize {
   margin: 0 auto;
@@ -82,6 +86,7 @@ export default {
   width: 86%;
 }
 .theme {
+  flex: 1;
   margin: 16px 60px;
   height: 30px;
   border-radius: 15px;

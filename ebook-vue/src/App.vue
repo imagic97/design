@@ -16,6 +16,7 @@ export default {
 </script>
 
 <style>
+/* @import "./assets/reset.css"; */
 body {
   background: #7d8188;
 }
@@ -36,6 +37,9 @@ body {
 @media screen and (max-width: 768px) {
   #app {
     width: 100%;
+  }
+  el-message {
+    width: 45px;
   }
 }
 </style>

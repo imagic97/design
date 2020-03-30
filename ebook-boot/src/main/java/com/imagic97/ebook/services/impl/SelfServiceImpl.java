@@ -23,6 +23,11 @@ public class SelfServiceImpl implements SelfService {
     }
 
     @Override
+    public Integer deleteSelfByBookId(long bookId, long userId) {
+        return selfMapper.deleteSelfByBookId(bookId,userId);
+    }
+
+    @Override
     public Integer deleteSelf(long selfId, long userId) {
         return selfMapper.deleteSelf(selfId, userId);
     }

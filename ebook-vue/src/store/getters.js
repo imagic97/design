@@ -10,7 +10,10 @@ const getters = {
   currentComponent: state => state.book.currentComponent,
   fontSize: state => state.book.fontSize,
   menuVisible: state => state.book.menuVisible,
-  keyInContent: state => state.book.keyInContent
+  keyInContent: state => state.book.keyInContent,
+  isLogin: state => state.book.isLogin,
+  userName: state => state.book.userName,
+  password: state => state.book.password
 };
 
 export default getters;

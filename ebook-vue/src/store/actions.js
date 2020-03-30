@@ -31,6 +31,15 @@ const actions = {
   },
   setMenuVisible: ({ commit }, menuVisible) => {
     return commit("SET_MENUVISIBLE", menuVisible);
+  },
+  setIsLogin: ({ commit }, isLogin) => {
+    return commit("SET_ISLOGIN", isLogin);
+  },
+  setUserName: ({ commit }, userName) => {
+    return commit("SET_USERNAME", userName);
+  },
+  setPassword: ({ commit }, password) => {
+    return commit("SET_PASSWORD", password);
   }
 };
 

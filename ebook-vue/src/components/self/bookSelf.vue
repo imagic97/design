@@ -3,7 +3,7 @@
     <div class="bookSelf">
       <div
         class="bookSelfList"
-        v-for="(item, key) in userSelfList"
+        v-for="(item, key) in bookSelfList"
         :key="key"
         @click="toReaderBook(item)"
       >
@@ -24,24 +24,19 @@
 </template>
 <script>
 import { ebookMixin } from "@/util/mixin";
+// import { getUserSelf } from "@/api/api";
 export default {
   mixins: [ebookMixin],
 
   data() {
     return {
-      userSelfList: [
-        { bookID: "1.epub", bookTitle: "" },
-        { bookID: "2.epub", bookTitle: "dadsdsdasdasdadadadad" },
-        { bookID: "3.epub", bookTitle: "dad" },
-        { bookID: "4.epub", bookTitle: "dad" },
-        { bookID: "5.epub", bookTitle: "dad" },
-        { bookID: "6.epub", bookTitle: "dad" },
-        { bookID: "7.epub", bookTitle: "dad" },
-        { bookID: "8.epub", bookTitle: "dad" },
-        { bookID: "9.epub", bookTitle: "dad" }
+      bookSelfList: [
+        { bookID: "1.epub", bookTitle: "", fileName: "" },
+        { bookID: "2.epub", bookTitle: "", fileName: "" }
       ]
     };
   },
+  mounted() {},
   methods: {
     toReaderBook(book) {
       this.setBookID(book.bookID);

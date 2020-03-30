@@ -16,7 +16,10 @@ const book = {
     menuShow: -1,
     keyInContent: 0,
     menuVisible: false,
-    fontSize: "16"
+    fontSize: "16",
+    isLogin: false,
+    userName: "",
+    password: ""
   },
   mutations: {
     SET_FILENAME: (state, fileName) => {
@@ -51,6 +54,15 @@ const book = {
     },
     SET_MENUVISIBLE: (state, menuVisible) => {
       state.menuVisible = menuVisible;
+    },
+    SET_ISLOGIN: (state, isLogin) => {
+      state.isLogin = isLogin;
+    },
+    SET_USERNAME: (state, userName) => {
+      state.userName = userName;
+    },
+    SET_PASSWORD: (state, password) => {
+      state.password = password;
     }
   }
 };

@@ -33,3 +33,52 @@ export function getChapterCSS(file) {
     }
   });
 }
+
+// http://localhost:8080/user/getUserSelf
+export function getUserSelf() {
+  return axios({
+    method: "GET",
+    url: "/user/getUserSelf"
+  });
+}
+
+///user/login?userName=test&password=123456
+export function login(userName, password) {
+  return axios({
+    method: "POST",
+    url: "/user/login",
+    params: {
+      userName: userName,
+      password: password
+    }
+  });
+}
+export function logout() {
+  return axios({
+    method: "GET",
+    url: "/user/logout"
+  });
+}
+///user/register?userName=user&password=123456&email=
+export function register(userName, password, email) {
+  return axios({
+    method: "POST",
+    url: "/user/register",
+    params: {
+      userName: userName,
+      password: password,
+      email: email
+    }
+  });
+}
+export function modifyUser(userName, password, email) {
+  return axios({
+    method: "POST",
+    url: "/user/modifyUser",
+    params: {
+      userName: userName,
+      password: password,
+      email: email
+    }
+  });
+}

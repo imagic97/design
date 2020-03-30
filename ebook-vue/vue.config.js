@@ -11,12 +11,12 @@ module.exports = {
     https: false,
     hotOnly: false,
     proxy: {
-      "/read": {
+      "/api": {
         target: "http://localhost:8080",
         changeOrigin: true,
         ws: true,
         pathRewrite: {
-          "^/read": "/read"
+          "^/api": ""
         }
       }
     },

@@ -52,6 +52,14 @@ public class UserController {
         return ResultBody.error("用户名或密码错误");
     }
 
+    @GetMapping("/logout")
+    @ApiOperation("退出登录")
+    public ResultBody login(HttpSession httpSession) {
+       httpSession.removeAttribute("user");
+        return ResultBody.success(null);
+    }
+
+
     @PostMapping("/register")
     @ApiOperation("用户注册")
     public ResultBody addUser(@RequestParam String userName,

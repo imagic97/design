@@ -1,7 +1,7 @@
 <template>
   <div class="bookCoverContainer">
     <div class="bookCover">
-      <img v-lazy="imgUrl" :key="imgUrl" alt />
+      <img :src="imgUrl" :key="imgUrl" alt />
       <span class="book_cover_boder"></span>
     </div>
     <div class="bookTitle">{{ bookTitle!="" ? bookTitle+"das" : "空" }}</div>

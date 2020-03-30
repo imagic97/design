@@ -20,6 +20,9 @@ public interface SelfMapper {
     @Delete(("delete from self where self_id = #{selfId} AND user_id = #{userId}"))
     Integer deleteSelf(long selfId, long userId);
 
+    @Delete(("delete from self where book_id = #{bookId} AND user_id = #{userId}"))
+    Integer deleteSelfByBookId(long bookId, long userId);
+
     @Select("SELECT s.self_id, b.book_id, b.file_name, bi.title " +
             "FROM book b,book_info bi,self s " +
             "where s.user_id = #{userId} AND b.book_id = s.book_id AND bi.book_id = s.book_id")
