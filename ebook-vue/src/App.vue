@@ -16,7 +16,7 @@ export default {
 </script>
 
 <style>
-/* @import "./assets/reset.css"; */
+@import "./assets/reset.css";
 body {
   background: #7d8188;
 }
@@ -28,6 +28,7 @@ body {
   bottom: 0;
   z-index: 0;
   width: 870px;
+  min-width: 320px;
   height: 100%;
   background-color: #f1f1f1;
   margin: 0 auto;

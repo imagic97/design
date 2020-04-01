@@ -3,6 +3,7 @@ import App from "./App.vue";
 import store from "./store";
 import router from "./router/index";
 import VueLazyload from "vue-lazyload";
+import "./assets/icon/iconfont.css";
 // import ElementUI from "element-ui";
 // import "element-ui/lib/theme-chalk/index.css";
 

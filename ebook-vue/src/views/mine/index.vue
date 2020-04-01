@@ -36,7 +36,7 @@ export default {
   width: 70%;
   margin: 0 auto;
   padding: 16px 0 0 0;
-  box-shadow: 0 2px 10px rgba(0, 25, 104, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 25, 104, 0.3);
 }
 
 @media screen and (max-width: 768px) {

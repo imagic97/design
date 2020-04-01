@@ -1,5 +1,6 @@
 *.epub
 .DS_Store
+/book
 node_modules
 /dist
 target
