@@ -71,6 +71,10 @@ export default new Router({
       name: "book-reader",
       path: "/book-reader",
       component: resolve => require(["@/views/book"], resolve)
+    },
+    {
+      path: "/**",
+      component: resolve => require(["@/components/common/error"], resolve)
     }
   ]
 });
