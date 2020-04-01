@@ -2,7 +2,7 @@
   <div class="readerControls" v-show="menuVisible">
     <div
       class="readerControls_item readerControls_item1"
-      :class="{'selected': menuShow === 3}"
+      :class="{ selected: menuShow === 3 }"
       @click="showSetting(3)"
     >
       <span class="title">书签</span>
@@ -10,7 +10,7 @@
 
     <div
       class="readerControls_item readerControls_item2"
-      :class="{'selected': menuShow === 2}"
+      :class="{ selected: menuShow === 2 }"
       @click="showSetting(2)"
     >
       <span class="title">主题</span>
@@ -18,14 +18,14 @@
 
     <div
       class="readerControls_item readerControls_item3"
-      :class="{'selected': menuShow === 1}"
+      :class="{ selected: menuShow === 1 }"
       @click="showSetting(1)"
     >
       <span class="title">目录</span>
     </div>
     <div
       class="readerControls_item readerControls_item4"
-      :class="{'selected': menuShow === 0}"
+      :class="{ selected: menuShow === 0 }"
       @click="showSetting(0)"
     >
       <router-link to="/self" tag="span">
@@ -52,7 +52,7 @@ export default {
   width: 100%;
   height: 64px;
   z-index: 999;
-  box-shadow: 0 -8px 21px rgba(0, 25, 104, 0.3);
+  box-shadow: 0 -1px 3px rgba(0, 25, 104, 0.3);
   text-align: center;
   display: flex;
 }

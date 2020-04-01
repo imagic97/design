@@ -25,10 +25,13 @@
 <script>
 import { logout } from "@/api/api";
 import { ebookMixin } from "@/util/mixin";
+import sessionStorage from "@/util/sessionStorage";
+
 export default {
   mixins: [ebookMixin],
   methods: {
     logout() {
+      sessionStorage.clear();
       logout();
       this.setIsLogin(false);
     }

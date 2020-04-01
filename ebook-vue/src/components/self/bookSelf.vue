@@ -5,15 +5,26 @@
         class="bookSelfList"
         v-for="(item, key) in bookSelfList"
         :key="key"
-        @click="toReaderBook(item)"
+        @click="selectedMode ? selectBook(key) : toReaderBook(item)"
       >
         <div class="bookCover">
-          <img v-lazy="API_TO_GET_COVER + item.bookID" :key="item.bookID" class="bookCover_img" />
+          <img
+            v-lazy="API_TO_GET_COVER + item.fileName"
+            :key="item.bookID"
+            class="bookCover_img"
+          />
+          <div
+            v-show="selectedMode"
+            v-bind:class="{ selected: item.isSelected }"
+            class="iconfont icon-selected"
+          ></div>
           <div class="book_cover_boder"></div>
         </div>
-        <div class="title">{{item.bookTitle?item.bookTitle:"------"}}</div>
+        <div class="title">
+          {{ item.title ? item.title : "无书名" }}
+        </div>
       </div>
-      <span class="addBook placeholder"></span>
+      <span class="addBook placeholder" @click="showUpload()"></span>
       <!-- 占位作用，防止组件拉伸 -->
       <div class="placeholder"></div>
       <div class="placeholder"></div>
@@ -24,23 +35,89 @@
 </template>
 <script>
 import { ebookMixin } from "@/util/mixin";
-// import { getUserSelf } from "@/api/api";
+import { getUserSelf, deleteBook, deleteBookFromSelf } from "@/api/api";
+import VueEvent from "@/util/vueEvent";
+
 export default {
   mixins: [ebookMixin],
 
   data() {
     return {
-      bookSelfList: [
-        { bookID: "1.epub", bookTitle: "", fileName: "" },
-        { bookID: "2.epub", bookTitle: "", fileName: "" }
-      ]
+      bookSelfList: [],
+      selectedMode: false
     };
   },
-  mounted() {},
+
+  watch: {
+    isLogin: function() {
+      if (this.isLogin == true) {
+        this.init();
+      } else this.bookSelfList = [];
+    }
+  },
+  mounted() {
+    VueEvent.$on("SELECTMODE", value => {
+      this.selectedMode = value;
+      if (value === false) {
+        this.selectCancel(this.bookSelfList);
+      }
+    });
+    VueEvent.$on("DELETEBOOK", value => {
+      if (value === true) this.deleteBook(this.bookSelfList);
+    });
+
+    this.init();
+  },
   methods: {
+    //初始化书架
+    init() {
+      //用户已登陆，从网络获取书架
+      if (this.isLogin == true) {
+        getUserSelf().then(Response => {
+          if (Response.data.code == 200)
+            // {selfId,bookId,fileName,title
+            for (let item of Response.data.result) {
+              item.isSelected = false;
+              this.bookSelfList.push(item);
+            }
+        });
+      }
+    },
+    //去阅读页面
     toReaderBook(book) {
-      this.setBookID(book.bookID);
+      this.setBookID(book.fileName);
       this.$router.push({ path: "/book-reader" });
+    },
+    //显示上传
+    showUpload() {
+      this.$emit("showUpload", true);
+    },
+    //从书架选择书
+    selectBook(key) {
+      this.bookSelfList[key].isSelected = !this.bookSelfList[key].isSelected;
+    },
+    //删除书架的书
+    deleteBook(array) {
+      for (let i = array.length - 1; i >= 0; i = i - 1) {
+        if (array[i].isSelected === true) {
+          if (array[i].selfId === 0) {
+            //用户自己上传书
+            deleteBook(array[i].bookId, array[i].fileName);
+          } else {
+            //书城的书
+            deleteBookFromSelf(array[i].selfId);
+          }
+          array.splice(i, 1);
+        }
+      }
+      return array;
+    },
+    //取消选择
+    selectCancel(array) {
+      for (let item of array) {
+        item.isSelected = false;
+      }
+      return array;
     }
   }
 };
@@ -60,11 +137,21 @@ export default {
   justify-content: space-between;
 }
 .title {
-  margin-top: 16px;
+  margin-top: 8px;
   line-height: 18px;
   overflow: hidden;
   height: 36px;
   text-overflow: ellipsis;
+}
+
+.iconfont {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  color: rgba(0, 0, 0, 0.4);
+}
+.selected {
+  color: blue;
 }
 
 .placeholder,
@@ -128,7 +215,7 @@ export default {
   .placeholder,
   .bookSelfList {
     margin-left: 20px;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
   }
 }
 @media screen and (max-width: 450px) {

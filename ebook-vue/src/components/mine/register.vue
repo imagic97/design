@@ -6,17 +6,32 @@
     <div class="register">
       <h2>注册/REGISTER</h2>
       <div class="register_form">
-        <input type="text" class="email" placeholder="邮箱,可省略" v-model="email" />
+        <input
+          type="text"
+          class="email"
+          placeholder="邮箱,可省略"
+          v-model="email"
+        />
         <div class="tips">
-          <span>{{tips}}</span>
+          <span>{{ tips }}</span>
         </div>
-        <input type="text" class="user" placeholder="用户名" v-model="userName" />
+        <input
+          type="text"
+          class="user"
+          placeholder="用户名"
+          v-model="userName"
+        />
         <div class="tips">
-          <span>{{tips_a}}</span>
+          <span>{{ tips_a }}</span>
         </div>
-        <input type="password" class="password" placeholder="密码" v-model="password" />
+        <input
+          type="password"
+          class="password"
+          placeholder="密码"
+          v-model="password"
+        />
         <div class="tips">
-          <span>{{tips_b}}</span>
+          <span>{{ tips_b }}</span>
         </div>
         <button class="register_btn" @click="register()">注册</button>
       </div>
@@ -87,14 +102,6 @@ h2 {
   text-align: center;
 }
 
-.outer_label {
-  position: relative;
-  margin: 0 auto;
-  width: 120px;
-  height: 120px;
-  border-radius: 60px;
-  box-shadow: 0 2px 10px rgba(0, 25, 104, 0.3);
-}
 .register_form {
   max-width: 450px;
   padding: 0 10px 64px 10px;

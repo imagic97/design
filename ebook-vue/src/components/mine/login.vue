@@ -6,24 +6,36 @@
     <div class="login">
       <h2>登录/LOGIN</h2>
       <div class="login_form">
-        <input type="text" class="user" placeholder="用户名" v-model="user_name" />
+        <input
+          type="text"
+          class="user"
+          placeholder="用户名"
+          v-model="user_name"
+        />
         <div class="tips">
-          <span>{{tips_a}}</span>
+          <span>{{ tips_a }}</span>
         </div>
-        <input type="password" class="password" placeholder="密码" v-model="user_password" />
+        <input
+          type="password"
+          class="password"
+          placeholder="密码"
+          v-model="user_password"
+        />
         <div class="tips">
-          <span>{{tips_b}}</span>
+          <span>{{ tips_b }}</span>
         </div>
         <button class="login_btn" @click="login()">登录</button>
       </div>
     </div>
   </div>
 </template>
- 
+
 <script>
 import { login } from "@/api/api";
 import loading from "@/components/common/loading";
 import { ebookMixin } from "@/util/mixin";
+import sessionStorage from "@/util/sessionStorage";
+
 export default {
   mixins: [ebookMixin],
   components: { loading },
@@ -70,6 +82,9 @@ export default {
           this.setUserName(this.user_name);
           this.setPassword(this.user_password);
           this.setIsLogin(true);
+          sessionStorage.set("isLogin", true);
+          sessionStorage.set("userName", this.user_name);
+          sessionStorage.set("password", this.user_password);
           this.$router.push("/mine");
         } else {
           this.tips_b = "登录失败，检查用户名/密码";

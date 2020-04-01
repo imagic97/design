@@ -20,7 +20,7 @@
 
     <div class="tabbar_item">
       <router-link to="/mine" tag="div" class="tab-items">
-        <span class="title">我的</span>
+        <span class="title">我</span>
       </router-link>
     </div>
   </div>
@@ -43,7 +43,7 @@ export default {
   width: 100%;
   height: 64px;
   z-index: 999;
-  box-shadow: 0 2px 10px rgba(0, 25, 104, 0.3);
+  box-shadow: 0 -1px 3px rgba(0, 25, 104, 0.3);
   text-align: center;
   display: flex;
   background-color: #f1f1f1;

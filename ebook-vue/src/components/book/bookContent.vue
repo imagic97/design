@@ -8,7 +8,12 @@
           :key="key"
           v-on:click="ContentToReader(item, key)"
         >
-          <div id="aa" v-bind:class="{'listSelected':isCurrentContent(item.url)}">{{ item.title }}</div>
+          <div
+            id="aa"
+            v-bind:class="{ listSelected: isCurrentContent(item.url) }"
+          >
+            {{ item.title }}
+          </div>
         </li>
       </ul>
     </div>
@@ -88,7 +93,7 @@ export default {
   height: 57%;
   border-radius: 16px 16px 0 0;
   overflow: hidden;
-  box-shadow: 0 -8px 21px rgba(0, 25, 104, 0.3);
+  box-shadow: 0 -1px 3px rgba(0, 25, 104, 0.3);
 }
 
 .chapterItem:hover {
@@ -113,6 +118,7 @@ li {
   border: solid #ebedf1;
   overflow: hidden;
   border-width: 0 0 1px;
+  padding: 0 0px 0 28px;
 }
 #aa {
   display: block;

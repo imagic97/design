@@ -10,7 +10,7 @@
   width: 120px;
   height: 120px;
   border-radius: 60px;
-  box-shadow: 0 2px 10px rgba(0, 25, 104, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 25, 104, 0.3);
 }
 .login_logo {
   position: absolute;

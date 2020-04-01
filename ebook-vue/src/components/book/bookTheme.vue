@@ -73,7 +73,7 @@ export default {
   bottom: 64px;
   width: 100%;
   border-radius: 16px 16px 0 0;
-  box-shadow: 0 -8px 21px rgba(0, 25, 104, 0.3);
+  box-shadow: 0 -1px 3px rgba(0, 25, 104, 0.3);
   padding: 18px 0 54px 0;
 }
 .themeContainer {
