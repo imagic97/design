@@ -87,16 +87,16 @@ public class BookController {
                         .publisher(reader.getPublisher())
                         .title(reader.getTitle()).build();
                 bookInfoService.addBookInfo(bookInfo);
-
-                //上传的书存至self表
-                //判断是否用户
-                if (user.getType() == 1) {
-                    self = Self.builder()
-                            .userId(user.getUserId())
-                            .bookId(book.getBookId())
-                            .createDate(StringUtil.getCurrentTimeStampWithLong(timeStamp)).build();
-                    selfService.addBookToSelf(self);
-                }
+//
+//                //上传的书存至self表
+//                //判断是否用户
+//                if (user.getType() == 1) {
+//                    self = Self.builder()
+//                            .userId(user.getUserId())
+//                            .bookId(book.getBookId())
+//                            .createDate(StringUtil.getCurrentTimeStampWithLong(timeStamp)).build();
+//                    selfService.addBookToSelf(self);
+//                }
             }
         } catch (Exception e) {
             //数据库读写失败
@@ -138,7 +138,6 @@ public class BookController {
         }
         if (FileOperate.deleteFile(BOOK_PATH + fileName)) {
             bookService.deleteBookById(bookId);
-            selfService.deleteSelfByBookId(bookId, user.getUserId());
         }
         return ResultBody.success(null);
     }

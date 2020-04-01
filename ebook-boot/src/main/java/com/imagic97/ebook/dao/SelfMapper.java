@@ -27,4 +27,9 @@ public interface SelfMapper {
             "FROM book b,book_info bi,self s " +
             "where s.user_id = #{userId} AND b.book_id = s.book_id AND bi.book_id = s.book_id")
     List<SelfBook> selectSelfByUserId(long userId);
+
+    @Select("SELECT b.book_id, b.file_name, bi.title " +
+            "FROM book b,book_info bi " +
+            "where b.user_id = #{userId} AND bi.book_id = b.book_id")
+    List<SelfBook> selectBookByUserId(long userId);
 }

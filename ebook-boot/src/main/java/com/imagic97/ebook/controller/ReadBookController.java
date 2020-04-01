@@ -72,6 +72,7 @@ public class ReadBookController {
         response.setContentType("image/png");
         Reader reader = new Reader(BOOK_PATH + file);
         byte[] data;
+
         try {
             Resource resource = reader.getBook().getCoverImage();
             if (resource == null){

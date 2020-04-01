@@ -17,4 +17,6 @@ public interface SelfService {
     Integer deleteSelfByBookId(long bookId, long userId);
 
     List<SelfBook> selectSelfByUserId(long userId);
+
+    List<SelfBook> selectBookByUserId(long userId);
 }

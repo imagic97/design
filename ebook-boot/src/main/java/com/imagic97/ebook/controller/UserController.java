@@ -123,8 +123,10 @@ public class UserController {
     @ApiOperation("获取用户书架")
     public ResultBody getUserSelf(HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
-        List<Book> bookList = bookService.selectBookByUserId(user.getUserId());
+        //用户自己上传书
+        List<SelfBook> bookList = selfService.selectBookByUserId(user.getUserId());
         List<SelfBook> selfList = selfService.selectSelfByUserId(user.getUserId());
+        selfList.addAll(bookList);
         return ResultBody.success(selfList);
     }
 
