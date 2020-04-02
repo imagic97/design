@@ -1,5 +1,6 @@
 package com.imagic97.ebook.controller;
 
+import com.imagic97.ebook.annotation.PassToken;
 import com.imagic97.ebook.common.ResultBody;
 import com.imagic97.ebook.entity.Book;
 import com.imagic97.ebook.entity.BookInfo;
@@ -142,6 +143,7 @@ public class BookController {
         return ResultBody.success(null);
     }
 
+    @PassToken
     @GetMapping("/getBookInfo")
     @ApiOperation("获取电子书详细信息")
     public ResultBody getBookInfoByBookId(@RequestParam long bookId) {

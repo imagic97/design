@@ -1,5 +1,7 @@
 package com.imagic97.ebook.controller;
 
+import com.imagic97.ebook.annotation.PassToken;
+import com.imagic97.ebook.annotation.UserLoginToken;
 import com.imagic97.ebook.common.ResultBody;
 import com.imagic97.ebook.dto.SelfBook;
 import com.imagic97.ebook.entity.Book;
@@ -8,14 +10,17 @@ import com.imagic97.ebook.entity.User;
 import com.imagic97.ebook.exception.MessageException;
 import com.imagic97.ebook.services.BookService;
 import com.imagic97.ebook.services.SelfService;
+import com.imagic97.ebook.services.TokenService;
 import com.imagic97.ebook.services.UserService;
 import com.imagic97.ebook.util.StringUtil;
+import com.imagic97.ebook.util.TokenUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author imagic
@@ -34,11 +39,14 @@ public class UserController {
     @Resource
     private BookService bookService;
 
+    @Resource
+    private TokenService tokenService;
+
+    @PassToken
     @PostMapping("/login")
     @ApiOperation("用户登录")
     public ResultBody login(@RequestParam String userName,
-                            @RequestParam String password,
-                            HttpSession httpSession) {
+                            @RequestParam String password) {
         if ("".equals(userName) || "".equals(password))
             throw new MessageException("1", "请输入用户名和密码");
         User user = userService.userLogin(userName, password);
@@ -46,8 +54,8 @@ public class UserController {
             if (user.getState() == 1) {
                 return ResultBody.error("该账户被冻结");
             }
-            httpSession.setAttribute("user", user);
-            return ResultBody.success(null);
+            Objects.requireNonNull(TokenUtil.getSession()).setAttribute("user", user);
+            return ResultBody.success(tokenService.getToken(user));
         }
         return ResultBody.error("用户名或密码错误");
     }
@@ -55,11 +63,19 @@ public class UserController {
     @GetMapping("/logout")
     @ApiOperation("退出登录")
     public ResultBody login(HttpSession httpSession) {
-       httpSession.removeAttribute("user");
+        httpSession.removeAttribute("user");
         return ResultBody.success(null);
     }
 
+    @PassToken
+    @GetMapping("/test")
+    @ApiOperation("测试")
+    public ResultBody test(HttpSession httpSession) {
+        return ResultBody.success(httpSession.getAttribute("user"));
+    }
 
+
+    @PassToken
     @PostMapping("/register")
     @ApiOperation("用户注册")
     public ResultBody addUser(@RequestParam String userName,
@@ -76,6 +92,7 @@ public class UserController {
                 .state(0).build();
         return userService.userAdd(user) > 0 ? ResultBody.success("注册成功") : ResultBody.error("注册失败，未知错误");
     }
+
 
     @GetMapping("/deleteUser")
     @ApiOperation("管理员删除用户")
@@ -119,13 +136,16 @@ public class UserController {
         return userService.modifyUserStatus(changeUser) > 0 ? ResultBody.success("修改成功") : ResultBody.error("修改失败");
     }
 
+    @UserLoginToken
     @GetMapping("/getUserSelf")
     @ApiOperation("获取用户书架")
     public ResultBody getUserSelf(HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+        // User user = (User) httpSession.getAttribute("user");
+
+        long userId = TokenUtil.getTokenUserId();
         //用户自己上传书
-        List<SelfBook> bookList = selfService.selectBookByUserId(user.getUserId());
-        List<SelfBook> selfList = selfService.selectSelfByUserId(user.getUserId());
+        List<SelfBook> bookList = selfService.selectBookByUserId(userId);
+        List<SelfBook> selfList = selfService.selectSelfByUserId(userId);
         selfList.addAll(bookList);
         return ResultBody.success(selfList);
     }

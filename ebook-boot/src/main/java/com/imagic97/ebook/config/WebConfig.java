@@ -1,6 +1,7 @@
 package com.imagic97.ebook.config;
 
-import com.imagic97.ebook.interceptor.LoginInterceptor;
+import com.imagic97.ebook.interceptor.AuthenticationInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
@@ -18,19 +19,32 @@ public class WebConfig implements WebMvcConfigurer {
         converters.add(new BufferedImageHttpMessageConverter());
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/book/**")
-                .addPathPatterns("/admin/**")
-                .addPathPatterns("/user/**")
-                .addPathPatterns("/delete_category")
-                .addPathPatterns("/add_category")
-                .excludePathPatterns("/user/login")
-                .excludePathPatterns("/user/register");
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(new LoginInterceptor())
+//                .addPathPatterns("/book/**")
+//                .addPathPatterns("/admin/**")
+//                .addPathPatterns("/user/**")
+//                .addPathPatterns("/delete_category")
+//                .addPathPatterns("/add_category")
+//                .excludePathPatterns("/user/login")
+//                .excludePathPatterns("/user/register");
 //
 //        registry.addInterceptor(new AdminInterceptor())
 //                .addPathPatterns("");
+//    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 拦截请求，通过判断是否有 @LoginRequired 注解 决定是否需要登录
+        registry.addInterceptor(authenticationInterceptor())
+                .addPathPatterns("/**").
+                excludePathPatterns("/read/*");
+    }
+
+    @Bean
+    public AuthenticationInterceptor authenticationInterceptor() {
+        return new AuthenticationInterceptor();// 自己写的拦截器
     }
 
 
