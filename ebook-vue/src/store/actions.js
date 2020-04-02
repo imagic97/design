@@ -38,8 +38,8 @@ const actions = {
   setUserName: ({ commit }, userName) => {
     return commit("SET_USERNAME", userName);
   },
-  setPassword: ({ commit }, password) => {
-    return commit("SET_PASSWORD", password);
+  setBookSelfList: ({ commit }, bookSelfList) => {
+    return commit("SET_BOOKSELFLIST", bookSelfList);
   }
 };
 

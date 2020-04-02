@@ -1,7 +1,7 @@
 *.epub
 .DS_Store
-/book
 node_modules
+/book
 /dist
 target
 # local env files

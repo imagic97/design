@@ -13,27 +13,32 @@
       ></div>
     </div>
     <div class="fontSize">
-      <input
-        class="fontSizeValue"
-        v-model="zitiSize"
-        type="range"
-        max="34"
-        min="10"
-        step="6"
-      />
+      <input class="fontSizeValue" v-model="zitiSize" type="range" max="34" min="10" step="6" />
     </div>
   </div>
 </template>
 
 <script>
 import { ebookMixin } from "@/util/mixin";
-//import { addCss, removeCss } from "@/util/utils";
+import lS from "@/util/localStorage";
+
 export default {
   mixins: [ebookMixin],
   data() {
     return {
-      currentTheme: "light"
+      currentTheme: ""
     };
+  },
+
+  mounted() {
+    let value = lS.get("theme");
+    if (value != null) {
+      this.setCurrentTheme(value);
+    } else {
+      value = "light";
+      this.setCurrentTheme(value);
+    }
+    this.currentTheme = value;
   },
 
   computed: {
@@ -59,6 +64,7 @@ export default {
         this.CreateStyle(this.THEME_LIGHT, "themeStyle");
       }
       this.currentTheme = value;
+      lS.set("theme", value);
     },
     isCurrentTheme(value) {
       return this.currentTheme === value;

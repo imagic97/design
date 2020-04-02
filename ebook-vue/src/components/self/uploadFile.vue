@@ -5,9 +5,7 @@
     <input ref="file" type="file" @change="getFile($event)" id="file" />
     <button class="btn" @click="selectFile()">选择电子书</button>
     <button class="btn btn-upload" @click="uploadFile()">上传</button>
-    <button class="btn btn-cancel" @click="hide()">
-      取消
-    </button>
+    <button class="btn btn-cancel" @click="hide()">取消</button>
   </div>
 </template>
 <script>
@@ -42,6 +40,11 @@ export default {
       this.message = fileTamp[0].name;
     },
     uploadFile() {
+      if (this.file == null) {
+        this.message = "请选择文件上传";
+        this.$refs.message.style.color = "red";
+        return;
+      }
       uploadBook(this.file).then(Response => {
         if (Response.data.code == 200) {
           this.message = "上传成功";

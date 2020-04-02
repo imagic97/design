@@ -33,26 +33,29 @@ public class ReadBookController {
      * 获取书籍资源文件,如图片、html、css
      * 章节通过href获取，图片资源则为id
      *
-     * @param file     书籍文件名
-     * @param href     指定资源名
-     * @param response 响应请求
+     * @param file 书籍文件名
+     * @param href 指定资源名
      */
     @GetMapping(value = "/view")
     @ApiOperation("获取电子书资源，如HTML、png等")
     public void view(@RequestParam String file,
-                     @RequestParam String href,
-                     HttpServletResponse response) {
+                     @RequestParam String href, HttpServletResponse response) {
         String type = ResponseContentType.getInstance().matchType(href, ".");
         response.setContentType(type);
         byte[] data = new Reader(BOOK_PATH + file, href).getResourceData();
         if (data == null) {
-
-            throw new MessageException("5", "资源不存在");
+            throw new MessageException("404", "资源不存在");
         } else {
             try {
-                FileCopyUtils.copy(data, response.getOutputStream());
+                FileCopyUtils.copy(new ByteArrayInputStream(data), response.getOutputStream());
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    response.getOutputStream().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -61,29 +64,33 @@ public class ReadBookController {
     /**
      * 获取书籍封面,
      *
-     * @param file     书籍文件名
-     * @param response 响应请求
+     * @param file 书籍文件名
      */
     @GetMapping(value = "/cover")
     @ResponseBody
     @ApiOperation("获取电子书封面")
-    public void getCover(@RequestParam String file,
-                         HttpServletResponse response) {
+    public void getCover(@RequestParam String file, HttpServletResponse response) {
         response.setContentType("image/png");
         Reader reader = new Reader(BOOK_PATH + file);
         byte[] data;
 
         try {
             Resource resource = reader.getBook().getCoverImage();
-            if (resource == null){
-                return ;
+            if (resource == null) {
+                return;
             }
-             data = resource.getData();
+            data = resource.getData();
             if (data != null) {
                 FileCopyUtils.copy(new ByteArrayInputStream(data), response.getOutputStream());
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                response.getOutputStream().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -110,7 +117,7 @@ public class ReadBookController {
         String cssStyle = reader.getCSS();
         if (cssStyle != null && !cssStyle.equals(""))
             return ResultBody.success(reader.getCSS());
-        else return ResultBody.error("样式空");
+        else return ResultBody.error("无样式");
     }
 
 }

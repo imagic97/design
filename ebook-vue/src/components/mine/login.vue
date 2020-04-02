@@ -6,21 +6,11 @@
     <div class="login">
       <h2>登录/LOGIN</h2>
       <div class="login_form">
-        <input
-          type="text"
-          class="user"
-          placeholder="用户名"
-          v-model="user_name"
-        />
+        <input type="text" class="user" placeholder="用户名" v-model="user_name" />
         <div class="tips">
           <span>{{ tips_a }}</span>
         </div>
-        <input
-          type="password"
-          class="password"
-          placeholder="密码"
-          v-model="user_password"
-        />
+        <input type="password" class="password" placeholder="密码" v-model="user_password" />
         <div class="tips">
           <span>{{ tips_b }}</span>
         </div>
@@ -34,7 +24,7 @@
 import { login } from "@/api/api";
 import loading from "@/components/common/loading";
 import { ebookMixin } from "@/util/mixin";
-import sessionStorage from "@/util/sessionStorage";
+import lS from "@/util/localStorage";
 
 export default {
   mixins: [ebookMixin],
@@ -56,15 +46,6 @@ export default {
       this.tips_b = "";
     }
   },
-  //   created() {
-  //     if (
-  //       JSON.parse(localStorage.getItem("user")) &&
-  //       JSON.parse(localStorage.getItem("user")).user_name
-  //     ) {
-  //       this.user_name = JSON.parse(localStorage.getItem("user")).user_name;
-  //       this.user_password = JSON.parse(localStorage.getItem("user")).user_password;
-  //     }
-  //   },
   methods: {
     login() {
       if (!this.user_name) {
@@ -76,18 +57,17 @@ export default {
         return;
       }
       this.isLoading = true;
+      lS.set("token", "");
       login(this.user_name, this.user_password).then(Response => {
         if (Response.data.code == 200) {
           this.tips_b = "登录成功";
+          lS.set("token", Response.data.result);
           this.setUserName(this.user_name);
-          this.setPassword(this.user_password);
-          this.setIsLogin(true);
-          sessionStorage.set("isLogin", true);
-          sessionStorage.set("userName", this.user_name);
-          sessionStorage.set("password", this.user_password);
+          this.setIsLogin(Response.data.result);
+          lS.set("userName", this.user_name);
           this.$router.push("/mine");
         } else {
-          this.tips_b = "登录失败，检查用户名/密码";
+          this.tips_b = Response.data.message;
         }
         this.isLoading = false;
       });

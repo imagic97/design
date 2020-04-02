@@ -8,7 +8,7 @@
 </template>
 <script>
 import Tabbar from "@/components/common/tabbar";
-import sessionStorage from "@/util/sessionStorage";
+import lS from "@/util/localStorage";
 import { ebookMixin } from "@/util/mixin";
 export default {
   mixins: [ebookMixin],
@@ -16,9 +16,7 @@ export default {
     Tabbar
   },
   mounted() {
-    this.setUserName(sessionStorage.get("userName"));
-    this.setPassword(sessionStorage.get("password"));
-    this.setIsLogin(sessionStorage.get("isLogin") ? true : false);
+    this.setIsLogin(lS.get("token"));
   }
 };
 </script>

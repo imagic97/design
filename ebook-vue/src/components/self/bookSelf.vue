@@ -8,11 +8,7 @@
         @click="selectedMode ? selectBook(key) : toReaderBook(item)"
       >
         <div class="bookCover">
-          <img
-            v-lazy="API_TO_GET_COVER + item.fileName"
-            :key="item.bookID"
-            class="bookCover_img"
-          />
+          <img v-lazy="API_TO_GET_COVER + item.fileName" :key="item.bookID" class="bookCover_img" />
           <div
             v-show="selectedMode"
             v-bind:class="{ selected: item.isSelected }"
@@ -20,9 +16,7 @@
           ></div>
           <div class="book_cover_boder"></div>
         </div>
-        <div class="title">
-          {{ item.title ? item.title : "无书名" }}
-        </div>
+        <div class="title">{{ item.title ? item.title : "无书名" }}</div>
       </div>
       <span class="addBook placeholder" @click="showUpload()"></span>
       <!-- 占位作用，防止组件拉伸 -->
@@ -36,43 +30,44 @@
 <script>
 import { ebookMixin } from "@/util/mixin";
 import { getUserSelf, deleteBook, deleteBookFromSelf } from "@/api/api";
-import VueEvent from "@/util/vueEvent";
+import VE from "@/util/vueEvent";
+import lS from "@/util/localStorage";
 
 export default {
   mixins: [ebookMixin],
 
   data() {
     return {
-      bookSelfList: [],
+      // bookSelfList: [],
       selectedMode: false
     };
   },
 
   watch: {
     isLogin: function() {
-      if (this.isLogin == true) {
-        this.init();
+      if (this.isLogin !== "") {
+        // this.init();
       } else this.bookSelfList = [];
     }
   },
   mounted() {
-    VueEvent.$on("SELECTMODE", value => {
+    VE.$on("SELECTMODE", value => {
       this.selectedMode = value;
       if (value === false) {
         this.selectCancel(this.bookSelfList);
       }
     });
-    VueEvent.$on("DELETEBOOK", value => {
+    VE.$on("DELETEBOOK", value => {
       if (value === true) this.deleteBook(this.bookSelfList);
     });
-
+    /* eslint-disable */
     this.init();
   },
   methods: {
     //初始化书架
     init() {
       //用户已登陆，从网络获取书架
-      if (this.isLogin == true) {
+      if (this.isLogin != null && this.bookSelfList.length == 0) {
         getUserSelf().then(Response => {
           if (Response.data.code == 200)
             // {selfId,bookId,fileName,title
@@ -86,6 +81,7 @@ export default {
     //去阅读页面
     toReaderBook(book) {
       this.setBookID(book.fileName);
+      this.setFileName(book.title);
       this.$router.push({ path: "/book-reader" });
     },
     //显示上传
@@ -107,11 +103,13 @@ export default {
             //书城的书
             deleteBookFromSelf(array[i].selfId);
           }
+          lS.delete(array[i].fileName);
           array.splice(i, 1);
         }
       }
       return array;
     },
+
     //取消选择
     selectCancel(array) {
       for (let item of array) {

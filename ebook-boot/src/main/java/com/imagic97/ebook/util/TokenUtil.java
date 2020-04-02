@@ -5,7 +5,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 /**
  * @author imagic
@@ -15,19 +17,13 @@ public class TokenUtil {
 
     public static long getTokenUserId() {
         HttpServletRequest httpServletRequest = getRequest();
-        if (httpServletRequest != null) {
-            String token = httpServletRequest.getHeader("token");// 从 http 请求头中取出 token
-            return Long.parseLong(JWT.decode(token).getAudience().get(0));
-        }
-        return -1;
+        String token = httpServletRequest.getHeader("token");// 从 http 请求头中取出 token
+        return Long.parseLong(JWT.decode(token).getAudience().get(0));
     }
 
-    public  static HttpSession getSession(){
+    public static HttpSession getSession() {
         HttpServletRequest httpServletRequest = getRequest();
-        if (httpServletRequest != null){
-            return httpServletRequest.getSession();
-        }
-        return null;
+        return httpServletRequest.getSession();
     }
 
     /**
@@ -36,6 +32,15 @@ public class TokenUtil {
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes();
-        return requestAttributes == null ? null : requestAttributes.getRequest();
+        return Objects.requireNonNull(requestAttributes).getRequest();
+    }
+
+    /**
+     * 获取request
+     */
+    public static HttpServletResponse getResponse() {
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes();
+        return Objects.requireNonNull(requestAttributes).getResponse();
     }
 }

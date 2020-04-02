@@ -1,17 +1,18 @@
 package com.imagic97.ebook.controller;
 
+import com.imagic97.ebook.annotation.PassToken;
 import com.imagic97.ebook.common.ResultBody;
 import com.imagic97.ebook.entity.Category;
 import com.imagic97.ebook.entity.User;
 import com.imagic97.ebook.services.BookService;
 import com.imagic97.ebook.services.CategoryService;
+import com.imagic97.ebook.util.TokenUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 /**
  * 电子书分类
@@ -27,12 +28,14 @@ public class CategoryController {
     @Resource
     private BookService bookService;
 
+    @PassToken
     @GetMapping("/get_category")
     @ApiOperation("获取分类列表")
     public ResultBody getCategory() {
         return ResultBody.success(categoryService.selectAllCategory());
     }
 
+    @PassToken
     @GetMapping("/get_category_book")
     @ApiOperation("获取分类下的电子书")
     public ResultBody getCategoryBook(@RequestParam int category_Id) {
@@ -41,8 +44,8 @@ public class CategoryController {
 
     @GetMapping("/add_category")
     @ApiOperation("增加分类列表")
-    public ResultBody addCategory(@RequestParam String categoryName, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public ResultBody addCategory(@RequestParam String categoryName) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         //判断是否为普通用户
         if (user.getType() == 1) {
             return ResultBody.error("无权限");
@@ -56,8 +59,8 @@ public class CategoryController {
 
     @GetMapping("/delete_category")
     @ApiOperation("删除分类")
-    public ResultBody deleteCategory(@RequestParam int categoryId, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public ResultBody deleteCategory(@RequestParam int categoryId) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         //判断是否为普通用户
         if (user.getType() == 1) {
             return ResultBody.error("删除失败,无权限");

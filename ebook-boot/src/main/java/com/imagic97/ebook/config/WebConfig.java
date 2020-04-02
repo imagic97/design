@@ -38,8 +38,13 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 拦截请求，通过判断是否有 @LoginRequired 注解 决定是否需要登录
         registry.addInterceptor(authenticationInterceptor())
-                .addPathPatterns("/**").
-                excludePathPatterns("/read/*");
+                .addPathPatterns("/**")
+                .excludePathPatterns("/read/*")
+                .excludePathPatterns("/v2/api-docs")
+                .excludePathPatterns("/swagger-resources/configuration/ui")
+                .excludePathPatterns("/swagger-resources")
+                .excludePathPatterns("/swagger-resources/configuration/security")
+                .excludePathPatterns("/csrf");
     }
 
     @Bean

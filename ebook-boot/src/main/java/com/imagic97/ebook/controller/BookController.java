@@ -13,13 +13,13 @@ import com.imagic97.ebook.services.BookService;
 import com.imagic97.ebook.services.SelfService;
 import com.imagic97.ebook.util.FileOperate;
 import com.imagic97.ebook.util.StringUtil;
+import com.imagic97.ebook.util.TokenUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author imagic
@@ -45,12 +45,11 @@ public class BookController {
      * 用户上传文件
      *
      * @param multipartFile 上传文件
-     * @param httpSession   session会话
      */
     @PostMapping(value = "/upload")
     @ApiOperation(value = "用户上传书本", response = ResultBody.class)
-    public ResultBody bookUpload(@RequestParam MultipartFile multipartFile, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public ResultBody bookUpload(@RequestParam MultipartFile multipartFile) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         //   String path = getClass().getResource("/").getPath() + "static/book/";
         long timeStamp = System.currentTimeMillis();
         //long数据自提升为string
@@ -118,9 +117,8 @@ public class BookController {
     @GetMapping(value = "/delete")
     @ApiOperation("删除电子书")
     public ResultBody deleteBookByUser(@RequestParam long bookId,
-                                       @RequestParam String fileName,
-                                       HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+                                       @RequestParam String fileName) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
 
         Book currentBook = bookService.selectBookById(bookId);
         if (currentBook == null) {
@@ -155,9 +153,8 @@ public class BookController {
     public ResultBody modifyBook(
             @RequestParam long bookId,
             @RequestParam Integer bookCategory,
-            @RequestParam Integer isShare,
-            HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+            @RequestParam Integer isShare) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         if (user.getType() == 1) return ResultBody.error("用户无权限");
         if (bookService.modifyBook(bookId, bookCategory, isShare) > 0) {
             return ResultBody.success(null);
@@ -168,9 +165,8 @@ public class BookController {
     @PostMapping("/modifyBookInfo")
     @ApiOperation("修改电子书详细信息 ---管理员/用户")
     public ResultBody modifyBookInfo(
-            @RequestBody BookInfo bookInfo,
-            HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+            @RequestBody BookInfo bookInfo) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         Book currentBook = bookService.selectBookById(bookInfo.getBookId());
         if (currentBook.getUserId() != user.getUserId()) {
             //判断是否为普通用户

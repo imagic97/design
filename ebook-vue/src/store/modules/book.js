@@ -19,7 +19,7 @@ const book = {
     fontSize: "16",
     isLogin: false,
     userName: "",
-    password: ""
+    bookSelfList: []
   },
   mutations: {
     SET_FILENAME: (state, fileName) => {
@@ -61,8 +61,8 @@ const book = {
     SET_USERNAME: (state, userName) => {
       state.userName = userName;
     },
-    SET_PASSWORD: (state, password) => {
-      state.password = password;
+    SET_BOOKSELFLIST: (state, bookSelfList) => {
+      state.bookSelfList = bookSelfList;
     }
   }
 };

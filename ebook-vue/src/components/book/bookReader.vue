@@ -21,6 +21,8 @@ import { getResource, getChapterCSS } from "@/api/api";
 import readerContext from "../book/bookReaderContext";
 import loading from "@/components/common/loading";
 import { ebookMixin } from "@/util/mixin";
+import lS from "@/util/localStorage";
+
 export default {
   mixins: [ebookMixin],
   components: {
@@ -42,6 +44,16 @@ export default {
       this.init();
     }
   },
+  created() {
+    let book = JSON.parse(lS.get(this.bookID));
+    if (book == null) return;
+    this.setBookID(book.bookID);
+    this.setContent(book.content);
+    this.setFileName(book.fileName);
+    this.setKeyInContent(book.keyInContent);
+    this.setNextPosition(book.nextPosition);
+    this.setPosition(book.position);
+  },
 
   mounted() {
     this.init();
@@ -58,6 +70,7 @@ export default {
           this.responseHtml = this.handleHtml(Response.data);
           this.$nextTick(() => {
             this.isLoading = false;
+            this.toLocalSession();
           });
         });
       }
@@ -154,6 +167,16 @@ export default {
       this.setKeyInContent(key);
       this.setPosition(this.nextPosition);
       this.setNextPosition(nextPosition);
+    },
+    toLocalSession() {
+      let book = {};
+      book.bookID = this.bookID;
+      book.content = this.content;
+      book.fileName = this.fileName;
+      book.keyInContent = this.keyInContent;
+      book.nextPosition = this.nextPosition;
+      book.position = this.position;
+      lS.set(this.bookID, JSON.stringify(book));
     }
   }
 };

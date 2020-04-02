@@ -55,15 +55,16 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         try {
             userId = Long.parseLong(JWT.decode(token).getAudience().get(0));
         } catch (JWTDecodeException j) {
-            throw new MessageException("401");
+            throw new MessageException("401", "token错误");
         }
 
         //验证session中user是否存在
         HttpSession httpSession = TokenUtil.getSession();
-        if (httpSession != null) {
-            User sessionUser = (User) httpSession.getAttribute("user");
-            if (sessionUser != null) {
-                if (sessionUser.getUserId() == userId) return true;
+
+        User sessionUser = (User) httpSession.getAttribute("user");
+        if (sessionUser != null) {
+            if (sessionUser.getUserId() == userId) {
+                return true;
             }
         }
 
@@ -71,17 +72,19 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (user == null) {
             throw new MessageException("401", "用户不存在，请重新登录");
         }
+        if (user.getState() == 1) {
+            throw new MessageException("401", "账户被冻结，拒绝登录");
+        }
         // 验证 token
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getUserPassword())).build();
         try {
             jwtVerifier.verify(token);
         } catch (JWTVerificationException e) {
-            throw new MessageException("401");
+            throw new MessageException("401", "非法登录");
         }
 
-        if (httpSession != null) {
-            httpSession.setAttribute("user", user);
-        }
+        httpSession.setAttribute("user", user);
+
         return true;
 //            }
 //        }

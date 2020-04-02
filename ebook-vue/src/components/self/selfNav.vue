@@ -5,7 +5,7 @@
       <div class="nav nav_center">书架</div>
       <div class="nav nav_right" @click="selectMode">编辑</div>
     </div>
-    <div class="type select " v-show="isSelectMode">
+    <div class="type select" v-show="isSelectMode">
       <div class="nav nav_left" @click="deleteBook">删除</div>
       <div class="nav nav_center">书架</div>
       <div class="nav nav_right" @click="selectMode">取消</div>
@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import VueEvent from "@/util/vueEvent";
+import VE from "@/util/vueEvent";
 export default {
   data() {
     return {
@@ -23,10 +23,10 @@ export default {
   methods: {
     selectMode() {
       this.isSelectMode = !this.isSelectMode;
-      VueEvent.$emit("SELECTMODE", this.isSelectMode);
+      VE.$emit("SELECTMODE", this.isSelectMode);
     },
     deleteBook() {
-      VueEvent.$emit("DELETEBOOK", true);
+      VE.$emit("DELETEBOOK", true);
     }
   }
 };

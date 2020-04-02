@@ -1,6 +1,21 @@
 import axios from "axios";
+
 axios.defaults.timeout = 5000; // 请求超时
 axios.defaults.baseURL = "/api";
+
+axios.interceptors.request.use(
+  function(config) {
+    let token = window.localStorage.getItem("token");
+    if (token) {
+      config.headers.common["token"] = token;
+    }
+    return config;
+  },
+  function(error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  }
+);
 
 // 获取书籍资源，封面，图片，章节
 export function getResource(file, href) {

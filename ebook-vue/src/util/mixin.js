@@ -17,7 +17,7 @@ export const ebookMixin = {
       "menuVisible",
       "isLogin",
       "userName",
-      "password"
+      "bookSelfList"
     ])
   },
   data() {
@@ -45,7 +45,7 @@ export const ebookMixin = {
       "setMenuVisible",
       "setIsLogin",
       "setUserName",
-      "setPassword"
+      "setBookSelfList"
     ]),
     setMenuShowOrHide() {
       this.setMenuShow(-1), this.setMenuVisible(!this.menuVisible);

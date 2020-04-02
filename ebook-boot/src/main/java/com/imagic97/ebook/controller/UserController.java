@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author imagic
@@ -54,7 +53,7 @@ public class UserController {
             if (user.getState() == 1) {
                 return ResultBody.error("该账户被冻结");
             }
-            Objects.requireNonNull(TokenUtil.getSession()).setAttribute("user", user);
+            TokenUtil.getSession().setAttribute("user", user);
             return ResultBody.success(tokenService.getToken(user));
         }
         return ResultBody.error("用户名或密码错误");
@@ -62,8 +61,8 @@ public class UserController {
 
     @GetMapping("/logout")
     @ApiOperation("退出登录")
-    public ResultBody login(HttpSession httpSession) {
-        httpSession.removeAttribute("user");
+    public ResultBody login() {
+        TokenUtil.getSession().removeAttribute("user");
         return ResultBody.success(null);
     }
 
@@ -96,8 +95,8 @@ public class UserController {
 
     @GetMapping("/deleteUser")
     @ApiOperation("管理员删除用户")
-    public ResultBody deleteUser(@RequestParam long userId, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public ResultBody deleteUser(@RequestParam long userId) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         if (user.getType() == 1) return ResultBody.error("用户无权限");
         if (userService.deleteUserById(userId) > 0) {
             return ResultBody.success("删除成功");
@@ -109,9 +108,8 @@ public class UserController {
     @ApiOperation("修改用户信息")
     public ResultBody modifyUser(@RequestParam String userName,
                                  @RequestParam String password,
-                                 @RequestParam(required = false) String email,
-                                 HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+                                 @RequestParam(required = false) String email) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         if ("".equals(password)) {
             return ResultBody.error("请输入密码");
         }
@@ -125,9 +123,8 @@ public class UserController {
     @ApiOperation("修改用户状态")
     public ResultBody modifyUserStatus(@RequestParam long userId,
                                        @RequestParam Integer type,
-                                       @RequestParam Integer state,
-                                       HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+                                       @RequestParam Integer state) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         if (user.getType() == 1) return ResultBody.error("无权限");
         User changeUser = userService.selectUserById(userId);
         if (changeUser == null) return ResultBody.error("查无此用户");
@@ -139,7 +136,7 @@ public class UserController {
     @UserLoginToken
     @GetMapping("/getUserSelf")
     @ApiOperation("获取用户书架")
-    public ResultBody getUserSelf(HttpSession httpSession) {
+    public ResultBody getUserSelf() {
         // User user = (User) httpSession.getAttribute("user");
 
         long userId = TokenUtil.getTokenUserId();
@@ -152,9 +149,8 @@ public class UserController {
 
     @GetMapping("/addBookToSelf")
     @ApiOperation("用户添加书到书架")
-    public ResultBody addBookToSelf(@RequestParam long bookId,
-                                    HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public ResultBody addBookToSelf(@RequestParam long bookId) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         Book book = bookService.selectBookById(bookId);
         if (book == null) return ResultBody.error("暂无此书");
         if (book.getIsShare() < 1) return ResultBody.error("此书不可共享");
@@ -171,9 +167,8 @@ public class UserController {
 
     @GetMapping("/deleteBookFromSelf")
     @ApiOperation("用户从书架删除书")
-    public ResultBody deleteBookFromSelf(@RequestParam long selfId,
-                                         HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public ResultBody deleteBookFromSelf(@RequestParam long selfId) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
         if (selfService.deleteSelf(selfId, user.getUserId()) > 0) {
             return ResultBody.success(null);
         }

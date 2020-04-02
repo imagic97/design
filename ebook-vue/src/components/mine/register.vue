@@ -6,30 +6,15 @@
     <div class="register">
       <h2>注册/REGISTER</h2>
       <div class="register_form">
-        <input
-          type="text"
-          class="email"
-          placeholder="邮箱,可省略"
-          v-model="email"
-        />
+        <input type="text" class="email" placeholder="邮箱,可省略" v-model="email" />
         <div class="tips">
           <span>{{ tips }}</span>
         </div>
-        <input
-          type="text"
-          class="user"
-          placeholder="用户名"
-          v-model="userName"
-        />
+        <input type="text" class="user" placeholder="用户名" v-model="userName" />
         <div class="tips">
           <span>{{ tips_a }}</span>
         </div>
-        <input
-          type="password"
-          class="password"
-          placeholder="密码"
-          v-model="password"
-        />
+        <input type="password" class="password" placeholder="密码" v-model="password" />
         <div class="tips">
           <span>{{ tips_b }}</span>
         </div>
@@ -78,7 +63,7 @@ export default {
         if (Response.data.code == 200) {
           this.$router.push("/login");
         } else {
-          this.tips_b = "注册失败";
+          this.tips_b = Response.data.message;
         }
         this.isLoading = false;
       });

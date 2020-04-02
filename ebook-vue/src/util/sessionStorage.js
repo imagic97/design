@@ -1,13 +1,13 @@
-const sl = window.sessionStorage;
+const sS = window.sessionStorage;
 
 module.exports = {
   set(key, value) {
-    sl.setItem(key, value);
+    sS.setItem(key, value);
   },
   get(key) {
-    return sl.getItem(key);
+    return sS.getItem(key);
   },
   clear() {
-    sl.clear();
+    sS.clear();
   }
 };

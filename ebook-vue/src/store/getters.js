@@ -13,7 +13,7 @@ const getters = {
   keyInContent: state => state.book.keyInContent,
   isLogin: state => state.book.isLogin,
   userName: state => state.book.userName,
-  password: state => state.book.password
+  bookSelfList: state => state.book.bookSelfList
 };
 
 export default getters;
