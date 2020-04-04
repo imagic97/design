@@ -28,9 +28,7 @@
       :class="{ selected: menuShow === 0 }"
       @click="showSetting(0)"
     >
-      <router-link to="/self" tag="span">
-        <span class="title">回到书架</span>
-      </router-link>
+      <span class="title">详情</span>
     </div>
   </div>
 </template>

@@ -1,4 +1,7 @@
 const actions = {
+  setTitle: ({ commit }, title) => {
+    return commit("SET_TITLE", title);
+  },
   setFileName: ({ commit }, fileName) => {
     return commit("SET_FILENAME", fileName);
   },
@@ -40,7 +43,10 @@ const actions = {
   },
   setBookSelfList: ({ commit }, bookSelfList) => {
     return commit("SET_BOOKSELFLIST", bookSelfList);
-  }
+  },
+  setOffsetY: ({ commit }, offsetY) => {
+    return commit("SET_OFFSETY", offsetY);
+  },
 };
 
 export default actions;

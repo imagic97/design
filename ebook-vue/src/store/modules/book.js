@@ -1,9 +1,17 @@
 const book = {
   state: {
+    //电子书在数据库ID
+    title: "",
+
+    //电子书名
     fileName: "",
+
+    //电子书对应文件
     bookID: "",
+
     //单章节
     content: "",
+
     //当前章节定位
     position: "",
     //下一章节定位
@@ -19,9 +27,13 @@ const book = {
     fontSize: "16",
     isLogin: false,
     userName: "",
-    bookSelfList: []
+    bookSelfList: [],
+    offsetY: 0,
   },
   mutations: {
+    SET_TITLE: (state, title) => {
+      state.title = title;
+    },
     SET_FILENAME: (state, fileName) => {
       state.fileName = fileName;
     },
@@ -63,8 +75,11 @@ const book = {
     },
     SET_BOOKSELFLIST: (state, bookSelfList) => {
       state.bookSelfList = bookSelfList;
-    }
-  }
+    },
+    SET_OFFSETY: (state, offsetY) => {
+      state.offsetY = offsetY;
+    },
+  },
 };
 
 export default book;

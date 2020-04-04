@@ -107,7 +107,7 @@ export default {
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.05), transparent);
 }
 .listSelected {
-  color: darkblue;
+  color: #4a7ab0;
 }
 
 ul {
