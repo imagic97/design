@@ -1,16 +1,34 @@
 <template>
   <div id="app">
+    <div class="loading" v-show="isLoading">
+      <loading />
+    </div>
     <router-view />
   </div>
 </template>
 
 <script>
 import { ebookMixin } from "@/util/mixin";
+import loading from "@/components/common/loading";
+import VE from "@/util/vueEvent";
+import lS from "@/util/localStorage";
 export default {
   mixins: [ebookMixin],
+  components: {
+    loading
+  },
   name: "app",
+  data() {
+    return {
+      isLoading: false
+    };
+  },
   mounted() {
+    VE.$on("isLoading", value => {
+      this.isLoading = value;
+    });
     this.CreateStyle(this.THEME_LIGHT, "themeStyle");
+    this.setIsLogin(lS.get("token"));
   }
 };
 </script>
@@ -19,6 +37,13 @@ export default {
 @import "./assets/reset.css";
 body {
   background: #7d8188;
+}
+.loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 199;
+  background-color: rgba(0, 0, 0, 0);
 }
 #app {
   position: fixed;
@@ -34,13 +59,9 @@ body {
   margin: 0 auto;
   user-select: none;
 }
-
 @media screen and (max-width: 768px) {
   #app {
     width: 100%;
-  }
-  el-message {
-    width: 45px;
   }
 }
 </style>

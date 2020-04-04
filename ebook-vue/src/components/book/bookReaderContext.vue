@@ -2,7 +2,7 @@
   <div
     id="text"
     v-html="responseHtml"
-    :style="{'fontSize':fontSize+'px'}"
+    :style="{ fontSize: fontSize + 'px' }"
     v-lazy-container="{ selector: 'img' }"
   ></div>
 </template>
@@ -16,7 +16,8 @@ export default {
 };
 </script>
 <style scoped>
+@import "../../assets/reset.css";
 #text {
-  padding: 0 14px;
+  padding: 0 16px;
 }
 </style>

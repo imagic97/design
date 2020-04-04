@@ -1,5 +1,6 @@
 package com.imagic97.ebook.dao;
 
+import com.imagic97.ebook.dto.BookInfoDTO;
 import com.imagic97.ebook.entity.Book;
 import org.apache.ibatis.annotations.*;
 
@@ -42,7 +43,10 @@ public interface BookMapper {
     //根据用户id查找书
     @Select("select * from book where user_id = #{userId}")
     List<Book> selectBookByUserId(long userId);
+//
+//    @Select("select * from book where book_category = #{CategoryId} AND is_Share = 1")
+//    List<Book> selectBookByCategoryId(int CategoryId);
 
-    @Select("select * from book where book_category = #{CategoryId} AND is_Share = 1")
-    List<Book> selectBookByCategoryId(int CategoryId);
+    @Select("select bi.*,b.file_name from book_info bi,book b where b.book_id in ( select book_id from book where book_category = #{CategoryId} AND is_Share = 1) AND bi.book_id = b.book_id")
+    List<BookInfoDTO> selectBookByCategoryId(@Param("CategoryId") int CategoryId);
 }

@@ -1,15 +1,18 @@
 <template>
-  <div class="upload_file">
-    <h3>上传电子书</h3>
-    <div id="message" ref="message" @click="cancel()">{{ message }}</div>
-    <input ref="file" type="file" @change="getFile($event)" id="file" />
-    <button class="btn" @click="selectFile()">选择电子书</button>
-    <button class="btn btn-upload" @click="uploadFile()">上传</button>
-    <button class="btn btn-cancel" @click="hide()">取消</button>
+  <div>
+    <div class="upload upload_file">
+      <h3>上传电子书</h3>
+      <div id="message" ref="message" @click="cancel()">{{ message }}</div>
+      <input ref="file" type="file" @change="getFile($event)" id="file" />
+      <button class="btn" @click="selectFile()">选择电子书</button>
+      <button class="btn btn-upload" @click="uploadFile()">上传</button>
+      <button class="btn btn-cancel" @click="hide()">取消</button>
+    </div>
   </div>
 </template>
 <script>
 import { uploadBook } from "@/api/api";
+import VE from "@/util/vueEvent";
 export default {
   data() {
     return {
@@ -28,14 +31,13 @@ export default {
         this.message = "只支持epub格式哦";
         this.$refs.message.style.color = "red";
         return;
-      } /* eslint-disable */
+      }
       if (fileTamp[0].size > 1024 * 1024 * 20) {
         this.message = "文件大小超过限制";
         this.$refs.message.style.color = "red";
         return;
       }
       this.file = fileTamp[0];
-      console.log(this.file);
       this.$refs.message.style.color = "";
       this.message = fileTamp[0].name;
     },
@@ -45,14 +47,22 @@ export default {
         this.$refs.message.style.color = "red";
         return;
       }
-      uploadBook(this.file).then(Response => {
-        if (Response.data.code == 200) {
-          this.message = "上传成功";
-          this.file = null;
-        } else {
-          this.message = Response.data.message;
-        }
-      });
+      VE.$emit("isLoading", true);
+      uploadBook(this.file)
+        .then(Response => {
+          if (Response.data.code == 200) {
+            this.message = "上传成功";
+            this.file = null;
+          } else {
+            this.message = Response.data.message;
+          }
+          VE.$emit("isLoading", false);
+        })
+        .catch(() => {
+          this.message = "网络错误";
+          this.$refs.message.style.color = "red";
+          VE.$emit("isLoading", false);
+        });
     },
     cancel() {
       this.file = null;
@@ -82,7 +92,7 @@ export default {
   cursor: pointer;
 }
 .btn-upload {
-  background-color: seagreen;
+  background-color: #409eff;
 }
 .btn-cancel {
   width: 60px;

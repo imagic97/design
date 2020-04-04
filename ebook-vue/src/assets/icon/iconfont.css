@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont";
-  src: url("iconfont.ttf?t=1585704921028"); /* IE9 */
+  src: url("iconfont.ttf?t=1585903792195") format("truetype");
 }
 
 .iconfont {
@@ -9,6 +9,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-add:before {
+  content: "\ec6a";
+}
+
+.icon-seach:before {
+  content: "\e7b1";
+}
+
+.icon-iconback:before {
+  content: "\e63c";
+}
+
+.icon-add-shelf:before {
+  content: "\e66f";
+}
+
+.icon-Book-Shopping:before {
+  content: "\ec69";
+}
+
+.icon-Personalcenter:before {
+  content: "\e61b";
+}
+
+.icon-self:before {
+  content: "\e614";
 }
 
 .icon-selected:before {

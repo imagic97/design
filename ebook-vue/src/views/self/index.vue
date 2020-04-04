@@ -38,7 +38,7 @@ export default {
 </script>
 <style scoped>
 .upload {
-  height: 100%;
+  height: 60%;
   width: 100%;
   margin-top: 145px;
 }

@@ -1,11 +1,13 @@
 package com.imagic97.ebook.services.impl;
 
 import com.imagic97.ebook.dao.BookInfoMapper;
+import com.imagic97.ebook.dto.BookInfoDTO;
 import com.imagic97.ebook.entity.BookInfo;
 import com.imagic97.ebook.services.BookInfoService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author imagic
@@ -14,6 +16,11 @@ import javax.annotation.Resource;
 public class BookInfoServiceImpl implements BookInfoService {
     @Resource
     private BookInfoMapper bookInfoMapper;
+
+    @Override
+    public List<BookInfoDTO> searchBook(String keyWords, int offset) {
+        return bookInfoMapper.searchBook(keyWords, offset);
+    }
 
     @Override
     public BookInfo selectBookInfoById(long bookId) {

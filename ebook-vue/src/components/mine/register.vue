@@ -1,20 +1,32 @@
 <template>
   <div class="registerContainer">
-    <div class="loading" v-show="isLoading">
-      <loading />
-    </div>
     <div class="register">
       <h2>注册/REGISTER</h2>
       <div class="register_form">
-        <input type="text" class="email" placeholder="邮箱,可省略" v-model="email" />
+        <input
+          type="text"
+          class="email"
+          placeholder="邮箱,可省略"
+          v-model="email"
+        />
         <div class="tips">
           <span>{{ tips }}</span>
         </div>
-        <input type="text" class="user" placeholder="用户名" v-model="userName" />
+        <input
+          type="text"
+          class="user"
+          placeholder="用户名"
+          v-model="userName"
+        />
         <div class="tips">
           <span>{{ tips_a }}</span>
         </div>
-        <input type="password" class="password" placeholder="密码" v-model="password" />
+        <input
+          type="password"
+          class="password"
+          placeholder="密码"
+          v-model="password"
+        />
         <div class="tips">
           <span>{{ tips_b }}</span>
         </div>
@@ -25,10 +37,9 @@
 </template>
 <script>
 import { register } from "@/api/api";
-import loading from "@/components/common/loading";
+import VE from "@/util/vueEvent";
 
 export default {
-  components: { loading },
   data() {
     return {
       userName: "",
@@ -36,8 +47,7 @@ export default {
       email: "",
       tips: "",
       tips_a: "",
-      tips_b: "",
-      isLoading: false
+      tips_b: ""
     };
   },
   watch: {
@@ -58,15 +68,20 @@ export default {
         this.tips_b = "请输入密码";
         return;
       }
-      this.isLoading = true;
-      register(this.userName, this.password, this.email).then(Response => {
-        if (Response.data.code == 200) {
-          this.$router.push("/login");
-        } else {
-          this.tips_b = Response.data.message;
-        }
-        this.isLoading = false;
-      });
+      VE.$emit("isLoading", true);
+      register(this.userName, this.password, this.email)
+        .then(Response => {
+          if (Response.data.code == 200) {
+            this.$router.push("/login");
+          } else {
+            this.tips_b = Response.data.message;
+          }
+          VE.$emit("isLoading", false);
+        })
+        .catch(() => {
+          this.tips_b = "请检查网络";
+          VE.$emit("isLoading", false);
+        });
     }
   }
 };
@@ -81,7 +96,7 @@ export default {
   height: 100%;
   z-index: 199;
   padding: 167px 0 0 0;
-  background-color: rgba(0, 25, 104, 0.1);
+  background-color: rgba(102, 177, 255, 0.1);
 }
 h2 {
   text-align: center;

@@ -1,26 +1,43 @@
 <template>
   <div class="modifyContainer">
-    <div class="loading" v-show="isLoading">
-      <loading />
-    </div>
     <div class="modify">
       <h2>修改信息</h2>
       <div class="modify_form">
-        <input type="email" class="email" placeholder="邮箱,可省略" v-model="email" />
+        <input
+          type="email"
+          class="email"
+          placeholder="邮箱,可省略"
+          v-model="email"
+        />
         <div class="tips">
-          <span>{{tips}}</span>
+          <span>{{ tips }}</span>
         </div>
-        <input type="text" class="user" placeholder="用户名" v-model="userName" />
+        <input
+          type="text"
+          class="user"
+          placeholder="用户名"
+          v-model="userName"
+        />
         <div class="tips">
-          <span>{{tips_a}}</span>
+          <span>{{ tips_a }}</span>
         </div>
-        <input type="password" class="password" placeholder="旧密码" v-model="old_password" />
+        <input
+          type="password"
+          class="password"
+          placeholder="旧密码"
+          v-model="old_password"
+        />
         <div class="tips">
-          <span>{{tips_b}}</span>
+          <span>{{ tips_b }}</span>
         </div>
-        <input type="password" class="password" placeholder="新密码" v-model="new_password" />
+        <input
+          type="password"
+          class="password"
+          placeholder="新密码"
+          v-model="new_password"
+        />
         <div class="tips">
-          <span>{{tips_c}}</span>
+          <span>{{ tips_c }}</span>
         </div>
         <button class="modify_btn" @click="modify()">提交修改</button>
       </div>
@@ -29,10 +46,9 @@
 </template>
 <script>
 import { modifyUser } from "@/api/api";
-import loading from "@/components/common/loading";
+import VE from "@/util/vueEvent";
 
 export default {
-  components: { loading },
   data() {
     return {
       userName: "",
@@ -42,8 +58,7 @@ export default {
       tips: "",
       tips_a: "",
       tips_b: "",
-      tips_c: "",
-      isLoading: false
+      tips_c: ""
     };
   },
   watch: {
@@ -64,17 +79,20 @@ export default {
         this.tips_b = "请输入密码";
         return;
       }
-      this.isLoading = true;
-      modifyUser(this.userName, this.new_password, this.email).then(
-        Response => {
+      VE.$emit("isLoading", true);
+      modifyUser(this.userName, this.new_password, this.email)
+        .then(Response => {
           if (Response.data.code == 200) {
             this.tips_c = "修改成功";
           } else {
             this.tips_c = "修改失败";
           }
-          this.isLoading = false;
-        }
-      );
+          VE.$emit("isLoading", false);
+        })
+        .catch(() => {
+          this.tips_b = "请检查网络";
+          VE.$emit("isLoading", false);
+        });
     }
   }
 };
@@ -85,7 +103,7 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 199;
-  background-color: rgba(0, 25, 104, 0.1);
+  background-color: rgba(0, 167, 222, 0.1);
 }
 .modify_form {
   max-width: 450px;

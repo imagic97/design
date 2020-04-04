@@ -1,17 +1,17 @@
 import axios from "axios";
 
-axios.defaults.timeout = 5000; // 请求超时
+axios.defaults.timeout = 60000; // 请求超时
 axios.defaults.baseURL = "/api";
 
 axios.interceptors.request.use(
-  function(config) {
+  function (config) {
     let token = window.localStorage.getItem("token");
     if (token) {
       config.headers.common["token"] = token;
     }
     return config;
   },
-  function(error) {
+  function (error) {
     // 对请求错误做些什么
     return Promise.reject(error);
   }
@@ -24,8 +24,8 @@ export function getResource(file, href) {
     url: "/read/view",
     params: {
       file: file,
-      href: href
-    }
+      href: href,
+    },
   });
 }
 // 目录
@@ -34,8 +34,8 @@ export function getContent(file) {
     method: "GET",
     url: "/read/content",
     params: {
-      file: file
-    }
+      file: file,
+    },
   });
 }
 // 章节样式
@@ -44,8 +44,8 @@ export function getChapterCSS(file) {
     method: "GET",
     url: "/read/css",
     params: {
-      file: file
-    }
+      file: file,
+    },
   });
 }
 
@@ -56,15 +56,15 @@ export function login(userName, password) {
     url: "/user/login",
     params: {
       userName: userName,
-      password: password
-    }
+      password: password,
+    },
   });
 }
 // 登出
 export function logout() {
   return axios({
     method: "GET",
-    url: "/user/logout"
+    url: "/user/logout",
   });
 }
 // 注册
@@ -75,8 +75,8 @@ export function register(userName, password, email) {
     params: {
       userName: userName,
       password: password,
-      email: email
-    }
+      email: email,
+    },
   });
 }
 // 用户修改
@@ -87,15 +87,26 @@ export function modifyUser(userName, password, email) {
     params: {
       userName: userName,
       password: password,
-      email: email
-    }
+      email: email,
+    },
   });
 }
 // 书架列表
 export function getUserSelf() {
   return axios({
     method: "GET",
-    url: "/user/getUserSelf"
+    url: "/user/getUserSelf",
+  });
+}
+///user/addBookToSelf?bookId=15
+
+export function addBookToSelf(bookId) {
+  return axios({
+    method: "GET",
+    url: "/user/addBookToSelf",
+    params: {
+      bookId: bookId,
+    },
   });
 }
 
@@ -105,8 +116,8 @@ export function deleteBookFromSelf(selfId) {
     method: "GET",
     url: "/user/deleteBookFromSelf",
     params: {
-      selfId: selfId
-    }
+      selfId: selfId,
+    },
   });
 }
 // 上传电子书
@@ -117,7 +128,7 @@ export function uploadBook(file) {
     headers: { "Content-Type": "multipart/form-data" },
     method: "POST",
     url: "/book/upload",
-    data: param
+    data: param,
   });
 }
 
@@ -128,7 +139,46 @@ export function deleteBook(bookId, fileName) {
     url: "/book/delete",
     params: {
       bookId: bookId,
-      fileName: fileName
-    }
+      fileName: fileName,
+    },
+  });
+}
+
+// 搜索
+export function searchBook(keyWords, offset) {
+  return axios({
+    method: "GET",
+    url: "/search",
+    params: {
+      keyWords: keyWords,
+      offset: offset,
+    },
+  });
+}
+// 电子书详细信息
+export function getBookInfo(bookId) {
+  return axios({
+    method: "GET",
+    url: "/book/getBookInfo",
+    params: {
+      bookId: bookId,
+    },
+  });
+}
+//获取全部分类
+export function getCategory() {
+  return axios({
+    method: "GET",
+    url: "/get_category",
+  });
+}
+// 获取分类下的电子书
+export function getCategoryBook(category_Id) {
+  return axios({
+    method: "GET",
+    url: "/get_category_book",
+    params: {
+      category_Id: category_Id,
+    },
   });
 }

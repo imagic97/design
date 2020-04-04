@@ -2,6 +2,7 @@ package com.imagic97.ebook.services.impl;
 
 import com.imagic97.ebook.dao.BookInfoMapper;
 import com.imagic97.ebook.dao.BookMapper;
+import com.imagic97.ebook.dto.BookInfoDTO;
 import com.imagic97.ebook.entity.Book;
 import com.imagic97.ebook.services.BookService;
 import com.imagic97.ebook.util.StringUtil;
@@ -44,7 +45,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> selectBookByCategoryId(int categoryId) {
+    public List<BookInfoDTO> selectBookByCategoryId(int categoryId) {
         return bookMapper.selectBookByCategoryId(categoryId);
     }
 

@@ -1,19 +1,14 @@
 <template>
   <div class="content" v-show="menuVisible && menuShow === 1">
     <div class="contentCatalog">
-      <ul class="contentCatalog_list">
+      <ul class="contentCatalog_list" ref="contentScroll">
         <li
           class="chapterItem"
           v-for="(item, key) in contentList"
           :key="key"
           v-on:click="ContentToReader(item, key)"
         >
-          <div
-            id="aa"
-            v-bind:class="{ listSelected: isCurrentContent(item.url) }"
-          >
-            {{ item.title }}
-          </div>
+          <div id="aa" v-bind:class="{ listSelected: isCurrentContent(item.url) }">{{ item.title }}</div>
         </li>
       </ul>
     </div>
@@ -26,7 +21,18 @@ export default {
   mixins: [ebookMixin],
   mounted() {
     this.init();
+    /* eslint-disable */
   },
+  watch: {
+    menuShow: function() {
+      if (this.menuShow === 1) {
+        setTimeout(() => {
+          this.$refs.contentScroll.scrollTo(0, 52 * this.keyInContent);
+        }, 1);
+      }
+    }
+  },
+
   methods: {
     isCurrentContent(value) {
       return this.content === value;
@@ -79,6 +85,7 @@ export default {
         this.setNextPosition(nextPosition);
         this.setKeyInContent(key);
       }
+      this.setOffsetY(0);
       this.setMenuShowOrHide();
     }
   }

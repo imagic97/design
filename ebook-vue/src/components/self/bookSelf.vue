@@ -18,12 +18,11 @@
         </div>
         <div class="title">{{ item.title ? item.title : "无书名" }}</div>
       </div>
-      <span class="addBook placeholder" @click="showUpload()"></span>
+      <div class="addBook placeholder" @click="showUpload()">
+        <div class="iconfont icon-add"></div>
+      </div>
       <!-- 占位作用，防止组件拉伸 -->
-      <div class="placeholder"></div>
-      <div class="placeholder"></div>
-      <div class="placeholder"></div>
-      <div class="placeholder"></div>
+      <div class="placeholder" v-for="n in placeholder" :key="`num-` + n"></div>
     </div>
   </div>
 </template>
@@ -39,15 +38,16 @@ export default {
   data() {
     return {
       // bookSelfList: [],
-      selectedMode: false
+      selectedMode: false,
+      placeholder: 4
     };
   },
 
   watch: {
     isLogin: function() {
-      if (this.isLogin !== "") {
-        // this.init();
-      } else this.bookSelfList = [];
+      if (this.isLogin == "") {
+        this.bookSelfList = [];
+      }
     }
   },
   mounted() {
@@ -60,9 +60,11 @@ export default {
     VE.$on("DELETEBOOK", value => {
       if (value === true) this.deleteBook(this.bookSelfList);
     });
-    /* eslint-disable */
+    let num = window.innerWidth > 870 ? 850 : window.innerWidth;
+    this.placeholder = parseInt(num / 150) - 1;
     this.init();
   },
+
   methods: {
     //初始化书架
     init() {
@@ -82,6 +84,7 @@ export default {
     toReaderBook(book) {
       this.setBookID(book.fileName);
       this.setFileName(book.title);
+      this.setTitle(book.bookId);
       this.$router.push({ path: "/book-reader" });
     },
     //显示上传
@@ -142,12 +145,21 @@ export default {
   text-overflow: ellipsis;
 }
 
-.iconfont {
+.icon-selected {
   position: absolute;
   bottom: 5px;
   right: 5px;
+  font-size: 24px;
+  border-radius: 15px;
   color: rgba(0, 0, 0, 0.4);
 }
+
+.icon-add {
+  font-size: 36px;
+  text-align: center;
+  color: rgb(125, 129, 136);
+}
+
 .selected {
   color: blue;
 }
@@ -165,7 +177,7 @@ export default {
   display: block;
   width: 100%;
   height: 100%;
-  box-shadow: 6px 7px 6px rgba(0, 25, 104, 0.3);
+  box-shadow: 3px 3px 3px rgba(0, 25, 104, 0.3);
 }
 
 @media screen and (min-width: 500px) {
@@ -176,10 +188,9 @@ export default {
 }
 .addBook {
   background-color: #e0e0e0;
-  background-size: 40px 40px;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-image: url(../../assets/add.png);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bookCover {

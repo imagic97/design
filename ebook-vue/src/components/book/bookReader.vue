@@ -1,14 +1,16 @@
 <template>
-  <div class="renderTargetContainer" @click="setMenuShowOrHide()">
-    <loading v-show="isLoading" />
-    <div class="chapterContainer" v-show="!isLoading">
+  <div class="renderTargetContainer" ref="scroll" @click="setMenuShowOrHide()">
+    <div class="chapterContainer">
       <reader-context :responseHtml="responseHtml" v-bind:fontSize="fontSize" />
       <div class="nextChapterContainner">
         <div class="nextChapter">
           <button
             type="primary"
-            v-if="responseHtml!=''&&this.keyInContent+1 < this.contentList.length"
-            @click.stop="toNextChapter"
+            v-if="
+              responseHtml != '' &&
+                this.keyInContent + 1 < this.contentList.length
+            "
+            @click.stop="toNextChapter()"
           >下一章</button>
         </div>
       </div>
@@ -19,19 +21,16 @@
 <script>
 import { getResource, getChapterCSS } from "@/api/api";
 import readerContext from "../book/bookReaderContext";
-import loading from "@/components/common/loading";
 import { ebookMixin } from "@/util/mixin";
 import lS from "@/util/localStorage";
-
+import VE from "@/util/vueEvent";
 export default {
   mixins: [ebookMixin],
   components: {
-    readerContext,
-    loading
+    readerContext
   },
   data() {
     return {
-      isLoading: true,
       //响应文本
       responseHtml: "",
       //响应样式
@@ -44,36 +43,54 @@ export default {
       this.init();
     }
   },
-  created() {
-    let book = JSON.parse(lS.get(this.bookID));
-    if (book == null) return;
-    this.setBookID(book.bookID);
-    this.setContent(book.content);
-    this.setFileName(book.fileName);
-    this.setKeyInContent(book.keyInContent);
-    this.setNextPosition(book.nextPosition);
-    this.setPosition(book.position);
-  },
 
   mounted() {
-    this.init();
+    this.$refs.scroll.addEventListener("scroll", () => {
+      this.setOffsetY(this.$refs.scroll.scrollTop);
+      // 滚动事件
+      let book = this.createBook();
+      lS.set(this.bookID, JSON.stringify(book));
+      lS.set("currentRead", JSON.stringify(book));
+    });
+  },
+
+  created() {
+    let book;
+    if (this.bookID === "") {
+      book = JSON.parse(lS.get("currentRead"));
+    } else {
+      book = JSON.parse(lS.get(this.bookID));
+    }
+    if (book == null) return;
+    this.parsingBook(book);
   },
 
   methods: {
     init() {
-      this.isLoading = true;
       if (this.content == "" && this.contentList.length > 0) {
         this.setContent = this.contentLiset[0].url;
       }
       if (this.bookID != "" && this.content != "") {
-        getResource(this.bookID, this.content).then(Response => {
-          this.responseHtml = this.handleHtml(Response.data);
-          this.$nextTick(() => {
-            this.isLoading = false;
-            this.toLocalSession();
+        VE.$emit("isLoading", true);
+        getResource(this.bookID, this.content)
+          .then(Response => {
+            this.responseHtml = this.handleHtml(Response.data);
+            this.$nextTick(() => {
+              this.isLoading = false;
+              this.$refs.scroll.scrollTo(0, this.offsetY);
+              let book = this.createBook();
+              lS.set(this.bookID, JSON.stringify(book));
+              lS.set("currentRead", JSON.stringify(book));
+              //隐藏加载图
+              VE.$emit("isLoading", false);
+            });
+          })
+          .catch(() => {
+            this.tips_b = "请检查网络";
+            VE.$emit("isLoading", false);
           });
-        });
       }
+      //组件第一次加载加载电子书样式
       if (this.chapterCSS == "")
         getChapterCSS(this.bookID).then(Response => {
           if (Response.data.code == 200) {
@@ -88,7 +105,7 @@ export default {
               ""
             );
 
-            this.chapterCSS += " a {pointer-events:none;}";
+            this.chapterCSS += ` a {pointer-events:none;} .chapterContainer img {max-width: 100%;max-height: 100%;display: block;}`;
             //去除换行
             this.chapterCSS = this.chapterCSS.replace(/\r|\n/gi, "");
             //移除已加载style节点并重新挂载
@@ -109,9 +126,8 @@ export default {
         htmlPath = htmlPath.slice(0, htmlPath.lastIndexOf("/"));
         return htmlPath + "/" + sourcePath;
       }
-      htmlPath = htmlPath.slice(0, htmlPath.lastIndexOf("/"));
-      /* eslint-disable */
 
+      htmlPath = htmlPath.slice(0, htmlPath.lastIndexOf("/"));
       while ((imgIndex = sourcePath.indexOf("../") > -1)) {
         sourcePath = sourcePath.slice(imgIndex + 2, sourcePath.length);
         htmlIndex = htmlPath.lastIndexOf("/");
@@ -163,12 +179,15 @@ export default {
       if (key + 1 < this.contentList.length) {
         nextPosition = this.getPosition(this.contentList[key + 1].url);
       }
+      this.setOffsetY(0);
       this.setContent(this.contentList[key].url);
       this.setKeyInContent(key);
       this.setPosition(this.nextPosition);
       this.setNextPosition(nextPosition);
     },
-    toLocalSession() {
+
+    //将store状态信息生成book对象
+    createBook() {
       let book = {};
       book.bookID = this.bookID;
       book.content = this.content;
@@ -176,7 +195,20 @@ export default {
       book.keyInContent = this.keyInContent;
       book.nextPosition = this.nextPosition;
       book.position = this.position;
-      lS.set(this.bookID, JSON.stringify(book));
+      book.title = this.title;
+      book.offsetY = this.offsetY;
+      return book;
+    },
+    //将book对象解析store状态
+    parsingBook(book) {
+      this.setBookID(book.bookID);
+      this.setContent(book.content);
+      this.setFileName(book.fileName);
+      this.setKeyInContent(book.keyInContent);
+      this.setNextPosition(book.nextPosition);
+      this.setPosition(book.position);
+      this.setTitle(book.title);
+      this.setOffsetY(book.offsetY ? book.offsetY : 0);
     }
   }
 };
@@ -194,10 +226,6 @@ export default {
   height: 100%;
   min-height: 450px;
   overflow: auto;
-}
-
-.renderTargetContainer::-webkit-scrollbar {
-  width: 0 !important;
 }
 
 .nextChapterContainner {
@@ -219,7 +247,8 @@ export default {
   height: 48px;
   margin: 0 auto;
   border: 0;
-  background-color: rgb(0, 167, 222);
+  border-radius: 10px;
+  background-color: #409eff;
   outline: none;
 }
 </style>

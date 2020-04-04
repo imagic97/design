@@ -10,7 +10,7 @@
 
 <style scoped>
 .spinner {
-  margin: 100px auto;
+  margin: 40% auto;
   width: 100px;
   height: 80px;
   text-align: center;

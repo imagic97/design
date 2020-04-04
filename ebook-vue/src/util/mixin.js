@@ -1,9 +1,10 @@
 import { mapGetters, mapActions } from "vuex";
-import { API_TO_GET_VIEW, API_TO_GET_COVER, API_TO_GET_CSS } from "./settings";
+import { API_TO_GET_VIEW, API_TO_GET_COVER } from "./settings";
 import { THEME_DARK, THEME_LIGHT } from "./settings";
 export const ebookMixin = {
   computed: {
     ...mapGetters([
+      "title",
       "fileName",
       "bookID",
       "content",
@@ -17,21 +18,22 @@ export const ebookMixin = {
       "menuVisible",
       "isLogin",
       "userName",
-      "bookSelfList"
-    ])
+      "bookSelfList",
+      "offsetY",
+    ]),
   },
   data() {
     return {
       API_TO_GET_VIEW: API_TO_GET_VIEW,
       API_TO_GET_COVER: API_TO_GET_COVER,
-      API_TO_GET_CSS: API_TO_GET_CSS,
       THEME_LIGHT: THEME_LIGHT,
-      THEME_DARK: THEME_DARK
+      THEME_DARK: THEME_DARK,
     };
   },
 
   methods: {
     ...mapActions([
+      "setTitle",
       "setFileName",
       "setBookID",
       "setContent",
@@ -45,7 +47,8 @@ export const ebookMixin = {
       "setMenuVisible",
       "setIsLogin",
       "setUserName",
-      "setBookSelfList"
+      "setBookSelfList",
+      "setOffsetY",
     ]),
     setMenuShowOrHide() {
       this.setMenuShow(-1), this.setMenuVisible(!this.menuVisible);
@@ -65,6 +68,6 @@ export const ebookMixin = {
       style.setAttribute("id", elementID);
       style.innerText = styleText;
       document.getElementsByTagName("head")[0].appendChild(style);
-    }
-  }
+    },
+  },
 };

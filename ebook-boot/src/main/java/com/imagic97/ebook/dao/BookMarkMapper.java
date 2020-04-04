@@ -18,9 +18,10 @@ public interface BookMarkMapper {
     //根据bookId查询书签
     @Select("select from book_mark where book_id = #{bookId}")
     public BookMark selectBookMarkByBookId(long bookId);
+
     //根据userId查询书签
     @Select("select from book_mark where user_id = #{userId}")
-    public  BookMark selectBookMarkByUserId(long userId);
+    public BookMark selectBookMarkByUserId(long userId);
 
     //删除书签
     @Delete("delete from book_mark where book_mark_id = #{bookMarkId}")

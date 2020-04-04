@@ -2,10 +2,7 @@ package com.imagic97.ebook.dao;
 
 import com.imagic97.ebook.dto.SelfBook;
 import com.imagic97.ebook.entity.Self;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -18,10 +15,10 @@ public interface SelfMapper {
     Integer addBookToSelf(Self self);
 
     @Delete(("delete from self where self_id = #{selfId} AND user_id = #{userId}"))
-    Integer deleteSelf(long selfId, long userId);
+    Integer deleteSelf(@Param("selfId") long selfId, @Param("userId") long userId);
 
     @Delete(("delete from self where book_id = #{bookId} AND user_id = #{userId}"))
-    Integer deleteSelfByBookId(long bookId, long userId);
+    Integer deleteSelfByBookId(@Param("bookId") long bookId, @Param("userId") long userId);
 
     @Select("SELECT s.self_id, b.book_id, b.file_name, bi.title " +
             "FROM book b,book_info bi,self s " +

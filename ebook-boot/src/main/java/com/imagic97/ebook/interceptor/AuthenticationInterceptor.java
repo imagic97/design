@@ -48,7 +48,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 //            if (userLoginToken.required()) {
         // 执行认证
         if (token == null) {
-            throw new MessageException("401", "无token，请重新登录");
+            throw new MessageException("401", "请登录后再进行操作");
         }
         // 获取 token 中的 user id
         long userId;

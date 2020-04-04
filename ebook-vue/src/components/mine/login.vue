@@ -1,16 +1,23 @@
 <template>
   <div class="loginContainer">
-    <div class="loading" v-show="isLoading">
-      <loading />
-    </div>
     <div class="login">
       <h2>登录/LOGIN</h2>
       <div class="login_form">
-        <input type="text" class="user" placeholder="用户名" v-model="user_name" />
+        <input
+          type="text"
+          class="user"
+          placeholder="用户名"
+          v-model="user_name"
+        />
         <div class="tips">
           <span>{{ tips_a }}</span>
         </div>
-        <input type="password" class="password" placeholder="密码" v-model="user_password" />
+        <input
+          type="password"
+          class="password"
+          placeholder="密码"
+          v-model="user_password"
+        />
         <div class="tips">
           <span>{{ tips_b }}</span>
         </div>
@@ -22,20 +29,18 @@
 
 <script>
 import { login } from "@/api/api";
-import loading from "@/components/common/loading";
 import { ebookMixin } from "@/util/mixin";
 import lS from "@/util/localStorage";
+import VE from "@/util/vueEvent";
 
 export default {
   mixins: [ebookMixin],
-  components: { loading },
   data() {
     return {
       user_name: "",
       user_password: "",
       tips_a: "",
-      tips_b: "",
-      isLoading: false
+      tips_b: ""
     };
   },
   watch: {
@@ -56,21 +61,26 @@ export default {
         this.tips_b = "请输入密码";
         return;
       }
-      this.isLoading = true;
       lS.set("token", "");
-      login(this.user_name, this.user_password).then(Response => {
-        if (Response.data.code == 200) {
-          this.tips_b = "登录成功";
-          lS.set("token", Response.data.result);
-          this.setUserName(this.user_name);
-          this.setIsLogin(Response.data.result);
-          lS.set("userName", this.user_name);
-          this.$router.push("/mine");
-        } else {
-          this.tips_b = Response.data.message;
-        }
-        this.isLoading = false;
-      });
+      VE.$emit("isLoading", true);
+      login(this.user_name, this.user_password)
+        .then(Response => {
+          if (Response.data.code == 200) {
+            this.tips_b = "登录成功";
+            lS.set("token", Response.data.result);
+            this.setUserName(this.user_name);
+            this.setIsLogin(Response.data.result);
+            lS.set("userName", this.user_name);
+            this.$router.push("/mine");
+          } else {
+            this.tips_b = Response.data.message;
+          }
+          VE.$emit("isLoading", false);
+        })
+        .catch(() => {
+          this.tips_b = "请检查网络";
+          VE.$emit("isLoading", false);
+        });
     }
   }
 };
@@ -84,7 +94,7 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 99;
-  background-color: rgba(0, 25, 104, 0.1);
+  background-color: rgba(102, 177, 255, 0.1);
 }
 h2 {
   text-align: center;

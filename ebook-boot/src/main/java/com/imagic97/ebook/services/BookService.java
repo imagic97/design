@@ -1,5 +1,6 @@
 package com.imagic97.ebook.services;
 
+import com.imagic97.ebook.dto.BookInfoDTO;
 import com.imagic97.ebook.entity.Book;
 
 import java.util.List;
@@ -21,5 +22,5 @@ public interface BookService {
 
     List<Book> selectBookByUserId(long userId);
 
-    List<Book> selectBookByCategoryId(int categoryId);
+    List<BookInfoDTO> selectBookByCategoryId(int categoryId);
 }
