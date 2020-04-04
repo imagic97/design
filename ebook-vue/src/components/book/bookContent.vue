@@ -21,7 +21,6 @@ export default {
   mixins: [ebookMixin],
   mounted() {
     this.init();
-    /* eslint-disable */
   },
   watch: {
     menuShow: function() {
@@ -42,7 +41,7 @@ export default {
     },
     init() {
       this.setContentList([]);
-      getContent(this.bookID).then(Response => {
+      getContent(this.fileName).then(Response => {
         if (Response.data.result == null) {
           this.setContentList([]);
           return;

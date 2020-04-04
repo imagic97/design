@@ -29,6 +29,8 @@ export default {
   },
   destroyed() {
     this.setBookID("");
+    this.setFileName("");
+    this.setTitle("");
     this.setContent("");
     this.setPosition("");
     this.setNextPosition("");

@@ -8,7 +8,8 @@
         @click="selectedMode ? selectBook(key) : toReaderBook(item)"
       >
         <div class="bookCover">
-          <img v-lazy="API_TO_GET_COVER + item.fileName" :key="item.bookID" class="bookCover_img" />
+          <!-- :key="item.bookID" -->
+          <img v-lazy="API_TO_GET_COVER + item.fileName"  class="bookCover_img" />
           <div
             v-show="selectedMode"
             v-bind:class="{ selected: item.isSelected }"
@@ -82,9 +83,9 @@ export default {
     },
     //去阅读页面
     toReaderBook(book) {
-      this.setBookID(book.fileName);
-      this.setFileName(book.title);
-      this.setTitle(book.bookId);
+      this.setBookID(book.bookId);
+      this.setFileName(book.fileName);
+      this.setTitle(book.title);
       this.$router.push({ path: "/book-reader" });
     },
     //显示上传

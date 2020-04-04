@@ -4,7 +4,7 @@
       <span class="iconfont icon-iconback"></span>
     </div>
     <div class="center" @click="back">
-      <span class="book-title">{{ fileName == "" ? "无书名" : fileName }}</span>
+      <span class="book-title">{{ title == "" ? "无书名" : title }}</span>
     </div>
     <div class="right">
       <div class="icon-wrapper">
@@ -30,7 +30,7 @@ export default {
     },
     isInSelf() {
       for (let item of this.bookSelfList) {
-        if (item.title == this.fileName) return false;
+        if (item.title == this.title) return false;
       }
       return true;
     },
@@ -39,12 +39,12 @@ export default {
       if (this.isLogin == false) {
         return;
       }
-      addBookToSelf(this.title).then(Response => {
+      addBookToSelf(this.bookID).then(Response => {
         if (Response.data.code == 200) {
           let book = {};
-          book.bookId = this.title;
-          book.fileName = this.bookId;
-          book.title = this.fileName;
+          book.title = this.title;
+          book.bookId = this.bookId;
+          book.fileName = this.fileName;
           this.bookSelfList.push(book);
         }
         return;

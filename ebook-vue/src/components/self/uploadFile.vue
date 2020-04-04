@@ -47,6 +47,11 @@ export default {
         this.$refs.message.style.color = "red";
         return;
       }
+      if (this.isLogin == false) {
+        this.message = "请登录后继续操作";
+        this.$refs.message.style.color = "red";
+        return;
+      }
       VE.$emit("isLoading", true);
       uploadBook(this.file)
         .then(Response => {

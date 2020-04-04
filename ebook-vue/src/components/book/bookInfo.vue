@@ -2,7 +2,7 @@
   <div class="book_bookBlock" v-show="menuShow === 0" @click="hideMenu()">
     <div class="border">
       <div class="bookCover book_bookCover">
-        <img v-lazy="API_TO_GET_COVER + bookID" class="bookCover_img" />
+        <img v-lazy="API_TO_GET_COVER + fileName" class="bookCover_img" />
       </div>
       <div class="bookInfo book_bookInfo">
         <p class="book_bookTitle">书名：{{ book.title }}</p>
@@ -42,7 +42,7 @@ export default {
 
   mounted() {
     // this.book.fileName = this.bookID;
-    this.init(this.title);
+    this.init(this.bookID);
   },
   methods: {
     init(value) {

@@ -32,9 +32,9 @@ export default {
   },
   methods: {
     toBookInfo(book) {
-      this.setBookID(book.fileName);
-      this.setFileName(book.title);
-      this.setTitle(book.bookId);
+      this.setBookID(book.bookId);
+      this.setFileName(book.fileName);
+      this.setTitle(book.title);
       this.setMenuVisible(false);
       this.setMenuShow(0);
       this.$router.push({ path: "/book-reader" });

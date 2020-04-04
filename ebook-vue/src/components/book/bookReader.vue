@@ -49,17 +49,17 @@ export default {
       this.setOffsetY(this.$refs.scroll.scrollTop);
       // 滚动事件
       let book = this.createBook();
-      lS.set(this.bookID, JSON.stringify(book));
+      lS.set(this.fileName, JSON.stringify(book));
       lS.set("currentRead", JSON.stringify(book));
     });
   },
 
   created() {
     let book;
-    if (this.bookID === "") {
+    if (this.fileName === "") {
       book = JSON.parse(lS.get("currentRead"));
     } else {
-      book = JSON.parse(lS.get(this.bookID));
+      book = JSON.parse(lS.get(this.fileName));
     }
     if (book == null) return;
     this.parsingBook(book);
@@ -70,16 +70,16 @@ export default {
       if (this.content == "" && this.contentList.length > 0) {
         this.setContent = this.contentLiset[0].url;
       }
-      if (this.bookID != "" && this.content != "") {
+      if (this.fileName != "" && this.content != "") {
         VE.$emit("isLoading", true);
-        getResource(this.bookID, this.content)
+        getResource(this.fileName, this.content)
           .then(Response => {
             this.responseHtml = this.handleHtml(Response.data);
             this.$nextTick(() => {
               this.isLoading = false;
               this.$refs.scroll.scrollTo(0, this.offsetY);
               let book = this.createBook();
-              lS.set(this.bookID, JSON.stringify(book));
+              lS.set(this.fileName, JSON.stringify(book));
               lS.set("currentRead", JSON.stringify(book));
               //隐藏加载图
               VE.$emit("isLoading", false);
@@ -92,7 +92,7 @@ export default {
       }
       //组件第一次加载加载电子书样式
       if (this.chapterCSS == "")
-        getChapterCSS(this.bookID).then(Response => {
+        getChapterCSS(this.fileName).then(Response => {
           if (Response.data.code == 200) {
             this.chapterCSS = Response.data.result;
             //添加章节样式容器限制
@@ -163,7 +163,7 @@ export default {
           p2 +
           `data-src="` +
           this.API_TO_GET_VIEW +
-          this.bookID +
+          this.fileName +
           `&href=` +
           p4 +
           p5 +
