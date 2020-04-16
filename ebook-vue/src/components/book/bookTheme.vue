@@ -1,19 +1,31 @@
 <template>
   <div class="themeControl" v-show="menuVisible && menuShow === 2">
+    <header class="component_title">主题</header>
     <div class="themeContainer">
       <div
         class="theme theme-dark"
         @click="setCurrentTheme('dark')"
         :class="{ currentTheme: isCurrentTheme('dark') }"
-      ></div>
+      >
+        <span class="iconfont icon-dark" style=""></span>
+      </div>
       <div
         class="theme theme-light"
         @click="setCurrentTheme('light')"
         :class="{ currentTheme: isCurrentTheme('light') }"
-      ></div>
+      >
+        <span class="iconfont icon-light"></span>
+      </div>
     </div>
     <div class="fontSize">
-      <input class="fontSizeValue" v-model="zitiSize" type="range" max="34" min="10" step="6" />
+      <input
+        class="fontSizeValue"
+        v-model="zitiSize"
+        type="range"
+        max="34"
+        min="10"
+        step="6"
+      />
     </div>
   </div>
 </template>
@@ -26,7 +38,7 @@ export default {
   mixins: [ebookMixin],
   data() {
     return {
-      currentTheme: ""
+      currentTheme: "",
     };
   },
 
@@ -48,8 +60,8 @@ export default {
       },
       set(value) {
         this.setFontSize(value);
-      }
-    }
+      },
+    },
   },
   methods: {
     setCurrentTheme(value) {
@@ -68,8 +80,8 @@ export default {
     },
     isCurrentTheme(value) {
       return this.currentTheme === value;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -80,12 +92,16 @@ export default {
   width: 100%;
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -1px 3px rgba(0, 25, 104, 0.3);
-  padding: 18px 0 54px 0;
+  padding: 0 0 54px 0;
 }
 .themeContainer {
   display: flex;
 }
-
+.component_title {
+  font-size: 22px;
+  margin: 12px 0;
+  text-align: center;
+}
 .fontSize {
   margin: 0 auto;
   padding: 16px 0 0 0;
@@ -95,7 +111,11 @@ export default {
   flex: 1;
   margin: 16px 60px;
   height: 30px;
+  text-align: center;
   border-radius: 15px;
+}
+.iconfont {
+  color: #1b88ee;
 }
 
 @media screen and (max-width: 500px) {

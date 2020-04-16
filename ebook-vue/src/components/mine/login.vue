@@ -1,11 +1,13 @@
 <template>
   <div class="loginContainer">
     <div class="login">
+      <avatar />
       <h2>登录/LOGIN</h2>
-      <div class="login_form">
+      <form class="login_form">
         <input
           type="text"
           class="user"
+          autoComplete="username"
           placeholder="用户名"
           v-model="user_name"
         />
@@ -15,14 +17,15 @@
         <input
           type="password"
           class="password"
+          autoComplete="current-password"
           placeholder="密码"
           v-model="user_password"
         />
         <div class="tips">
           <span>{{ tips_b }}</span>
         </div>
-        <button class="login_btn" @click="login()">登录</button>
-      </div>
+        <button class="login_btn" @click.prevent="login()">登录</button>
+      </form>
     </div>
   </div>
 </template>
@@ -32,15 +35,18 @@ import { login } from "@/api/api";
 import { ebookMixin } from "@/util/mixin";
 import lS from "@/util/localStorage";
 import VE from "@/util/vueEvent";
-
+import avatar from "@/components/common/avatar";
 export default {
+  components: {
+    avatar,
+  },
   mixins: [ebookMixin],
   data() {
     return {
       user_name: "",
       user_password: "",
       tips_a: "",
-      tips_b: ""
+      tips_b: "",
     };
   },
   watch: {
@@ -49,7 +55,7 @@ export default {
     },
     user_password: function() {
       this.tips_b = "";
-    }
+    },
   },
   methods: {
     login() {
@@ -64,12 +70,12 @@ export default {
       lS.set("token", "");
       VE.$emit("isLoading", true);
       login(this.user_name, this.user_password)
-        .then(Response => {
+        .then((Response) => {
           if (Response.data.code == 200) {
             this.tips_b = "登录成功";
-            lS.set("token", Response.data.result);
             this.setUserName(this.user_name);
             this.setIsLogin(Response.data.result);
+            lS.set("token", Response.data.result);
             lS.set("userName", this.user_name);
             this.$router.push("/mine");
           } else {
@@ -81,8 +87,8 @@ export default {
           this.tips_b = "请检查网络";
           VE.$emit("isLoading", false);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -96,7 +102,11 @@ export default {
   z-index: 99;
   background-color: rgba(102, 177, 255, 0.1);
 }
+.login {
+  padding: 48px 0 0 0;
+}
 h2 {
+  margin: 24px 0 12px 0;
   text-align: center;
 }
 .login_form {

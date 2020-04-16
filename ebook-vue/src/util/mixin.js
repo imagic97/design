@@ -69,5 +69,30 @@ export const ebookMixin = {
       style.innerText = styleText;
       document.getElementsByTagName("head")[0].appendChild(style);
     },
+
+    //将store状态信息生成book对象
+    createBook() {
+      let book = {};
+      book.bookID = this.bookID;
+      book.content = this.content;
+      book.fileName = this.fileName;
+      book.keyInContent = this.keyInContent;
+      book.nextPosition = this.nextPosition;
+      book.position = this.position;
+      book.title = this.title;
+      book.offsetY = this.offsetY;
+      return book;
+    },
+    //将book对象解析store状态
+    parsingBook(book) {
+      this.setBookID(book.bookID);
+      this.setContent(book.content);
+      this.setFileName(book.fileName);
+      this.setKeyInContent(book.keyInContent);
+      this.setNextPosition(book.nextPosition);
+      this.setPosition(book.position);
+      this.setTitle(book.title);
+      this.setOffsetY(book.offsetY ? book.offsetY : 0);
+    },
   },
 };

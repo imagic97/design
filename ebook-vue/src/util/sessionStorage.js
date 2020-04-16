@@ -9,5 +9,5 @@ module.exports = {
   },
   clear() {
     sS.clear();
-  }
+  },
 };

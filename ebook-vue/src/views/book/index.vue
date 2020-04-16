@@ -6,6 +6,7 @@
     <book-menu />
     <book-content />
     <book-theme />
+    <book-mark />
   </div>
 </template>
 
@@ -16,7 +17,11 @@ import bookContent from "@/components/book/bookContent";
 import bookTheme from "@/components/book/bookTheme";
 import bookHeader from "@/components/book/bookHeader";
 import bookInfo from "@/components/book/bookInfo";
+import bookMark from "@/components/book/bookMark";
 import { ebookMixin } from "@/util/mixin";
+
+import { addReadHistory } from "@/api/api";
+
 export default {
   mixins: [ebookMixin],
   components: {
@@ -25,7 +30,27 @@ export default {
     bookContent,
     bookTheme,
     bookHeader,
-    bookInfo
+    bookInfo,
+    bookMark,
+  },
+
+  data() {
+    return {
+      timeIntervel: null,
+    };
+  },
+  mounted() {
+    this.timeIntervel = setInterval(this.saveRead, 60000);
+  },
+  methods: {
+    saveRead() {
+      let chapter = JSON.stringify(this.createBook());
+      addReadHistory(this.bookID, chapter).then((Response) => {
+        if (Response.data.code == 200) {
+          console.log("ada");
+        } else console.log(Response.data.message);
+      });
+    },
   },
   destroyed() {
     this.setBookID("");
@@ -38,7 +63,9 @@ export default {
     this.setKeyInContent(0);
     this.setMenuVisible(false);
     this.setMenuShow(-1);
-  }
+
+    clearInterval(this.timeIntervel);
+  },
 };
 </script>
 

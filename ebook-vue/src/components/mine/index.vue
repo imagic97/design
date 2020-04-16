@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="user" v-show="isLogin">
-      <div class="user_item">当前用户：{{userName}}</div>
+      <div class="user_item">当前用户：{{ userName }}</div>
       <router-link to="/history" tag="div">
         <div class="user_item">阅读历史记录</div>
       </router-link>
@@ -27,6 +27,7 @@
 import { logout } from "@/api/api";
 import { ebookMixin } from "@/util/mixin";
 import lS from "@/util/localStorage";
+import sS from "@/util/sessionStorage";
 
 export default {
   mixins: [ebookMixin],
@@ -36,13 +37,13 @@ export default {
   methods: {
     logout() {
       logout().then(() => {
-        lS.delete("token");
-        lS.delete("userName");
+        lS.clear();
+        sS.clear();
         this.setIsLogin("");
         this.setBookSelfList([]);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

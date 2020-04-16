@@ -4,14 +4,14 @@ axios.defaults.timeout = 60000; // 请求超时
 axios.defaults.baseURL = "/api";
 
 axios.interceptors.request.use(
-  function (config) {
+  function(config) {
     let token = window.localStorage.getItem("token");
     if (token) {
       config.headers.common["token"] = token;
     }
     return config;
   },
-  function (error) {
+  function(error) {
     // 对请求错误做些什么
     return Promise.reject(error);
   }
@@ -180,5 +180,57 @@ export function getCategoryBook(category_Id) {
     params: {
       category_Id: category_Id,
     },
+  });
+}
+
+// 添加书签
+export function addBookMark(bookId, chapter) {
+  return axios({
+    method: "POST",
+    url: "/user/addBookMark",
+    params: {
+      bookId: bookId,
+      chapter: chapter,
+    },
+  });
+}
+// 获取电子书的书签
+export function getBookMark(bookId) {
+  return axios({
+    method: "GET",
+    url: "/user/getBookMark",
+    params: {
+      bookId: bookId,
+    },
+  });
+}
+
+// 删除电子书的书签
+export function deleteBookMark(bookMarkId) {
+  return axios({
+    method: "GET",
+    url: "/user/deleteBookMark",
+    params: {
+      bookMarkId: bookMarkId,
+    },
+  });
+}
+// 添加阅读记录
+export function addReadHistory(bookId, chapter) {
+  return axios({
+    method: "POST",
+    url: "/user/addReadHistory",
+    params: {
+      bookId: bookId,
+      chapter: chapter,
+    },
+  });
+}
+
+// 获取阅读记录
+export function getReadHistory() {
+  return axios({
+    method: "GET",
+    url: "/user/getReadHistory",
   });
 }

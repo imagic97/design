@@ -9,7 +9,10 @@
       >
         <div class="bookCover">
           <!-- :key="item.bookID" -->
-          <img v-lazy="API_TO_GET_COVER + item.fileName"  class="bookCover_img" />
+          <img
+            v-lazy="API_TO_GET_COVER + item.fileName"
+            class="bookCover_img"
+          />
           <div
             v-show="selectedMode"
             v-bind:class="{ selected: item.isSelected }"
@@ -31,7 +34,6 @@
 import { ebookMixin } from "@/util/mixin";
 import { getUserSelf, deleteBook, deleteBookFromSelf } from "@/api/api";
 import VE from "@/util/vueEvent";
-import lS from "@/util/localStorage";
 
 export default {
   mixins: [ebookMixin],
@@ -40,25 +42,25 @@ export default {
     return {
       // bookSelfList: [],
       selectedMode: false,
-      placeholder: 4
+      placeholder: 4,
     };
   },
 
   watch: {
     isLogin: function() {
       if (this.isLogin == "") {
-        this.bookSelfList = [];
+        this.setBookSelfList([]);
       }
-    }
+    },
   },
   mounted() {
-    VE.$on("SELECTMODE", value => {
+    VE.$on("SELECTMODE", (value) => {
       this.selectedMode = value;
       if (value === false) {
         this.selectCancel(this.bookSelfList);
       }
     });
-    VE.$on("DELETEBOOK", value => {
+    VE.$on("DELETEBOOK", (value) => {
       if (value === true) this.deleteBook(this.bookSelfList);
     });
     let num = window.innerWidth > 870 ? 850 : window.innerWidth;
@@ -71,7 +73,7 @@ export default {
     init() {
       //用户已登陆，从网络获取书架
       if (this.isLogin != null && this.bookSelfList.length == 0) {
-        getUserSelf().then(Response => {
+        getUserSelf().then((Response) => {
           if (Response.data.code == 200)
             // {selfId,bookId,fileName,title
             for (let item of Response.data.result) {
@@ -107,7 +109,7 @@ export default {
             //书城的书
             deleteBookFromSelf(array[i].selfId);
           }
-          lS.delete(array[i].fileName);
+
           array.splice(i, 1);
         }
       }
@@ -120,8 +122,8 @@ export default {
         item.isSelected = false;
       }
       return array;
-    }
-  }
+    },
+  },
 };
 </script>
 

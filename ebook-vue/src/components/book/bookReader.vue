@@ -11,7 +11,9 @@
                 this.keyInContent + 1 < this.contentList.length
             "
             @click.stop="toNextChapter()"
-          >下一章</button>
+          >
+            下一章
+          </button>
         </div>
       </div>
     </div>
@@ -19,29 +21,29 @@
   </div>
 </template>
 <script>
-import { getResource, getChapterCSS } from "@/api/api";
+import { getResource, getChapterCSS, addReadHistory } from "@/api/api";
 import readerContext from "../book/bookReaderContext";
 import { ebookMixin } from "@/util/mixin";
-import lS from "@/util/localStorage";
+import sS from "@/util/sessionStorage";
 import VE from "@/util/vueEvent";
 export default {
   mixins: [ebookMixin],
   components: {
-    readerContext
+    readerContext,
   },
   data() {
     return {
       //响应文本
       responseHtml: "",
       //响应样式
-      chapterCSS: ""
+      chapterCSS: "",
     };
   },
 
   watch: {
     content: function() {
       this.init();
-    }
+    },
   },
 
   mounted() {
@@ -49,17 +51,20 @@ export default {
       this.setOffsetY(this.$refs.scroll.scrollTop);
       // 滚动事件
       let book = this.createBook();
-      lS.set(this.fileName, JSON.stringify(book));
-      lS.set("currentRead", JSON.stringify(book));
+      sS.set(this.fileName, JSON.stringify(book));
+      sS.set("currentRead", JSON.stringify(book));
     });
+    if (this.responseHtml == "") {
+      this.init();
+    }
   },
 
   created() {
     let book;
     if (this.fileName === "") {
-      book = JSON.parse(lS.get("currentRead"));
+      book = JSON.parse(sS.get("currentRead"));
     } else {
-      book = JSON.parse(lS.get(this.fileName));
+      book = JSON.parse(sS.get(this.fileName));
     }
     if (book == null) return;
     this.parsingBook(book);
@@ -73,14 +78,14 @@ export default {
       if (this.fileName != "" && this.content != "") {
         VE.$emit("isLoading", true);
         getResource(this.fileName, this.content)
-          .then(Response => {
+          .then((Response) => {
             this.responseHtml = this.handleHtml(Response.data);
             this.$nextTick(() => {
               this.isLoading = false;
               this.$refs.scroll.scrollTo(0, this.offsetY);
-              let book = this.createBook();
-              lS.set(this.fileName, JSON.stringify(book));
-              lS.set("currentRead", JSON.stringify(book));
+              // let book = this.createBook();
+              // lS.set(this.fileName, JSON.stringify(book));
+              // lS.set("currentRead", JSON.stringify(book));
               //隐藏加载图
               VE.$emit("isLoading", false);
             });
@@ -90,9 +95,18 @@ export default {
             VE.$emit("isLoading", false);
           });
       }
+      if (this.isLogin != "") {
+        let chapter = JSON.stringify(this.createBook());
+        addReadHistory(this.bookID, chapter).then((Response) => {
+          if (Response.data.code == 200) {
+            sS.set(this.fileName, chapter);
+            sS.set("currentRead", chapter);
+          }
+        });
+      }
       //组件第一次加载加载电子书样式
       if (this.chapterCSS == "")
-        getChapterCSS(this.fileName).then(Response => {
+        getChapterCSS(this.fileName).then((Response) => {
           if (Response.data.code == 200) {
             this.chapterCSS = Response.data.result;
             //添加章节样式容器限制
@@ -185,32 +199,7 @@ export default {
       this.setPosition(this.nextPosition);
       this.setNextPosition(nextPosition);
     },
-
-    //将store状态信息生成book对象
-    createBook() {
-      let book = {};
-      book.bookID = this.bookID;
-      book.content = this.content;
-      book.fileName = this.fileName;
-      book.keyInContent = this.keyInContent;
-      book.nextPosition = this.nextPosition;
-      book.position = this.position;
-      book.title = this.title;
-      book.offsetY = this.offsetY;
-      return book;
-    },
-    //将book对象解析store状态
-    parsingBook(book) {
-      this.setBookID(book.bookID);
-      this.setContent(book.content);
-      this.setFileName(book.fileName);
-      this.setKeyInContent(book.keyInContent);
-      this.setNextPosition(book.nextPosition);
-      this.setPosition(book.position);
-      this.setTitle(book.title);
-      this.setOffsetY(book.offsetY ? book.offsetY : 0);
-    }
-  }
+  },
 };
 </script>
 

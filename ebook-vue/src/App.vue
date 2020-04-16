@@ -11,25 +11,24 @@
 import { ebookMixin } from "@/util/mixin";
 import loading from "@/components/common/loading";
 import VE from "@/util/vueEvent";
-import lS from "@/util/localStorage";
+
 export default {
   mixins: [ebookMixin],
   components: {
-    loading
+    loading,
   },
   name: "app",
   data() {
     return {
-      isLoading: false
+      isLoading: false,
     };
   },
   mounted() {
-    VE.$on("isLoading", value => {
+    VE.$on("isLoading", (value) => {
       this.isLoading = value;
     });
     this.CreateStyle(this.THEME_LIGHT, "themeStyle");
-    this.setIsLogin(lS.get("token"));
-  }
+  },
 };
 </script>
 

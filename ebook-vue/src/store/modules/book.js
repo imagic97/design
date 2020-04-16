@@ -25,7 +25,7 @@ const book = {
     keyInContent: 0,
     menuVisible: false,
     fontSize: "16",
-    isLogin: false,
+    isLogin: "",
     userName: "",
     bookSelfList: [],
     offsetY: 0,

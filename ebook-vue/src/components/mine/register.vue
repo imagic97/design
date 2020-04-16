@@ -1,6 +1,7 @@
 <template>
   <div class="registerContainer">
     <div class="register">
+      <avatar />
       <h2>注册/REGISTER</h2>
       <div class="register_form">
         <input
@@ -38,8 +39,11 @@
 <script>
 import { register } from "@/api/api";
 import VE from "@/util/vueEvent";
-
+import avatar from "@/components/common/avatar";
 export default {
+  components: {
+    avatar,
+  },
   data() {
     return {
       userName: "",
@@ -47,7 +51,7 @@ export default {
       email: "",
       tips: "",
       tips_a: "",
-      tips_b: ""
+      tips_b: "",
     };
   },
   watch: {
@@ -56,7 +60,7 @@ export default {
     },
     password: function() {
       this.tips_b = "";
-    }
+    },
   },
   methods: {
     register() {
@@ -70,7 +74,7 @@ export default {
       }
       VE.$emit("isLoading", true);
       register(this.userName, this.password, this.email)
-        .then(Response => {
+        .then((Response) => {
           if (Response.data.code == 200) {
             this.$router.push("/login");
           } else {
@@ -82,8 +86,8 @@ export default {
           this.tips_b = "请检查网络";
           VE.$emit("isLoading", false);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -98,7 +102,11 @@ export default {
   padding: 167px 0 0 0;
   background-color: rgba(102, 177, 255, 0.1);
 }
+.register {
+  padding: 48px 0 0 0;
+}
 h2 {
+  margin: 24px 0 12px 0;
   text-align: center;
 }
 

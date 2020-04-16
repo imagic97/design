@@ -3,10 +3,14 @@
     <div class="type no_select" v-show="!isSelectMode">
       <div class="nav nav_left"></div>
       <div class="nav nav_center">书架</div>
-      <div class="nav nav_right" @click="selectMode">编辑</div>
+      <div class="nav nav_right" @click="selectMode">
+        <span class="iconfont icon-edit"></span>
+      </div>
     </div>
     <div class="type select" v-show="isSelectMode">
-      <div class="nav nav_left" @click="deleteBook">删除</div>
+      <div class="nav nav_left" @click="deleteBook">
+        <span class="iconfont icon-delete"></span>
+      </div>
       <div class="nav nav_center">书架</div>
       <div class="nav nav_right" @click="selectMode">取消</div>
     </div>
@@ -17,7 +21,7 @@ import VE from "@/util/vueEvent";
 export default {
   data() {
     return {
-      isSelectMode: false
+      isSelectMode: false,
     };
   },
   methods: {
@@ -27,8 +31,8 @@ export default {
     },
     deleteBook() {
       VE.$emit("DELETEBOOK", true);
-    }
-  }
+    },
+  },
 };
 </script>
 

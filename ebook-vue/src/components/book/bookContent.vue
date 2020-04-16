@@ -1,6 +1,7 @@
 <template>
   <div class="content" v-show="menuVisible && menuShow === 1">
     <div class="contentCatalog">
+      <header class="component_title">目录</header>
       <ul class="contentCatalog_list" ref="contentScroll">
         <li
           class="chapterItem"
@@ -8,7 +9,12 @@
           :key="key"
           v-on:click="ContentToReader(item, key)"
         >
-          <div id="aa" v-bind:class="{ listSelected: isCurrentContent(item.url) }">{{ item.title }}</div>
+          <div
+            id="aa"
+            v-bind:class="{ listSelected: isCurrentContent(item.url) }"
+          >
+            {{ item.title }}
+          </div>
         </li>
       </ul>
     </div>
@@ -27,9 +33,9 @@ export default {
       if (this.menuShow === 1) {
         setTimeout(() => {
           this.$refs.contentScroll.scrollTo(0, 52 * this.keyInContent);
-        }, 1);
+        }, 10);
       }
-    }
+    },
   },
 
   methods: {
@@ -41,7 +47,7 @@ export default {
     },
     init() {
       this.setContentList([]);
-      getContent(this.fileName).then(Response => {
+      getContent(this.fileName).then((Response) => {
         if (Response.data.result == null) {
           this.setContentList([]);
           return;
@@ -58,7 +64,7 @@ export default {
       for (var i = 0; i < contentJson.length; i++) {
         this.contentList.push({
           title: contentJson[i].title,
-          url: contentJson[i].url
+          url: contentJson[i].url,
         });
         if (contentJson[i].children.length > 0) {
           //获取子目录内容
@@ -86,8 +92,8 @@ export default {
       }
       this.setOffsetY(0);
       this.setMenuShowOrHide();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -100,6 +106,13 @@ export default {
   border-radius: 16px 16px 0 0;
   overflow: hidden;
   box-shadow: 0 -1px 3px rgba(0, 25, 104, 0.3);
+}
+
+.component_title {
+  font-size: 22px;
+  margin: 12px 0;
+
+  text-align: center;
 }
 
 .chapterItem:hover {

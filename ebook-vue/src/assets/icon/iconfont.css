@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont";
-  src: url("iconfont.ttf?t=1585903792195") format("truetype");
+  src: url("iconfont.ttf?t=1587021891919") format("truetype"); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -9,6 +9,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-book-mark:before {
+  content: "\e6bb";
+}
+
+.icon-delete:before {
+  content: "\e608";
+}
+
+.icon-edit:before {
+  content: "\e612";
+}
+
+.icon-light:before {
+  content: "\e61e";
+}
+
+.icon-dark:before {
+  content: "\e63f";
 }
 
 .icon-add:before {

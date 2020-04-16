@@ -3,12 +3,20 @@
     <div class="left" @click="back">
       <span class="iconfont icon-iconback"></span>
     </div>
-    <div class="center" @click="back">
+    <div class="center">
       <span class="book-title">{{ title == "" ? "无书名" : title }}</span>
     </div>
     <div class="right">
       <div class="icon-wrapper">
-        <span class="iconfont icon-add-shelf" @click="addToSlef()" v-show="isInSelf()"></span>
+        <span
+          class="iconfont icon-add-shelf"
+          @click="addToSlef()"
+          v-show="isInSelf()"
+        ></span>
+        <span
+          class="iconfont icon-book-mark"
+          @click.stop="toAddBookMark()"
+        ></span>
       </div>
     </div>
   </div>
@@ -16,8 +24,7 @@
 
 <script>
 import { ebookMixin } from "@/util/mixin";
-import { addBookToSelf } from "@/api/api";
-// import lS from "@/util/localStorage";
+import { addBookToSelf, addBookMark } from "@/api/api";
 
 export default {
   mixins: [ebookMixin],
@@ -39,7 +46,7 @@ export default {
       if (this.isLogin == false) {
         return;
       }
-      addBookToSelf(this.bookID).then(Response => {
+      addBookToSelf(this.bookID).then((Response) => {
         if (Response.data.code == 200) {
           let book = {};
           book.title = this.title;
@@ -49,9 +56,16 @@ export default {
         }
         return;
       });
-      //
-    }
-  }
+    },
+    toAddBookMark() {
+      let chapter = JSON.stringify(this.createBook());
+      addBookMark(this.bookID, chapter).then((Response) => {
+        if (Response.data.code == 200) {
+          console.log("添加成功");
+        }
+      });
+    },
+  },
 };
 </script>
 
@@ -97,5 +111,6 @@ export default {
   height: 24px;
   width: 24px;
   font-size: 24px;
+  margin: 0 5px;
 }
 </style>
