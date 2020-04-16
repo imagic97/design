@@ -23,6 +23,11 @@ public class BookInfoServiceImpl implements BookInfoService {
     }
 
     @Override
+    public List<BookInfoDTO> selectBookInfoList(int num, int offset) {
+        return bookInfoMapper.selectBookInfoList(num,offset);
+    }
+
+    @Override
     public BookInfo selectBookInfoById(long bookId) {
         return bookInfoMapper.selectBookInfoById(bookId);
     }

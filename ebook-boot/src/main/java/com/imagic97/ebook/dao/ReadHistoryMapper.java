@@ -14,14 +14,17 @@ public interface ReadHistoryMapper {
             " value(#{userId},#{bookId},#{chapter})")
     Integer addReadHistory(ReadHistory readHistory);
 
-    @Select("select from read_history where user_id = #{userId}")
-    List<ReadHistory> selectReadHistoryByUserId(String userId);
+    @Select("select * from read_history where user_id = #{userId} order by update_date desc")
+    List<ReadHistory> selectReadHistoryByUserId(long userId);
+
+    @Select("select * from read_history where book_id = #{bookId}")
+    ReadHistory selectReadHistoryByBookId(long bookId);
 
     @Delete("delete from read_history where read_history_id = #{readHistoryId}")
-    Integer deleteReadHistoryById(String bookId);
+    Integer deleteReadHistoryById(long read_history_id);
 
     @Update("update read_history set" +
             " chapter = #{chapter}" +
-            " where read_history_id = #{readHistoryId}")
+            " where book_id = #{bookId} and user_id = #{userId}")
     Integer modifyReadHistory(ReadHistory readHistory);
 }

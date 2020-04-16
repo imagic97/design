@@ -23,4 +23,6 @@ public interface BookService {
     List<Book> selectBookByUserId(long userId);
 
     List<BookInfoDTO> selectBookByCategoryId(int categoryId);
+
+    long selectBookTotal();
 }

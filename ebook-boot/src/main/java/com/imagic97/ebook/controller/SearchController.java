@@ -25,7 +25,6 @@ public class SearchController {
     public ResultBody searchBook(@RequestParam String keyWords,@RequestParam(required = false,defaultValue = "0") int offset){
         if(keyWords.length()>25) return ResultBody.success(null);
         if(keyWords.length()==0) return ResultBody.success(null);
-
         return ResultBody.success(bookInfoService.searchBook(keyWords,offset));
     }
 }

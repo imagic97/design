@@ -1,5 +1,6 @@
 package com.imagic97.ebook.config;
 
+import com.imagic97.ebook.interceptor.AdminInterceptor;
 import com.imagic97.ebook.interceptor.AuthenticationInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,20 +20,6 @@ public class WebConfig implements WebMvcConfigurer {
         converters.add(new BufferedImageHttpMessageConverter());
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new LoginInterceptor())
-//                .addPathPatterns("/book/**")
-//                .addPathPatterns("/admin/**")
-//                .addPathPatterns("/user/**")
-//                .addPathPatterns("/delete_category")
-//                .addPathPatterns("/add_category")
-//                .excludePathPatterns("/user/login")
-//                .excludePathPatterns("/user/register");
-//
-//        registry.addInterceptor(new AdminInterceptor())
-//                .addPathPatterns("");
-//    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -45,11 +32,20 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/swagger-resources")
                 .excludePathPatterns("/swagger-resources/configuration/security")
                 .excludePathPatterns("/csrf");
+
+        registry.addInterceptor(adminInterceptor())
+                .addPathPatterns("/admin/*")
+                .excludePathPatterns("/admin/login");
     }
 
     @Bean
     public AuthenticationInterceptor authenticationInterceptor() {
         return new AuthenticationInterceptor();// 自己写的拦截器
+    }
+
+    @Bean
+    public AdminInterceptor adminInterceptor() {
+        return new AdminInterceptor();// 自己写的拦截器
     }
 
 

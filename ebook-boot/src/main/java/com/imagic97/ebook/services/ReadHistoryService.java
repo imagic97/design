@@ -10,9 +10,11 @@ import java.util.List;
 public interface ReadHistoryService {
     Integer addReadHistory(ReadHistory readHistory);
 
-    List<ReadHistory> selectReadHistoryByUserId(String userId);
+    List<ReadHistory> selectReadHistoryByUserId(long userId);
 
-    Integer deleteReadHistoryById(String bookId);
+    ReadHistory selectReadHistoryByBookId(long bookId);
+
+    Integer deleteReadHistoryById(long bookId);
 
     Integer modifyReadHistory(ReadHistory readHistory);
 }

@@ -9,6 +9,9 @@ import java.util.List;
  * @author imagic
  */
 public interface BookInfoService {
+    List<BookInfoDTO> selectBookInfoList(int num, int offset);
+
+
     BookInfo selectBookInfoById(long bookId);
 
     Integer addBookInfo(BookInfo bookInfo);

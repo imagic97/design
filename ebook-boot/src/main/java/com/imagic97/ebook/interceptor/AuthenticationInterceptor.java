@@ -50,7 +50,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (token == null) {
             throw new MessageException("401", "请登录后再进行操作");
         }
-        // 获取 token 中的 user id
         long userId;
         try {
             userId = Long.parseLong(JWT.decode(token).getAudience().get(0));

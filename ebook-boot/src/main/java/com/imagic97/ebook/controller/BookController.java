@@ -9,6 +9,7 @@ import com.imagic97.ebook.entity.User;
 import com.imagic97.ebook.epub.Reader;
 import com.imagic97.ebook.exception.MessageException;
 import com.imagic97.ebook.services.BookInfoService;
+import com.imagic97.ebook.services.BookMarkService;
 import com.imagic97.ebook.services.BookService;
 import com.imagic97.ebook.services.SelfService;
 import com.imagic97.ebook.util.FileOperate;
@@ -34,6 +35,9 @@ public class BookController {
 
     @Resource
     private SelfService selfService;
+
+    @Resource
+    private BookMarkService bookMarkService;
 
     @Resource
     private BookInfoService bookInfoService;
@@ -177,6 +181,8 @@ public class BookController {
         if (bookInfoService.modifyBookInfo(bookInfo) > 0) {
             return ResultBody.success(null);
         }
-        return ResultBody.error("修改成功");
+        return ResultBody.error("修改失败，请稍后重试！");
     }
+
+
 }

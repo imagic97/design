@@ -7,6 +7,7 @@ import com.imagic97.ebook.util.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author imagic
@@ -23,12 +24,12 @@ public class BookMarkServiceImpl implements BookMarkService {
     }
 
     @Override
-    public BookMark selectBookMarkByBookId(long bookId) {
-        return bookMarkMapper.selectBookMarkByBookId(bookId);
+    public List<BookMark> selectBookMarkByBookId(long bookId,long userId) {
+        return bookMarkMapper.selectBookMarkByBookId(bookId,userId);
     }
 
     @Override
-    public BookMark selectBookMarkByUserId(long userId) {
+    public List<BookMark> selectBookMarkByUserId(long userId) {
         return bookMarkMapper.selectBookMarkByUserId(userId);
     }
 

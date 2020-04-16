@@ -35,6 +35,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public long selectBookTotal() {
+        return bookMapper.selectBookTotal();
+    }
+
+    @Override
     public Integer modifyBook(long bookId, Integer category, Integer isShare) {
         return bookMapper.modifyBook(bookId, category, isShare);
     }

@@ -4,21 +4,15 @@ import com.imagic97.ebook.annotation.PassToken;
 import com.imagic97.ebook.annotation.UserLoginToken;
 import com.imagic97.ebook.common.ResultBody;
 import com.imagic97.ebook.dto.SelfBook;
-import com.imagic97.ebook.entity.Book;
-import com.imagic97.ebook.entity.Self;
-import com.imagic97.ebook.entity.User;
+import com.imagic97.ebook.entity.*;
 import com.imagic97.ebook.exception.MessageException;
-import com.imagic97.ebook.services.BookService;
-import com.imagic97.ebook.services.SelfService;
-import com.imagic97.ebook.services.TokenService;
-import com.imagic97.ebook.services.UserService;
+import com.imagic97.ebook.services.*;
 import com.imagic97.ebook.util.StringUtil;
 import com.imagic97.ebook.util.TokenUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -31,6 +25,12 @@ import java.util.List;
 public class UserController {
     @Resource
     private UserService userService;
+
+    @Resource
+    private BookMarkService bookMarkService;
+
+    @Resource
+    private ReadHistoryService readHistoryService;
 
     @Resource
     private SelfService selfService;
@@ -53,6 +53,9 @@ public class UserController {
             if (user.getState() == 1) {
                 return ResultBody.error("该账户被冻结");
             }
+            if (!(user.getType() == 1)) {
+                return ResultBody.error("该账户禁止登录");
+            }
             TokenUtil.getSession().setAttribute("user", user);
             return ResultBody.success(tokenService.getToken(user));
         }
@@ -69,8 +72,9 @@ public class UserController {
     @PassToken
     @GetMapping("/test")
     @ApiOperation("测试")
-    public ResultBody test(HttpSession httpSession) {
-        return ResultBody.success(httpSession.getAttribute("user"));
+    public ResultBody test() {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
+        return ResultBody.success(user);
     }
 
 
@@ -97,7 +101,7 @@ public class UserController {
     @ApiOperation("管理员删除用户")
     public ResultBody deleteUser(@RequestParam long userId) {
         User user = (User) TokenUtil.getSession().getAttribute("user");
-        if (user.getType() == 1) return ResultBody.error("用户无权限");
+        if (user.getType() == 1) return ResultBody.error("非管理员，该操作无权限");
         if (userService.deleteUserById(userId) > 0) {
             return ResultBody.success("删除成功");
         }
@@ -107,14 +111,15 @@ public class UserController {
     @PostMapping("/modifyUser")
     @ApiOperation("修改用户信息")
     public ResultBody modifyUser(@RequestParam String userName,
-                                 @RequestParam String password,
+                                 @RequestParam String oldPassword,
+                                 @RequestParam String newPassword,
                                  @RequestParam(required = false) String email) {
         User user = (User) TokenUtil.getSession().getAttribute("user");
-        if ("".equals(password)) {
-            return ResultBody.error("请输入密码");
+        if (!user.getUserPassword().equals(oldPassword)) {
+            return ResultBody.error("密码错误，拒绝修改操作");
         }
         user.setUserName(userName);
-        user.setUserPassword(password);
+        user.setUserPassword(newPassword);
         user.setEmail(email);
         return userService.modifyUser(user) > 0 ? ResultBody.success("修改成功") : ResultBody.error("修改失败");
     }
@@ -173,6 +178,69 @@ public class UserController {
             return ResultBody.success(null);
         }
         return ResultBody.error("删除失败");
+    }
+
+    @PostMapping("/addBookMark")
+    @ApiOperation("用户添加书签")
+    public ResultBody addBookMark(@RequestParam long bookId,
+                                  @RequestParam String chapter) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
+
+        BookMark bookMark = BookMark.builder()
+                .bookId(bookId)
+                .userId(user.getUserId())
+                .chapters(chapter)
+                .createDate(StringUtil.getCurrentTimeStamp()).build();
+
+        if (bookMarkService.addBookMark(bookMark) > 0) {
+            return ResultBody.success("添加成功");
+        }
+        return ResultBody.error("添加失败");
+    }
+
+    @GetMapping("/getBookMark")
+    @ApiOperation("用户获取指定书的书签")
+    public ResultBody getBookMark(@RequestParam long bookId) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
+        List<BookMark> bookMarkList = bookMarkService.selectBookMarkByBookId(bookId, user.getUserId());
+        return ResultBody.success(bookMarkList);
+    }
+
+    @GetMapping("/deleteBookMark")
+    @ApiOperation("用户删除指定书签")
+    public ResultBody deleteBookMark(@RequestParam long bookMarkId) {
+        int result = bookMarkService.deleteBookMarkById(bookMarkId);
+        if (result > 0) {
+            return ResultBody.success("删除成功");
+        }
+        return ResultBody.success("删除失败");
+    }
+
+    @PostMapping("/addReadHistory")
+    @ApiOperation("添加阅读记录")
+    public ResultBody addReadHistory(@RequestParam long bookId,
+                                     @RequestParam String chapter) {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
+        ReadHistory readHistory = ReadHistory.builder()
+                .bookId(bookId)
+                .chapter(chapter)
+                .userId(user.getUserId()).build();
+
+        if (readHistoryService.modifyReadHistory(readHistory) > 0) {
+            return ResultBody.success("添加成功");
+        }
+        if (readHistoryService.addReadHistory(readHistory) > 0) {
+            return ResultBody.success("添加成功");
+        }
+        return ResultBody.error("添加失败");
+    }
+
+    @GetMapping("/getReadHistory")
+    @ApiOperation("用户获取阅读记录")
+    public ResultBody getReadHistory() {
+        User user = (User) TokenUtil.getSession().getAttribute("user");
+        List<ReadHistory> bookMarkList = readHistoryService.selectReadHistoryByUserId(user.getUserId());
+        return ResultBody.success(bookMarkList);
     }
 
 }

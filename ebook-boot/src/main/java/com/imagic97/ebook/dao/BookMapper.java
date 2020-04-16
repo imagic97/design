@@ -15,6 +15,9 @@ public interface BookMapper {
     @Select("select * from book where book_id = #{bookId}")
     Book selectBookById(long bookId);
 
+    @Select("select count(book_id) from book")
+    long selectBookTotal();
+
     //添加书籍，bookName对于资源文件夹下的书名
 
     @Insert("insert into book(user_id,file_name,book_category,is_share,upload_date)" +
@@ -43,9 +46,7 @@ public interface BookMapper {
     //根据用户id查找书
     @Select("select * from book where user_id = #{userId}")
     List<Book> selectBookByUserId(long userId);
-//
-//    @Select("select * from book where book_category = #{CategoryId} AND is_Share = 1")
-//    List<Book> selectBookByCategoryId(int CategoryId);
+
 
     @Select("select bi.*,b.file_name from book_info bi,book b where b.book_id in ( select book_id from book where book_category = #{CategoryId} AND is_Share = 1) AND bi.book_id = b.book_id")
     List<BookInfoDTO> selectBookByCategoryId(@Param("CategoryId") int CategoryId);
