@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BookInfoDTO {
     private String bookId;
-    private String fileName;
+    private String userId;
     private String title;
     private String Introduction;
     private String language;
@@ -23,4 +23,8 @@ public class BookInfoDTO {
     private String creator;
     private String ISBN;
     private String publishDate;
+    private String fileName;
+    private String isShare;
+    private String bookCategory;
+
 }

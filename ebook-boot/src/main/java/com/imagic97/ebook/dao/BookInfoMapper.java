@@ -14,7 +14,7 @@ public interface BookInfoMapper {
     @Select("select * from book_info where book_id = #{bookId}")
     BookInfo selectBookInfoById(long bookId);
 
-    @Select("select bi.*,b.file_name from book_info bi,book b where b.book_id in ( " +
+    @Select("select bi.*,b.* from book_info bi,book b where b.book_id in ( " +
             "select book_id from (select book_id from book limit #{offset},#{num}) as tamp ) " +
             "AND bi.book_id = b.book_id")
     List<BookInfoDTO> selectBookInfoList(@Param("num") int num,@Param("offset") int offset);
