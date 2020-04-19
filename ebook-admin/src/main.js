@@ -10,12 +10,11 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  if (to.path == "/login" || to.path == "/register") {
+  if (to.path == "/login") {
     next();
   } else {
     let token = window.sessionStorage.getItem("token");
     if (token != null) {
-      console.log(token);
       next();
     } else {
       next("/login");

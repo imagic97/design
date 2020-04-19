@@ -7,25 +7,13 @@
         </div>
         <el-form :model="loginForm" :rules="rules" ref="loginForm">
           <el-form-item prop="username">
-            <el-input
-              v-model="loginForm.username"
-              placeholder="用户名"
-            ></el-input>
+            <el-input v-model="loginForm.username" placeholder="用户名"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input
-              type="password"
-              placeholder="密码"
-              v-model="loginForm.password"
-            ></el-input>
+            <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="primary"
-              @click="submitForm('loginForm')"
-              class="submit_btn"
-              >登陆</el-button
-            >
+            <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
           </el-form-item>
         </el-form>
       </section>
@@ -42,27 +30,27 @@ export default {
     return {
       loginForm: {
         username: "",
-        password: "",
+        password: ""
       },
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          { required: true, message: "请输入用户名", trigger: "blur" }
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       },
-      showLogin: false,
+      showLogin: false
     };
   },
   mounted() {
     this.showLogin = true;
   },
   computed: {
-    ...mapGetters(["adminName", "token"]),
+    ...mapGetters(["adminName", "token"])
   },
   methods: {
     ...mapActions(["setAdminName", "setToken"]),
     async submitForm(formName) {
-      this.$refs[formName].validate(async (valid) => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           const res = await login(
             this.loginForm.username,
@@ -71,41 +59,42 @@ export default {
           if (res.data.code == 200) {
             this.$message({
               type: "success",
-              message: "登录成功",
+              message: "登录成功"
             });
             console.log(res.data.result);
             this.setToken(res.data.result);
             window.sessionStorage.setItem("token", res.data.result);
+            window.sessionStorage.setItem("user", this.loginForm.username);
             this.setAdminName(this.loginForm.username);
             this.$router.push("manage");
           } else {
             this.$message({
               type: "error",
-              message: res.data.message,
+              message: res.data.message
             });
           }
         } else {
           this.$notify.error({
             title: "错误",
             message: "请输入正确的用户名密码",
-            offset: 100,
+            offset: 100
           });
           return false;
         }
       });
-    },
+    }
   },
   watch: {
-    adminInfo: function (newValue) {
+    adminInfo: function(newValue) {
       if (newValue.id) {
         this.$message({
           type: "success",
-          message: "检测到您之前登录过，将自动登录",
+          message: "检测到您之前登录过，将自动登录"
         });
         this.$router.push("manage");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less" scoped>

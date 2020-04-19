@@ -2,13 +2,12 @@
   <div class="header_container">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/manage' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">
-        {{ item }}
-      </el-breadcrumb-item>
+      <el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{ item }}</el-breadcrumb-item>
     </el-breadcrumb>
     <el-dropdown @command="handleCommand">
       <div class="user">
-        <span>{{ adminName }} </span> <img :src="avator" class="avator" />
+        <span>{{ adminName }}</span>
+        <span style="font-size:24px;margin:0 24px" class="el-icon-s-custom" />
       </div>
 
       <el-dropdown-menu slot="dropdown">
@@ -21,18 +20,22 @@
 
 <script>
 import { logout } from "@/api";
-import avator from "@/assets/logo.png";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      avator: avator,
-      baseImgPath: "",
+      baseImgPath: ""
     };
   },
   computed: {
-    ...mapGetters(["adminName", "token"]),
+    ...mapGetters(["adminName", "token"])
+  },
+  mounted() {
+    let user = window.sessionStorage.getItem("user");
+    let token = window.sessionStorage.getItem("token");
+    this.setAdminName(user);
+    this.setToken(token);
   },
   methods: {
     ...mapActions(["setAdminName", "setToken"]),
@@ -44,19 +47,20 @@ export default {
         if (res.data.code == 200) {
           this.$message({
             type: "success",
-            message: "退出成功",
+            message: "退出成功"
           });
           window.sessionStorage.removeItem("token");
-          this.$router.push("/");
+          window.sessionStorage.removeItem("user");
+          this.$router.push("/login");
         } else {
           this.$message({
             type: "error",
-            message: "退出操作出现错误",
+            message: "退出操作出现错误"
           });
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

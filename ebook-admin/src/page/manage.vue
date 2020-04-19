@@ -2,18 +2,8 @@
   <div class="manage_page fillcontain">
     <el-row style="height: 100%;">
       <el-col :span="4" style="min-height: 100%; background-color: #324057;">
-        <p
-          class="title title-1"
-          style="color: rgb(32, 160, 255); margin: 24px auto;"
-        >
-          WEBOOK
-        </p>
-        <p
-          class="title title-2"
-          style="color: rgb(32, 160, 255); margin: 24px auto;"
-        >
-          后台管理
-        </p>
+        <p class="title title-1" style="color: rgb(32, 160, 255); margin: 24px auto;">WEBOOK</p>
+        <p class="title title-2" style="color: rgb(32, 160, 255); margin: 24px auto;">后台管理</p>
         <el-menu
           :default-active="defaultActive"
           style="min-height: 100%;"
@@ -31,6 +21,7 @@
             </template>
             <el-menu-item index="upload">上传电子书</el-menu-item>
             <el-menu-item index="bookList">电子书列表</el-menu-item>
+            <el-menu-item index="category">电子书分类</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
             <template slot="title">
@@ -62,13 +53,13 @@
 import headTop from "../components/headTop";
 export default {
   components: {
-    headTop,
+    headTop
   },
   computed: {
-    defaultActive: function () {
+    defaultActive: function() {
       return this.$route.path.replace("/", "");
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -4,14 +4,14 @@ axios.defaults.timeout = 60000; // 请求超时
 axios.defaults.baseURL = "/api";
 
 axios.interceptors.request.use(
-  function (config) {
+  function(config) {
     let token = window.sessionStorage.getItem("token");
     if (token) {
       config.headers.common["token"] = token;
     }
     return config;
   },
-  function (error) {
+  function(error) {
     // 对请求错误做些什么
     return Promise.reject(error);
   }
@@ -53,7 +53,7 @@ export function getChapterCSS(file) {
 export function login(userName, password) {
   return axios({
     method: "POST",
-    url: "/admin/login",
+    url: "/admin/adminLogin",
     params: {
       userName: userName,
       password: password,
