@@ -12,6 +12,8 @@ const upload = (r) =>
   require.ensure([], () => r(require("@/page/book/upload")), "upload");
 const bookList = (r) =>
   require.ensure([], () => r(require("@/page/book/bookList")), "bookList");
+const category = (r) =>
+  require.ensure([], () => r(require("@/page/book/category")), "category");
 const addUser = (r) =>
   require.ensure([], () => r(require("@/page/user/addUser")), "addUser");
 const userList = (r) =>
@@ -49,6 +51,11 @@ const routes = [
         path: "/bookList",
         component: bookList,
         meta: ["电子书管理", "电子书列表"],
+      },
+      {
+        path: "/category",
+        component: category,
+        meta: ["电子书管理", "电子书分类"],
       },
       {
         path: "/addUser",
