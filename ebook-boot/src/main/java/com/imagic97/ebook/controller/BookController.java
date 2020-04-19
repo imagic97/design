@@ -58,14 +58,14 @@ public class BookController {
         long timeStamp = System.currentTimeMillis();
         //long数据自提升为string
         String fileType = multipartFile.getContentType();
-        if (!"application/epub+zip".equals(fileType)) {
+        if (!"application/epub+zip".contains(fileType)) {
             return ResultBody.error("格式错误,该文件类型为：" + fileType);
         }
         String fileName = timeStamp + "_" + user.getUserId();
         //保存上传文件至本地，返回文件名
         boolean isDone = FileOperate.fileUpload(multipartFile, BOOK_PATH, fileName);
         Book book = null;
-        BookInfo bookInfo;
+        BookInfo bookInfo = null;
         Self self;
         Integer flag = -1;
         try {
@@ -115,7 +115,7 @@ public class BookController {
             e.printStackTrace();
             throw new MessageException("上传文件错误");
         }
-        return ResultBody.success(null);
+        return ResultBody.success(bookInfo);
     }
 
     @GetMapping(value = "/delete")
