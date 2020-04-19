@@ -63,6 +63,7 @@ export default {
       } else {
         this.$message.error("上传失败！");
       }
+      this.$refs.upload.clearFiles();
     },
     getToken() {
       return { token: this.token };
